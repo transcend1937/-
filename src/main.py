@@ -480,6 +480,10 @@ async def health_check():
 async def http_graph_inout_parameter(request: Request):
     return service.graph_inout_schema()
 
+# 挂载铁路就业题库应用
+from exam.app import app as exam_app
+app.mount("/exam", exam_app)
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Start FastAPI server")
     parser.add_argument("-m", type=str, default="http", help="Run mode, support http,flow,node")

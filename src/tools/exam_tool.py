@@ -1,5 +1,6 @@
 """题库入口工具 - 提供刷题平台的访问入口"""
 
+import os
 from langchain.tools import tool
 
 
@@ -7,10 +8,12 @@ from langchain.tools import tool
 def open_exam_platform() -> str:
     """打开铁路就业题库刷题平台，提供行测、专业笔试题、情景模拟题、性格测试题的练习功能。支持随机出题、按需出题、每日一练、模拟考试、答案解析和错题本功能。当用户想要刷题、练习、做题目、准备笔试或考试时，使用此工具。
     """
+    domain = os.getenv("COZE_PROJECT_DOMAIN_DEFAULT", "http://localhost:5000")
+    exam_url = f"{domain}/exam/"
     return (
         "📝 **铁路就业题库刷题平台** 🚂\n\n"
         "点击下方链接即可进入刷题：\n\n"
-        "👉 **[进入题库开始刷题](http://localhost:8000)**\n\n"
+        f"👉 **[进入题库开始刷题]({exam_url})**\n\n"
         "### 题库功能简介\n\n"
         "| 功能 | 说明 |\n"
         "|------|------|\n"

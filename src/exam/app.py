@@ -809,7 +809,7 @@ async function api(url) {
 
 // ===== Init =====
 async function init() {
-    const resp = await api('/api/categories');
+    const resp = await api('./api/categories');
     const cats = resp.data;
 
     // Sidebar
@@ -841,7 +841,7 @@ async function init() {
 
 // ===== Daily Practice =====
 async function startDaily() {
-    const resp = await api('/api/daily');
+    const resp = await api('./api/daily');
     state.questions = resp.data.items;
     if (state.questions.length === 0) return;
 
@@ -887,9 +887,9 @@ async function startPractice(category) {
 
     let url;
     if (category === 'all') {
-        url = '/api/questions/random?count=15';
+        url = './api/questions/random?count=15';
     } else {
-        url = `/api/questions/random?category=${category}&count=15`;
+        url = `./api/questions/random?category=${category}&count=15`;
     }
 
     const resp = await api(url);
