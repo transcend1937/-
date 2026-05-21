@@ -685,6 +685,131 @@ EXAM_HTML = """
             margin-bottom: 24px;
             font-size: 15px;
         }
+
+        /* 欢迎横幅 */
+        .welcome-banner {
+            background: linear-gradient(135deg, #1a3a5c 0%, #2b6ba3 100%);
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 28px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .welcome-banner .welcome-text h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: #fff;
+        }
+        .welcome-banner .welcome-text p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.85);
+            margin: 0;
+            line-height: 1.6;
+        }
+        .welcome-banner .welcome-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .welcome-banner .welcome-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        .welcome-banner .welcome-btn.primary {
+            background: #ff6b35;
+            color: #fff;
+        }
+        .welcome-banner .welcome-btn.primary:hover {
+            background: #e55a2b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255,107,53,0.4);
+        }
+        .welcome-banner .welcome-btn.secondary {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            backdrop-filter: blur(4px);
+        }
+        .welcome-banner .welcome-btn.secondary:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+        /* 招录数据提示弹窗 */
+        .data-tip-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .data-tip-overlay.show {
+            display: flex;
+        }
+        .data-tip-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px 36px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.3s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .data-tip-box .data-tip-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .data-tip-box h3 {
+            font-size: 18px;
+            color: #1a1a2e;
+            margin: 0 0 12px;
+        }
+        .data-tip-box p {
+            font-size: 14px;
+            color: #666;
+            margin: 0 0 12px;
+        }
+        .data-tip-box .data-tip-cmd {
+            background: #f0f4ff;
+            color: #2b6ba3;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-family: monospace;
+        }
+        .data-tip-box .data-tip-btn {
+            background: #2b6ba3;
+            color: #fff;
+            border: none;
+            padding: 10px 32px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .data-tip-box .data-tip-btn:hover {
+            background: #1a4a7a;
+        }
+
         .start-screen .start-options {
             display: flex;
             flex-direction: column;
@@ -769,9 +894,37 @@ EXAM_HTML = """
 
     <!-- Main -->
     <main class="main-content" id="mainContent">
+        <!-- 欢迎横幅 -->
+        <div class="welcome-banner">
+            <div class="welcome-avatar">👋</div>
+            <div class="welcome-text">
+                <h2>你好呀~我是你的专属就业小助手！</h2>
+                <p>掌握着路局在我们学校各专业招录的独家数据，还能帮你把简历优化得闪闪发光，找工作不用愁啦！</p>
+            </div>
+            <div class="welcome-actions">
+                <a href="/exam/?category=广铁机考模拟题" class="welcome-btn primary">
+                    🚂 广铁机考模拟题
+                </a>
+                <a href="/" class="welcome-btn secondary" onclick="showDataTip(event)">
+                    📊 广铁招录数据
+                </a>
+            </div>
+        </div>
+        <!-- 招录数据提示弹窗 -->
+        <div class="data-tip-overlay" id="dataTipOverlay" onclick="hideDataTip()">
+            <div class="data-tip-box">
+                <div class="data-tip-icon">💡</div>
+                <h3>招录数据在这里👇</h3>
+                <p>返回 <strong>就业小助手</strong> 对话框，直接发送：</p>
+                <div class="data-tip-cmd">「查广铁招录数据」</div>
+                <p>或发送具体专业名称如：</p>
+                <div class="data-tip-cmd">「广州局铁道机车招了多少人」</div>
+                <button onclick="hideDataTip()" class="data-tip-btn">知道了</button>
+            </div>
+        </div>
         <div class="start-screen" id="startScreen">
-            <h2>🚂 铁路就业刷题</h2>
-            <p>选择左侧题型分类，开始你的刷题之旅</p>
+            <h2>🚂 选择刷题模式</h2>
+            <p>选择下方分类，开始你的刷题之旅</p>
             <div class="start-options">
                 <button onclick="startPractice('行测')">
                     📊 行测练习（言语·数量·判断·常识）
@@ -835,6 +988,14 @@ const state = {
 async function api(url) {
     const resp = await fetch(url);
     return resp.json();
+}
+
+// ===== 招录数据提示弹窗 =====
+function showDataTip() {
+    document.getElementById('dataTipOverlay').classList.add('show');
+}
+function hideDataTip() {
+    document.getElementById('dataTipOverlay').classList.remove('show');
 }
 
 // ===== Init =====
