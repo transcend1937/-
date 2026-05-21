@@ -9,6 +9,7 @@ from langchain_core.messages import AnyMessage
 from coze_coding_utils.runtime_ctx.context import default_headers
 from storage.memory import get_memory_saver
 from tools.knowledge_search_tool import search_knowledge
+from tools.exam_tool import open_exam_platform
 
 LLM_CONFIG = "config/agent_llm_config.json"
 
@@ -53,7 +54,7 @@ def build_agent(ctx=None):
     return create_agent(
         model=llm,
         system_prompt=cfg.get("sp"),
-        tools=[search_knowledge],
+        tools=[search_knowledge, open_exam_platform],
         checkpointer=get_memory_saver(),
         state_schema=AgentState,
     )
