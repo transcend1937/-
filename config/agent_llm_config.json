@@ -11,6 +11,6 @@
     "tools": [
         "query_recruitment_data(bureau: str, major: str, gender: str, query_type: str) - 【优先使用】精确查询2025届湖南铁道职业技术学院东校区铁路局招录数据。参数说明：bureau=路局名称(广州局/南昌局/上海局/武汉局/留空查所有)；major=专业名称(留空查所有)；gender=male/female(按性别过滤)；query_type=summary(汇总)/detail(明细)/compare(对比)。数据来源：真实招录文件，100%精确。",
         "search_knowledge(query: str) - 【备用】在就业知识库中搜索相关信息，包括铁路局招录数据、岗位信息、行业趋势等。",
-        "open_exam_platform(category: str, sub_type: str, mode: str, count: int) - 打开铁路就业题库刷题平台，支持深链接一键直达指定刷题模式。"
+        "open_exam_platform(category, sub_type, mode, count) - 打开刷题平台。category可选：行测/专业题/情景模拟/性格测试/广铁机考模拟题(🆕广铁机考图形推理5道)；sub_type如：铁道机车/言语理解；mode：daily(每日一练)；count为题量。【注意】用户说\"广铁机考/广铁模拟题/广铁图形推理\"等，category必须设为\"广铁机考模拟题\"！"
     ]
 }

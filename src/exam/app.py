@@ -13,11 +13,18 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="铁路就业题库")
 
+# 挂载静态文件目录（存放题目配图）
+import os
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
 CATEGORY_MAP = {
     "行测": "行测",
     "专业": "专业",
     "情景模拟": "情景模拟",
     "性格测试": "性格测试",
+    "广铁机考模拟题": "广铁机考模拟题",
 }
 
 TYPE_MAP = {}
@@ -372,6 +379,29 @@ EXAM_HTML = """
             margin-bottom: 24px;
             color: #222;
             white-space: pre-wrap;
+        }
+
+        /* ===== Question Image ===== */
+        .question-image {
+            margin: 16px 0 24px 0;
+            text-align: center;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #eee;
+        }
+        .question-image img {
+            max-width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+            border-radius: 8px;
+            cursor: zoom-in;
+            transition: transform 0.2s;
+        }
+        .question-image img.img-enlarged {
+            max-height: none;
+            cursor: zoom-out;
+            transform: scale(1.05);
         }
 
         /* ===== Options ===== */
@@ -990,6 +1020,7 @@ function renderQuestion() {
                 <span class="question-type-badge">${q.type}</span>
             </div>
             <div class="question-text">${q.question}</div>
+            ${q.image ? `<div class="question-image"><img src="./static/images/${q.image}" alt="题目配图" onclick="this.classList.toggle('img-enlarged')"></div>` : ''}
             <div class="options-list">${optionsHTML}</div>
             ${analysisHTML}
             <div class="bottom-bar">
