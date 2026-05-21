@@ -837,6 +837,21 @@ async function init() {
 
     // Update sidebar active
     updateSidebarActive('all');
+
+    // ===== URL参数深链接解析 =====
+    const params = new URLSearchParams(window.location.search);
+    const directCategory = params.get('category');
+    const directType = params.get('type');
+    const directMode = params.get('mode');
+    const directCount = params.get('count') ? parseInt(params.get('count')) : null;
+
+    if (directMode === 'daily') {
+        // 每日一练：直接开始
+        setTimeout(() => startDaily(), 100);
+    } else if (directCategory) {
+        // 指定分类：直接进入对应刷题
+        setTimeout(() => startPractice(directCategory, directType, directCount), 100);
+    }
 }
 
 // ===== Daily Practice =====
@@ -864,8 +879,8 @@ async function startDaily() {
     updateAnswerSheet();
 }
 
-// ===== Start Practice =====
-async function startPractice(category) {
+// ===== Start Practice (支持深链接参数) =====
+async function startPractice(category, subType, count) {
     // Stop timer
     if (state.timerInterval) {
         clearInterval(state.timerInterval);
@@ -885,11 +900,14 @@ async function startPractice(category) {
 
     updateSidebarActive(category);
 
+    count = count || 15;
     let url;
     if (category === 'all') {
-        url = './api/questions/random?count=15';
+        url = `./api/questions/random?count=${count}`;
+    } else if (subType) {
+        url = `./api/questions/random?category=${category}&type=${encodeURIComponent(subType)}&count=${count}`;
     } else {
-        url = `./api/questions/random?category=${category}&count=15`;
+        url = `./api/questions/random?category=${category}&count=${count}`;
     }
 
     const resp = await api(url);
