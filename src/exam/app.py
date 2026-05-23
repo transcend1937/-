@@ -288,6 +288,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .home-footer{text-align:center;margin-top:40px;font-size:13px;color:#bbb}
 .home-footer .btn{display:inline-block;padding:8px 20px;border:1px solid #ddd;border-radius:20px;color:#999;font-size:13px;cursor:pointer;background:#fff;margin:0 6px}
 .home-footer .btn:hover{background:#f5f5f5}
+.blessing{text-align:center;margin:12px 0 8px;padding:8px 12px;font-size:15px;color:#ff6b35;font-weight:500;background:linear-gradient(135deg,#fff5f0,#fff0e6);border-radius:12px;border:1px solid #ffe0cc}
 /* Header */
 .header{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;padding:0 20px;height:52px;display:flex;align-items:center;position:fixed;top:0;left:0;right:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
 .header .back{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px 8px;margin-right:8px;display:flex;align-items:center}
@@ -385,6 +386,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
   <div class="home-page">
     <div class="home-title">广铁就业题库</div>
     <div class="home-sub">广州铁路局机考模拟 · 分层训练</div>
+    <div class="blessing">🌟 祝你笔下生花，顺利上岸！</div>
     <div class="home-cards">
       <div class="home-card exam" onclick="startExam()">
         <div class="icon">📝</div>
@@ -638,6 +640,7 @@ function showExamResult(data) {
   const color = scorePercent>=80?'#4caf50':scorePercent>=60?'#ff9800':'#f44336';
   html += '<div class="result-score" style="color:'+color+'">'+data.total_score+'<span class="unit"> / '+data.full_score+'</span></div>';
   html += '<div class="result-info">用时 '+m+'分'+s+'秒</div>';
+  html += '<div class="blessing" style="font-size:14px;margin-top:10px">🌟 祝你笔下生花，顺利上岸！</div>';
   html += '</div>';
   html += '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">';
   html += '<button class="btn btn-primary btn-sm" onclick="backHome();setTimeout(startExam,100)">再来一套</button>';
