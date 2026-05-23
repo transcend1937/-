@@ -412,14 +412,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 /* Exam Q-nav sidebar */
 .exam-wrap{display:flex;gap:16px;max-width:900px;margin:0 auto;position:relative}
 .exam-main{flex:1;min-width:0}
-.exam-nav-wrap{width:72px;flex-shrink:0;position:sticky;top:68px;align-self:flex-start;max-height:calc(100vh - 80px);overflow-y:auto;padding:4px 6px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-.exam-nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
-.exam-nav-num{width:100%;aspect-ratio:1;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;background:#f0f0f0;color:#999;transition:all 0.2s;display:flex;align-items:center;justify-content:center;padding:0}
-.exam-nav-num:hover{background:#e0e0e0;transform:scale(1.1)}
-.exam-nav-num.answered{background:#1a73e8;color:#fff}
-.exam-nav-num.wrong{background:#f44336;color:#fff}
-.exam-nav-num.current{border:2px solid #ff6b35}
-@media(max-width:640px){.exam-nav-wrap{display:none}}
 /* Result */
 .result-card{background:#fff;border-radius:16px;padding:32px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.08);margin-bottom:20px}
 .result-score{font-size:64px;font-weight:700;color:#1a73e8;margin:16px 0}
@@ -437,6 +429,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 /* Scrollbar */
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+.submit-top-btn{display:inline-block;padding:6px 14px;background:#e74c3c;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-left:8px;transition:background .2s}
+.submit-top-btn:hover{background:#c0392b}
 /* Mobile */
 @media(max-width:640px){
 .home-cards{grid-template-columns:1fr}
@@ -482,6 +476,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
     <span class="title">广铁限时模拟题</span>
     <div class="right">
       <span class="timer-badge" id="examTimer">45:00</span>
+      <button class="submit-top-btn" onclick="submitExam()">提交试卷</button>
     </div>
   </div>
   <div class="content">
@@ -489,9 +484,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
       <div class="exam-main" id="examContent">
         <div style="text-align:center;padding:60px 0;color:#999">加载中...</div>
       </div>
-      <div class="exam-nav-wrap" id="examNavWrap">
-        <div class="exam-nav-grid" id="examNavGrid"></div>
-      </div>
+
     </div>
   </div>
 </div>
@@ -643,7 +636,7 @@ function renderExam() {
       html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
     }
     if(q.question_type==='填空'){
-      html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value};updateExamNav()">';
+      html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value}">';
     } else {
       if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
       html += '<div class="options" id="exam_opts_'+i+'">';
@@ -660,54 +653,6 @@ function renderExam() {
   html += '<button class="btn btn-primary btn-block" onclick="submitExam()" id="examSubmitBtn">提交试卷</button>';
   html += '</div>';
   el.innerHTML = html;
-  renderExamNav();
-  updateExamNav();
-}
-
-function renderExamNav() {
-  const grid = document.getElementById('examNavGrid');
-  if(!grid) return;
-  let html = '';
-  for(let i=0;i<examData.items.length;i++){
-    html += '<button class="exam-nav-num" onclick="scrollToQuestion('+i+')" id="nav_'+i+'">'+(i+1)+'</button>';
-  }
-  grid.innerHTML = html;
-}
-
-function updateExamNav() {
-  for(let i=0;i<examData.items.length;i++){
-    const btn = document.getElementById('nav_'+i);
-    if(!btn) continue;
-    const q = examData.items[i];
-    const answered = examAnswers[q.id] && examAnswers[q.id].selected && examAnswers[q.id].selected.toString().trim()!=='';
-    btn.classList.toggle('answered', answered);
-  }
-}
-
-function scrollToQuestion(i) {
-  const el = document.getElementById('eq_'+i);
-  if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
-}
-
-function examSelectOpt(i, qid, opt, isMulti) {
-  const opts = document.getElementById('exam_opts_'+i);
-  if(!opts) return;
-  if(isMulti){
-    const el = opts.children[Array.from(opts.children).findIndex(c=>c.querySelector('.letter')&&c.querySelector('.letter').textContent===opt)];
-    if(el) el.classList.toggle('selected');
-    const selected = [];
-    opts.querySelectorAll('.option.selected').forEach(o=>{
-      const letter = o.querySelector('.letter');
-      if(letter) selected.push(letter.textContent);
-    });
-    examAnswers[qid] = {id:qid, selected: selected.join(',')};
-  } else {
-    opts.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
-    const el = opts.children[Array.from(opts.children).findIndex(c=>c.querySelector('.letter')&&c.querySelector('.letter').textContent===opt)];
-    if(el) el.classList.add('selected');
-    examAnswers[qid] = {id:qid, selected: opt};
-  }
-  updateExamNav();
 }
 
 function startExamTimer() {
