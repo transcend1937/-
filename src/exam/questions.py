@@ -1298,7 +1298,6 @@ QUESTIONS: list[dict[str, Any]] = [
         "type": '综合',
         "question_type": '多选',
         "question": '下列关于中国高铁的说法，正确的有：',
-        "answer": ['A', 'B', 'C'],
         "analysis": 'ABC正确，D错误：高铁线路遍布全国',
         "score": 4.0,
         "options": {
@@ -1313,7 +1312,6 @@ QUESTIONS: list[dict[str, Any]] = [
         "type": '综合',
         "question_type": '多选',
         "question": '以下哪些是广东省的铁路局？',
-        "answer": ['A', 'C'],
         "analysis": '广铁集团即中国铁路广州局集团',
         "score": 4.0,
         "options": {
@@ -1328,7 +1326,6 @@ QUESTIONS: list[dict[str, Any]] = [
         "type": '综合',
         "question_type": '多选',
         "question": '以下哪些属于铁路信号系统？',
-        "answer": ['B', 'C', 'D'],
         "analysis": '铁路信号系统包括转辙机、轨道电路、应答器等',
         "score": 4.0,
         "options": {
@@ -1343,7 +1340,6 @@ QUESTIONS: list[dict[str, Any]] = [
         "type": '综合',
         "question_type": '多选',
         "question": '铁路职工需要具备哪些基本素质？',
-        "answer": ['A', 'B', 'C', 'D'],
         "analysis": '以上都是铁路职工必备的基本素质',
         "score": 4.0,
         "options": {
@@ -1872,7 +1868,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p2_1.png', 'images/graph_pdf1_p2_2.png', 'images/graph_pdf1_p2_3.png'],
+        "image": ['images/graph_new1_p1.png'],
     },
     {
         "id": 127,
@@ -1888,7 +1884,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p2_1.png', 'images/graph_pdf1_p2_2.png', 'images/graph_pdf1_p2_3.png'],
+        "image": ['images/graph_new1_p1.png'],
     },
     {
         "id": 128,
@@ -1904,7 +1900,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': '4',
             'D': '3',
         },
-        "image": ['images/graph_pdf1_p2_1.png', 'images/graph_pdf1_p2_2.png', 'images/graph_pdf1_p2_3.png'],
+        "image": ['images/graph_new1_p1.png'],
     },
     {
         "id": 129,
@@ -1920,7 +1916,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': '①②⑥，③④⑤',
             'D': '①④⑥，②③⑤',
         },
-        "image": ['images/graph_pdf1_p3_1.png', 'images/graph_pdf1_p3_2.png', 'images/graph_pdf1_p3_3.png'],
+        "image": ['images/graph_new1_p2.png'],
     },
     {
         "id": 130,
@@ -1936,7 +1932,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p3_1.png', 'images/graph_pdf1_p3_2.png', 'images/graph_pdf1_p3_3.png'],
+        "image": ['images/graph_new1_p2.png'],
     },
     {
         "id": 131,
@@ -1952,7 +1948,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p3_1.png', 'images/graph_pdf1_p3_2.png', 'images/graph_pdf1_p3_3.png'],
+        "image": ['images/graph_new1_p2.png'],
     },
     {
         "id": 132,
@@ -1968,7 +1964,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p3_1.png', 'images/graph_pdf1_p3_2.png', 'images/graph_pdf1_p3_3.png'],
+        "image": ['images/graph_new1_p3.png'],
     },
     {
         "id": 133,
@@ -1984,7 +1980,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p4_1.png', 'images/graph_pdf1_p4_2.png'],
+        "image": ['images/graph_new1_p3.png'],
     },
     {
         "id": 134,
@@ -2000,7 +1996,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p4_1.png', 'images/graph_pdf1_p4_2.png'],
+        "image": ['images/graph_new1_p3.png'],
     },
     {
         "id": 135,
@@ -2016,7 +2012,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p5_1.png', 'images/graph_pdf1_p5_2.png'],
+        "image": ['images/graph_new1_p4.png'],
     },
     {
         "id": 136,
@@ -2032,7 +2028,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p5_1.png', 'images/graph_pdf1_p5_2.png'],
+        "image": ['images/graph_new1_p4.png'],
     },
     {
         "id": 137,
@@ -2048,7 +2044,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p6_1.png', 'images/graph_pdf1_p6_2.png', 'images/graph_pdf1_p6_3.png'],
+        "image": ['images/graph_new1_p4.png'],
     },
     {
         "id": 138,
@@ -2064,7 +2060,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p6_1.png', 'images/graph_pdf1_p6_2.png', 'images/graph_pdf1_p6_3.png'],
+        "image": ['images/graph_new1_p5.png'],
     },
     {
         "id": 139,
@@ -2080,7 +2076,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p7_1.png', 'images/graph_pdf1_p7_2.png'],
+        "image": ['images/graph_new1_p5.png'],
     },
     {
         "id": 140,
@@ -2096,7 +2092,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf1_p7_1.png', 'images/graph_pdf1_p7_2.png'],
+        "image": ['images/graph_new1_p5.png'],
     },
     {
         "id": 141,
@@ -2112,7 +2108,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p2_1.png', 'images/graph_pdf2_p2_2.png', 'images/graph_pdf2_p2_3.png'],
+        "image": ['images/graph_new2_p1.png'],
     },
     {
         "id": 142,
@@ -2128,7 +2124,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p2_1.png', 'images/graph_pdf2_p2_2.png', 'images/graph_pdf2_p2_3.png'],
+        "image": ['images/graph_new2_p1.png'],
     },
     {
         "id": 143,
@@ -2144,7 +2140,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p2_1.png', 'images/graph_pdf2_p2_2.png', 'images/graph_pdf2_p2_3.png'],
+        "image": ['images/graph_new2_p2.png'],
     },
     {
         "id": 144,
@@ -2160,7 +2156,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p3_1.png', 'images/graph_pdf2_p3_2.png', 'images/graph_pdf2_p3_3.png'],
+        "image": ['images/graph_new2_p2.png'],
     },
     {
         "id": 145,
@@ -2176,7 +2172,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p3_1.png', 'images/graph_pdf2_p3_2.png', 'images/graph_pdf2_p3_3.png'],
+        "image": ['images/graph_new2_p3.png'],
     },
     {
         "id": 146,
@@ -2192,7 +2188,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p3_1.png', 'images/graph_pdf2_p3_2.png', 'images/graph_pdf2_p3_3.png'],
+        "image": ['images/graph_new2_p3.png'],
     },
     {
         "id": 147,
@@ -2208,7 +2204,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p3_1.png', 'images/graph_pdf2_p3_2.png', 'images/graph_pdf2_p3_3.png'],
+        "image": ['images/graph_new2_p4.png'],
     },
     {
         "id": 148,
@@ -2224,7 +2220,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p4_1.png', 'images/graph_pdf2_p4_2.png', 'images/graph_pdf2_p4_3.png'],
+        "image": ['images/graph_new2_p4.png'],
     },
     {
         "id": 149,
@@ -2240,7 +2236,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p4_1.png', 'images/graph_pdf2_p4_2.png', 'images/graph_pdf2_p4_3.png'],
+        "image": ['images/graph_new2_p5.png'],
     },
     {
         "id": 150,
@@ -2256,7 +2252,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p4_1.png', 'images/graph_pdf2_p4_2.png', 'images/graph_pdf2_p4_3.png'],
+        "image": ['images/graph_new2_p5.png'],
     },
     {
         "id": 151,
@@ -2272,7 +2268,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p5_1.png', 'images/graph_pdf2_p5_2.png', 'images/graph_pdf2_p5_3.png'],
+        "image": ['images/graph_new2_p6.png'],
     },
     {
         "id": 152,
@@ -2288,7 +2284,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p5_1.png', 'images/graph_pdf2_p5_2.png', 'images/graph_pdf2_p5_3.png'],
+        "image": ['images/graph_new2_p6.png'],
     },
     {
         "id": 153,
@@ -2304,7 +2300,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p5_1.png', 'images/graph_pdf2_p5_2.png', 'images/graph_pdf2_p5_3.png'],
+        "image": ['images/graph_new2_p7.png'],
     },
     {
         "id": 154,
@@ -2320,7 +2316,7 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p6_1.png', 'images/graph_pdf2_p6_2.png'],
+        "image": ['images/graph_new2_p7.png'],
     },
     {
         "id": 155,
@@ -2336,6 +2332,6 @@ QUESTIONS: list[dict[str, Any]] = [
             'C': 'C',
             'D': 'D',
         },
-        "image": ['images/graph_pdf2_p6_1.png', 'images/graph_pdf2_p6_2.png'],
+        "image": ['images/graph_new2_p7.png'],
     },
 ]
