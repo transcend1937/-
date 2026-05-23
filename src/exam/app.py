@@ -661,7 +661,7 @@ window.examSelectOpt = function(i, qid, opt, isMulti) {
   if(!items) return;
   const cards = items.querySelectorAll('.q-card');
   if(!cards[i]) return;
-  const opts = cards[i].querySelector('.options-wrap');
+  const opts = cards[i].querySelector('.options');
   if(!opts) return;
   
   currentExamQuestion = i;
