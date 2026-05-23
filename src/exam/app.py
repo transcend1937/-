@@ -13,7 +13,7 @@ from exam.questions import QUESTIONS
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="广铁就业题库")
+app = FastAPI(title="广铁机考模拟题库")
 
 import os
 static_dir = os.path.join(os.path.dirname(__file__), "static")
@@ -269,7 +269,7 @@ EXAM_HTML = r"""
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>广铁就业题库</title>
+<title>广铁机考模拟题库</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
@@ -384,9 +384,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 <!-- ========== 首页 ========== -->
 <div id="pageHome" class="page active">
   <div class="home-page">
-    <div class="home-title">广铁就业题库</div>
+    <div class="home-title">广铁机考模拟题库</div>
     <div class="home-sub">广州铁路局机考模拟 · 分层训练</div>
-    <div class="blessing">🌟 祝你笔下生花，顺利上岸！</div>
+    <div class="blessing">🌟 祝你考试顺利，成功上岸！</div>
     <div class="home-cards">
       <div class="home-card exam" onclick="startExam()">
         <div class="icon">📝</div>
@@ -640,7 +640,7 @@ function showExamResult(data) {
   const color = scorePercent>=80?'#4caf50':scorePercent>=60?'#ff9800':'#f44336';
   html += '<div class="result-score" style="color:'+color+'">'+data.total_score+'<span class="unit"> / '+data.full_score+'</span></div>';
   html += '<div class="result-info">用时 '+m+'分'+s+'秒</div>';
-  html += '<div class="blessing" style="font-size:14px;margin-top:10px">🌟 祝你笔下生花，顺利上岸！</div>';
+  html += '<div class="blessing" style="font-size:14px;margin-top:10px">🌟 祝你考试顺利，成功上岸！</div>';
   html += '</div>';
   html += '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">';
   html += '<button class="btn btn-primary btn-sm" onclick="backHome();setTimeout(startExam,100)">再来一套</button>';
