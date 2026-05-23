@@ -655,6 +655,40 @@ function renderExam() {
   el.innerHTML = html;
 }
 
+// 选答案
+window.examSelectOpt = function(i, qid, opt, isMulti) {
+  const items = document.getElementById('examContent');
+  if(!items) return;
+  const cards = items.querySelectorAll('.q-card');
+  if(!cards[i]) return;
+  const opts = cards[i].querySelector('.options-wrap');
+  if(!opts) return;
+  
+  currentExamQuestion = i;
+  
+  if(isMulti){
+    const el = Array.from(opts.children).find(o=>{
+      const letter = o.querySelector('.letter');
+      return letter && letter.textContent.trim()===opt;
+    });
+    if(el) el.classList.toggle('selected');
+    const selected = [];
+    opts.querySelectorAll('.option.selected').forEach(o=>{
+      const letter = o.querySelector('.letter');
+      if(letter) selected.push(letter.textContent.trim());
+    });
+    examAnswers[qid] = {id:qid, selected: selected.join(',')};
+  } else {
+    opts.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+    const el = Array.from(opts.children).find(o=>{
+      const letter = o.querySelector('.letter');
+      return letter && letter.textContent.trim()===opt;
+    });
+    if(el) el.classList.add('selected');
+    examAnswers[qid] = {id:qid, selected: opt};
+  }
+}
+
 function startExamTimer() {
   if(examTimerId) clearInterval(examTimerId);
   examTimerId = setInterval(()=>{
