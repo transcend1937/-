@@ -408,6 +408,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .btn-sm{padding:8px 16px;font-size:13px}
 /* Exam footer */
 .exam-footer{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+/* Exam Q-nav sidebar */
+.exam-wrap{display:flex;gap:16px;max-width:900px;margin:0 auto;position:relative}
+.exam-main{flex:1;min-width:0}
+.exam-nav-wrap{width:72px;flex-shrink:0;position:sticky;top:68px;align-self:flex-start;max-height:calc(100vh - 80px);overflow-y:auto;padding:4px 6px;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.exam-nav-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.exam-nav-num{width:100%;aspect-ratio:1;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;background:#f0f0f0;color:#999;transition:all 0.2s;display:flex;align-items:center;justify-content:center;padding:0}
+.exam-nav-num:hover{background:#e0e0e0;transform:scale(1.1)}
+.exam-nav-num.answered{background:#1a73e8;color:#fff}
+.exam-nav-num.wrong{background:#f44336;color:#fff}
+.exam-nav-num.current{border:2px solid #ff6b35}
+@media(max-width:640px){.exam-nav-wrap{display:none}}
 /* Result */
 .result-card{background:#fff;border-radius:16px;padding:32px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.08);margin-bottom:20px}
 .result-score{font-size:64px;font-weight:700;color:#1a73e8;margin:16px 0}
@@ -467,13 +478,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 <div id="pageExam" class="page">
   <div class="header">
     <button class="back" onclick="backHome()">&#x2190;</button>
-    <span class="title">广铁机考限时模拟</span>
+    <span class="title">广铁限时模拟题</span>
     <div class="right">
       <span class="timer-badge" id="examTimer">45:00</span>
     </div>
   </div>
-  <div class="content" id="examContent">
-    <div style="text-align:center;padding:60px 0;color:#999">加载中...</div>
+  <div class="content">
+    <div class="exam-wrap">
+      <div class="exam-main" id="examContent">
+        <div style="text-align:center;padding:60px 0;color:#999">加载中...</div>
+      </div>
+      <div class="exam-nav-wrap" id="examNavWrap">
+        <div class="exam-nav-grid" id="examNavGrid"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -624,7 +642,7 @@ function renderExam() {
       html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
     }
     if(q.question_type==='填空'){
-      html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value}">';
+      html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value};updateExamNav()">';
     } else {
       if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
       html += '<div class="options" id="exam_opts_'+i+'">';
@@ -641,6 +659,33 @@ function renderExam() {
   html += '<button class="btn btn-primary btn-block" onclick="submitExam()" id="examSubmitBtn">提交试卷</button>';
   html += '</div>';
   el.innerHTML = html;
+  renderExamNav();
+  updateExamNav();
+}
+
+function renderExamNav() {
+  const grid = document.getElementById('examNavGrid');
+  if(!grid) return;
+  let html = '';
+  for(let i=0;i<examData.items.length;i++){
+    html += '<button class="exam-nav-num" onclick="scrollToQuestion('+i+')" id="nav_'+i+'">'+(i+1)+'</button>';
+  }
+  grid.innerHTML = html;
+}
+
+function updateExamNav() {
+  for(let i=0;i<examData.items.length;i++){
+    const btn = document.getElementById('nav_'+i);
+    if(!btn) continue;
+    const q = examData.items[i];
+    const answered = examAnswers[q.id] && examAnswers[q.id].selected && examAnswers[q.id].selected.toString().trim()!=='';
+    btn.classList.toggle('answered', answered);
+  }
+}
+
+function scrollToQuestion(i) {
+  const el = document.getElementById('eq_'+i);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
 function examSelectOpt(i, qid, opt, isMulti) {
@@ -661,6 +706,7 @@ function examSelectOpt(i, qid, opt, isMulti) {
     if(el) el.classList.add('selected');
     examAnswers[qid] = {id:qid, selected: opt};
   }
+  updateExamNav();
 }
 
 function startExamTimer() {
@@ -704,34 +750,55 @@ function showExamResult(data) {
   const color = scorePercent>=80?'#4caf50':scorePercent>=60?'#ff9800':'#f44336';
   html += '<div class="result-score" style="color:'+color+'">'+data.total_score+'<span class="unit"> / '+data.full_score+'</span></div>';
   html += '<div class="result-info">用时 '+m+'分'+s+'秒</div>';
+  let correctCount = data.details.filter(d=>d.correct).length;
+  html += '<div style="font-size:14px;color:#666;margin-bottom:8px">共 '+data.details.length+' 题 · 正确 '+correctCount+' 题 · 错误 '+(data.details.length-correctCount)+' 题</div>';
   html += '<div class="blessing" style="font-size:14px;margin-top:10px">🌟 祝你考试顺利，成功上岸！</div>';
   html += '</div>';
   html += '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">';
-  html += '<button class="btn btn-primary btn-sm" onclick="backHome();setTimeout(startExam,100)">再来一套</button>';
-  html += '<button class="btn btn-outline btn-sm" onclick="showExamDetail()">查看详情</button>';
+  html += '<button class="btn btn-primary btn-sm" onclick="backHome();setTimeout(startGTExam,100)">再来一套</button>';
+  html += '<button class="btn btn-outline btn-sm" onclick="document.getElementById(\'reviewSection\').scrollIntoView({behavior:\'smooth\'})">查看详情</button>';
   html += '</div>';
-  html += '<div id="examDetail" style="display:none">';
-  let correctCount = 0;
+  // Review all questions
+  html += '<div id="reviewSection">';
+  let correctCount2 = 0;
   data.details.forEach((d,i)=>{
-    if(d.correct) correctCount++;
-    html += '<div class="result-detail-item '+(d.correct?'correct':'wrong')+'">';
-    html += '<span>第'+(i+1)+'题</span>';
-    html += '<span>'+(d.correct?'&#x2713; +'+d.score+'分':'&#x2717; 正确答案:'+d.answer)+'</span>';
+    const q = examData.items[i];
+    if(!q) return;
+    if(d.correct) correctCount2++;
+    const isCorrect = d.correct;
+    const userAns = d.user_answer || '未作答';
+    const correctAns = d.answer || '';
+    html += '<div class="q-card" id="review_'+i+'">';
+    html += '<div class="q-header">';
+    html += '<span class="q-num">第 '+(i+1)+' 题</span>';
+    html += '<span style="font-size:12px;padding:2px 10px;border-radius:10px;background:'+(isCorrect?'#e8f5e9':'#ffebee')+';color:'+(isCorrect?'#2e7d32':'#c62828')+'">'+(isCorrect?'✓ 正确 (+'+d.score+'分)':'✗ 错误')+'</span>';
     html += '</div>';
-    if(!d.correct){
-      // 记录错题
-      const q = examData.items[i];
-      if(q) addWrongId(q.id);
+    if(q.image && q.type==='图形推理'){
+      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+    } else {
+      html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
+    }
+    if(q.image && q.type!=='图形推理'){
+      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+    }
+    if(!isCorrect){
+      html += '<div class="analysis-box">';
+      html += '<div><span class="label">你的答案：</span><span style="color:#c62828;font-weight:600">'+htmlEscape(userAns.toString())+'</span></div>';
+      html += '<div><span class="label">正确答案：</span><span style="color:#2e7d32;font-weight:600">'+htmlEscape(correctAns.toString())+'</span></div>';
+      if(q.analysis){
+        html += '<div style="margin-top:8px"><span class="label">解析：</span>'+htmlEscape(q.analysis)+'</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+    if(!isCorrect){
+      const qq = examData.items[i];
+      if(qq) addWrongId(qq.id);
     }
   });
   html += '</div>';
   el.innerHTML = html;
   showPage('pageResult');
-}
-
-function showExamDetail() {
-  const el = document.getElementById('examDetail');
-  el.style.display = el.style.display==='none'?'block':'none';
 }
 
 // ========== 分层训练 ==========
