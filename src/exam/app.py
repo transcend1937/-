@@ -199,6 +199,7 @@ def submit_exam(req: ExamSubmitRequest):
             "answer": q["answer"],
             "analysis": q["analysis"],
             "score": q.get("score", 2.0),
+            "user_answer": selected,
         })
 
     return {
@@ -742,63 +743,67 @@ function submitExam() {
 
 function showExamResult(data) {
   const el = document.getElementById('resultContent');
-  const m = Math.floor(data.time_used/60);
-  const s = data.time_used%60;
+  if(!el){alert('页面加载异常，请刷新重试');return;}
+  
+  // 得分卡片
   let html = '<div class="result-card">';
-  html += '<div style="font-size:16px;color:#888">广铁限时模拟题</div>';
-  const scorePercent = data.total_score/data.full_score*100;
-  const color = scorePercent>=80?'#4caf50':scorePercent>=60?'#ff9800':'#f44336';
-  html += '<div class="result-score" style="color:'+color+'">'+data.total_score+'<span class="unit"> / '+data.full_score+'</span></div>';
-  html += '<div class="result-info">用时 '+m+'分'+s+'秒</div>';
+  html += '<div style="font-size:36px;font-weight:700;color:#e74c3c">'+data.total_score+'</div>';
+  html += '<div style="font-size:14px;color:#999">满分 '+data.full_score+' 分</div>';
+  html += '<div class="time-used">用时 <b>'+Math.floor(data.time_used/60)+'分'+data.time_used%60+'秒</b></div>';
   let correctCount = data.details.filter(d=>d.correct).length;
   html += '<div style="font-size:14px;color:#666;margin-bottom:8px">共 '+data.details.length+' 题 · 正确 '+correctCount+' 题 · 错误 '+(data.details.length-correctCount)+' 题</div>';
-  html += '<div class="blessing" style="font-size:14px;margin-top:10px">🌟 祝你考试顺利，成功上岸！</div>';
   html += '</div>';
-  html += '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap">';
-  html += '<button class="btn btn-primary btn-sm" onclick="backHome();setTimeout(startGTExam,100)">再来一套</button>';
-  html += '<button class="btn btn-outline btn-sm" onclick="document.getElementById(\'reviewSection\').scrollIntoView({behavior:\'smooth\'})">查看详情</button>';
+  
+  // 按钮
+  html += '<div style="display:flex;gap:10px;margin-bottom:12px">';
+  html += '<button onclick="backHome();setTimeout(startGTExam,100)" style="flex:1;padding:10px;background:#3498db;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer">再来一套</button>';
   html += '</div>';
-  // Review all questions
+  
+  // 每题详情
   html += '<div id="reviewSection">';
-  let correctCount2 = 0;
   data.details.forEach((d,i)=>{
     const q = examData.items[i];
     if(!q) return;
-    if(d.correct) correctCount2++;
     const isCorrect = d.correct;
     const userAns = d.user_answer || '未作答';
-    const correctAns = d.answer || '';
-    html += '<div class="q-card" id="review_'+i+'">';
-    html += '<div class="q-header">';
-    html += '<span class="q-num">第 '+(i+1)+' 题</span>';
-    html += '<span style="font-size:12px;padding:2px 10px;border-radius:10px;background:'+(isCorrect?'#e8f5e9':'#ffebee')+';color:'+(isCorrect?'#2e7d32':'#c62828')+'">'+(isCorrect?'✓ 正确 (+'+d.score+'分)':'✗ 错误')+'</span>';
-    html += '</div>';
+    const correctAns = typeof d.answer==='object' ? (d.answer||[]).join(',') : (d.answer||'');
+    const analysisText = d.analysis || '暂无解析';
+    
+    html += '<div class="result-item '+(isCorrect?'correct-bg':'wrong-bg')+'">';
+    html += '<div style="font-size:14px;font-weight:600;color:#333;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #eee">第 '+(i+1)+' 题 <span style="float:right;font-size:13px">'+(isCorrect?'✅ 正确 (+'+d.score+'分)':'❌ 错误')+'</span></div>';
+    html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     if(q.image && q.type==='图形推理'){
       html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    } else {
-      html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
-    }
-    if(q.image && q.type!=='图形推理'){
+    } else if(q.image){
       html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
     }
-    html += '<div class="analysis-box">';
-    html += '<div><span class="label">你的答案：</span><span style="color:'+(isCorrect?'#2e7d32':'#c62828')+';font-weight:600">'+htmlEscape(userAns.toString())+'</span></div>';
-    html += '<div><span class="label">正确答案：</span><span style="color:#2e7d32;font-weight:600">'+htmlEscape(correctAns.toString())+'</span></div>';
-    if(d.analysis){
-      html += '<div style="margin-top:8px"><span class="label">解析：</span>'+htmlEscape(d.analysis)+'</div>';
+    // 你的答案 & 正确答案
+    html += '<div style="margin-top:8px;padding:8px 10px;background:#f8f9fa;border-radius:6px;font-size:14px">';
+    html += '<div><span style="font-weight:600">你的答案：</span><span style="color:'+(isCorrect?'#27ae60':'#e74c3c')+';font-weight:600">'+htmlEscape(userAns)+'</span></div>';
+    if(!isCorrect){
+      html += '<div><span style="font-weight:600">正确答案：</span><span style="color:#27ae60;font-weight:600">'+htmlEscape(correctAns)+'</span></div>';
     }
     html += '</div>';
+    // 解析
+    html += '<div style="margin-top:8px;padding:10px 12px;background:#f0f4ff;border-radius:6px;font-size:13px;color:#444;line-height:1.7;border-left:3px solid #4a90d9">';
+    html += '<span style="font-weight:600;color:#4a90d9">📖 解析：</span>'+htmlEscape(analysisText);
     html += '</div>';
+    html += '</div>';
+    
     if(!isCorrect){
-      const qq = examData.items[i];
-      if(qq) addWrongId(qq.id);
+      try{addWrongId(q.id);}catch(e){}
     }
   });
   html += '</div>';
+  
   el.innerHTML = html;
   showPage('pageResult');
+  // 自动滚动到结果卡片
+  setTimeout(()=>{
+    const card = document.querySelector('.result-card');
+    if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
+  },100);
 }
-
 // ========== 分层训练 ==========
 var trainType = '';
 var trainPage = 1;
