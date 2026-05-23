@@ -576,14 +576,7 @@ function loadWrongBook() {
         html += '<span style="font-size:12px;color:#888">'+q.type+' · '+q.question_type+'</span>';
         html += '<span style="font-size:12px;color:#f44336;cursor:pointer" onclick="removeWrongId('+q.id+');loadWrongBook()">✕ 移除</span>';
         html += '</div>';
-        if(q.image && q.type==='图形推理'){
-      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    } else {
-      html += '<div style="font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:10px">'+htmlEscape(q.question)+'</div>';
-    }
-    if(q.image && q.type!=='图形推理'){
-      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    }
+        html += '<div style="font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:10px">'+htmlEscape(q.question)+'</div>';
         if(q.options){
           html += '<div style="font-size:13px;color:#666;margin-bottom:6px">选项：</div>';
           Object.entries(q.options).forEach(([k,v])=>{
@@ -633,14 +626,7 @@ function renderExam() {
     html += '<span class="q-num">第 <span class="n">'+(i+1)+'</span> 题</span>';
     html += '<span class="q-type">'+q.type+' · '+(q.question_type==='单选'?'单选题':q.question_type==='多选'?'多选题':'填空题')+'</span>';
     html += '</div>';
-    if(q.image && q.type==='图形推理'){
-      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    } else {
-      html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
-    }
-    if(q.image && q.type!=='图形推理'){
-      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    }
+    html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     if(q.question_type==='填空'){
       html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value};updateExamNav()">';
     } else {
@@ -773,23 +759,14 @@ function showExamResult(data) {
     html += '<span class="q-num">第 '+(i+1)+' 题</span>';
     html += '<span style="font-size:12px;padding:2px 10px;border-radius:10px;background:'+(isCorrect?'#e8f5e9':'#ffebee')+';color:'+(isCorrect?'#2e7d32':'#c62828')+'">'+(isCorrect?'✓ 正确 (+'+d.score+'分)':'✗ 错误')+'</span>';
     html += '</div>';
-    if(q.image && q.type==='图形推理'){
-      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    } else {
-      html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
+    html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
+    html += '<div class="analysis-box">';
+    html += '<div><span class="label">你的答案：</span><span style="color:'+(isCorrect?'#2e7d32':'#c62828')+';font-weight:600">'+htmlEscape(userAns.toString())+'</span></div>';
+    html += '<div><span class="label">正确答案：</span><span style="color:#2e7d32;font-weight:600">'+htmlEscape(correctAns.toString())+'</span></div>';
+    if(q.analysis){
+      html += '<div style="margin-top:8px"><span class="label">解析：</span>'+htmlEscape(q.analysis)+'</div>';
     }
-    if(q.image && q.type!=='图形推理'){
-      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    }
-    if(!isCorrect){
-      html += '<div class="analysis-box">';
-      html += '<div><span class="label">你的答案：</span><span style="color:#c62828;font-weight:600">'+htmlEscape(userAns.toString())+'</span></div>';
-      html += '<div><span class="label">正确答案：</span><span style="color:#2e7d32;font-weight:600">'+htmlEscape(correctAns.toString())+'</span></div>';
-      if(q.analysis){
-        html += '<div style="margin-top:8px"><span class="label">解析：</span>'+htmlEscape(q.analysis)+'</div>';
-      }
-      html += '</div>';
-    }
+    html += '</div>';
     html += '</div>';
     if(!isCorrect){
       const qq = examData.items[i];
@@ -853,14 +830,7 @@ function renderTrainQuestion(q, hasMore) {
   html += '<span class="q-num">第 <span class="n">'+(trainPage)+'</span> 题</span>';
   html += '<span class="q-type">'+(q.question_type==='多选'?'多选题':'单选题')+'</span>';
   html += '</div>';
-  if(q.image && q.type==='图形推理'){
-      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    } else {
-      html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
-    }
-    if(q.image && q.type!=='图形推理'){
-      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-    }
+  html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
   if(q.options){
     if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
     html += '<div class="options" id="trainOpts">';
