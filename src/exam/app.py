@@ -160,14 +160,15 @@ def submit_exam(req: ExamSubmitRequest):
 # ============================================================
 @app.get("/api/train/types")
 def get_train_types():
-    """获取所有可训练的类型 (不返回题目数量)"""
-    types = []
+    """获取所有可训练的类型 (不返回题目数量)，图形推理排在首位"""
     seen = set()
     for q in QUESTIONS:
-        if q["question_type"] in ("单选", "多选") and q["type"] not in seen:
-            types.append(q["type"])
+        if q["question_type"] in ("单选", "多选"):
             seen.add(q["type"])
-    return {"code": 0, "data": types}
+    # 固定顺序：图形推理排首位，其余按科目逻辑排序
+    type_order = ["图形推理", "数字推理", "言语理解", "文学常识", "地理常识", "数学物理", "高中数学", "高中物理", "综合"]
+    type_order = [t for t in type_order if t in seen]
+    return {"code": 0, "data": type_order}
 
 
 @app.get("/api/train/questions")
@@ -181,8 +182,8 @@ def get_train_questions(
     if not filtered:
         return {"code": 0, "data": {"items": [], "has_more": False}}
 
-    # 打乱顺序
-    random.shuffle(filtered)
+    # 排序后切片（不shuffle，保证分页不重复）
+    filtered.sort(key=lambda x: x["id"])
 
     start = (page - 1) * page_size
     end = start + page_size
@@ -310,7 +311,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .q-num .n{color:#1a73e8;font-weight:700}
 .q-type{font-size:11px;padding:2px 10px;border-radius:10px;background:#e8f0fe;color:#1a73e8}
 .q-text{font-size:15px;line-height:1.8;margin-bottom:16px;white-space:pre-wrap}
-.q-img{max-width:100%;margin:8px 0;border-radius:8px}
+.q-img-wrap{margin:8px 0;text-align:center}.q-img-wrap img{max-width:100%;max-height:280px;border-radius:6px;border:1px solid #e0e0e0;background:#f8f8f8}
 /* Options */
 .options{display:flex;flex-direction:column;gap:8px}
 .option{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:2px solid #e8e8e8;border-radius:10px;cursor:pointer;transition:all 0.2s;font-size:14px;line-height:1.6}
@@ -498,6 +499,9 @@ function loadWrongBook() {
         html += '<span style="font-size:12px;color:#f44336;cursor:pointer" onclick="removeWrongId('+q.id+');loadWrongBook()">✕ 移除</span>';
         html += '</div>';
         html += '<div style="font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:10px">'+htmlEscape(q.question)+'</div>';
+    if(q.image){
+      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+    }
         if(q.options){
           html += '<div style="font-size:13px;color:#666;margin-bottom:6px">选项：</div>';
           Object.entries(q.options).forEach(([k,v])=>{
@@ -547,6 +551,12 @@ function renderExam() {
     html += '<span class="q-type">'+q.type+' · '+(q.question_type==='单选'?'单选题':q.question_type==='多选'?'多选题':'填空题')+'</span>';
     html += '</div>';
     html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
+  if(q.image){
+    html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+  }
+    if(q.image){
+      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+    }
     if(q.question_type==='填空'){
       html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value}">';
     } else {
@@ -710,6 +720,9 @@ function renderTrainQuestion(q, hasMore) {
   html += '<span class="q-type">'+(q.question_type==='多选'?'多选题':'单选题')+'</span>';
   html += '</div>';
   html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
+  if(q.image){
+    html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+  }
   if(q.options){
     if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
     html += '<div class="options" id="trainOpts">';
