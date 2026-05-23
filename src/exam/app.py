@@ -313,6 +313,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .q-type{font-size:11px;padding:2px 10px;border-radius:10px;background:#e8f0fe;color:#1a73e8}
 .q-text{font-size:15px;line-height:1.8;margin-bottom:16px;white-space:pre-wrap}
 .q-img-wrap{margin:8px 0;text-align:center}.q-img-wrap img{max-width:100%;max-height:280px;border-radius:6px;border:1px solid #e0e0e0;background:#f8f8f8}
+    .q-img-full{margin:8px 0;text-align:center}.q-img-full img{max-width:100%;width:100%;border-radius:6px;border:1px solid #e0e0e0;background:#f8f8f8}
 /* Options */
 .options{display:flex;flex-direction:column;gap:8px}
 .option{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:2px solid #e8e8e8;border-radius:10px;cursor:pointer;transition:all 0.2s;font-size:14px;line-height:1.6}
@@ -500,8 +501,12 @@ function loadWrongBook() {
         html += '<span style="font-size:12px;color:#888">'+q.type+' · '+q.question_type+'</span>';
         html += '<span style="font-size:12px;color:#f44336;cursor:pointer" onclick="removeWrongId('+q.id+');loadWrongBook()">✕ 移除</span>';
         html += '</div>';
-        html += '<div style="font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:10px">'+htmlEscape(q.question)+'</div>';
-    if(q.image){
+        if(q.image && q.type==='图形推理'){
+      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+    } else {
+      html += '<div style="font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:10px">'+htmlEscape(q.question)+'</div>';
+    }
+    if(q.image && q.type!=='图形推理'){
       html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
     }
         if(q.options){
@@ -552,11 +557,12 @@ function renderExam() {
     html += '<span class="q-num">第 <span class="n">'+(i+1)+'</span> 题</span>';
     html += '<span class="q-type">'+q.type+' · '+(q.question_type==='单选'?'单选题':q.question_type==='多选'?'多选题':'填空题')+'</span>';
     html += '</div>';
-    html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
-  if(q.image){
-    html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-  }
-    if(q.image){
+    if(q.image && q.type==='图形推理'){
+      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+    } else {
+      html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
+    }
+    if(q.image && q.type!=='图形推理'){
       html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
     }
     if(q.question_type==='填空'){
@@ -722,10 +728,14 @@ function renderTrainQuestion(q, hasMore) {
   html += '<span class="q-num">第 <span class="n">'+(trainPage)+'</span> 题</span>';
   html += '<span class="q-type">'+(q.question_type==='多选'?'多选题':'单选题')+'</span>';
   html += '</div>';
-  html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
-  if(q.image){
-    html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
-  }
+  if(q.image && q.type==='图形推理'){
+      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+    } else {
+      html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
+    }
+    if(q.image && q.type!=='图形推理'){
+      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+    }
   if(q.options){
     if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
     html += '<div class="options" id="trainOpts">';
