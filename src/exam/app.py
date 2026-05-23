@@ -784,8 +784,8 @@ function showExamResult(data) {
     html += '<div class="analysis-box">';
     html += '<div><span class="label">你的答案：</span><span style="color:'+(isCorrect?'#2e7d32':'#c62828')+';font-weight:600">'+htmlEscape(userAns.toString())+'</span></div>';
     html += '<div><span class="label">正确答案：</span><span style="color:#2e7d32;font-weight:600">'+htmlEscape(correctAns.toString())+'</span></div>';
-    if(q.analysis){
-      html += '<div style="margin-top:8px"><span class="label">解析：</span>'+htmlEscape(q.analysis)+'</div>';
+    if(d.analysis){
+      html += '<div style="margin-top:8px"><span class="label">解析：</span>'+htmlEscape(d.analysis)+'</div>';
     }
     html += '</div>';
     html += '</div>';
