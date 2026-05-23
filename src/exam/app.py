@@ -446,11 +446,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
     <div class="home-sub">广州铁路局机考模拟 · 分层训练</div>
     <div class="blessing">🌟 祝你考试顺利，成功上岸！</div>
     <div class="home-cards">
-      <div class="home-card exam" onclick="startExam()">
-        <div class="icon">📝</div>
-        <div class="name">随机模拟</div>
-        <div class="desc">45分钟限时答题<br>单选37题+多选4题+填空4题<br>随机顺序</div>
-      </div>
       <div class="home-card" style="border-top:4px solid #e91e63" onclick="startGTExam()">
         <div class="icon">🎯</div>
         <div class="name">广铁限时模拟题</div>
@@ -528,8 +523,7 @@ function backHome() {
 }
 
 // ========== 首页按钮 ==========
-function startExam() { showPage('pageExam'); loadExam('random'); }
-function startGTExam() { showPage('pageExam'); loadExam('gt'); }
+function startGTExam() { showPage('pageExam'); loadExam(); }
 function startTrain() { showPage('pageTrain'); loadTypes(); }
 function showWrongBook() { showPage('pageWrong'); loadWrongBook(); }
 
@@ -597,16 +591,12 @@ var examData = null;
 var examAnswers = {};
 var examTimerId = null;
 var examTimeLeft = 0;
-var examMode = 'random'; // 'random' or 'gt'
 
-function loadExam(mode) {
-  examMode = mode || 'random';
+function loadExam() {
   const el = document.getElementById('examContent');
-  // Update header title
-  document.querySelector('#pageExam .header .title').textContent = examMode === 'gt' ? '广铁限时模拟题' : '广铁随机模拟';
+  document.querySelector('#pageExam .header .title').textContent = '广铁限时模拟题';
   el.innerHTML = '<div style="text-align:center;padding:60px 0;color:#999">生成试卷中...</div>';
-  const apiUrl = examMode === 'gt' ? './api/exam/generate_gt' : './api/exam/generate';
-  fetch(apiUrl).then(r=>r.json()).then(res=>{
+  fetch('./api/exam/generate_gt').then(r=>r.json()).then(res=>{
     if(res.code!==0){el.innerHTML='<div style="text-align:center;padding:60px 0;color:#f44336">生成失败</div>';return}
     examData = res.data;
     examAnswers = {};
