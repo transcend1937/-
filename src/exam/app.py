@@ -732,18 +732,29 @@ function submitExam() {
   examTimerId = null;
   const btn = document.getElementById('examSubmitBtn');
   if(btn) btn.disabled = true;
-  const answers = Object.values(examAnswers);
+  // 构建完整45题答案，未答的传空字符串
+  const answers = [];
+  if(examData && examData.items){
+    examData.items.forEach(q=>{
+      const ans = examAnswers[q.id];
+      answers.push({id: q.id, selected: ans ? ans.selected : ''});
+    });
+  }
   const timeUsed = examData.duration * 60 - examTimeLeft;
   fetch('./api/exam/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers,time_used:timeUsed})})
     .then(r=>r.json()).then(res=>{
       if(res.code!==0) return;
       showExamResult(res.data);
-    }).catch(()=>{});
+    }).catch(e=>{console.error(e)});
 }
 
 function showExamResult(data) {
   const el = document.getElementById('resultContent');
   if(!el){alert('页面加载异常，请刷新重试');return;}
+  
+  // 存储结果数据供筛选使用
+  window._examResultData = data;
+  window._examFilter = 'all';
   
   // 得分卡片
   let html = '<div class="result-card">';
@@ -751,17 +762,40 @@ function showExamResult(data) {
   html += '<div style="font-size:14px;color:#999">满分 '+data.full_score+' 分</div>';
   html += '<div class="time-used">用时 <b>'+Math.floor(data.time_used/60)+'分'+data.time_used%60+'秒</b></div>';
   let correctCount = data.details.filter(d=>d.correct).length;
-  html += '<div style="font-size:14px;color:#666;margin-bottom:8px">共 '+data.details.length+' 题 · 正确 '+correctCount+' 题 · 错误 '+(data.details.length-correctCount)+' 题</div>';
+  let wrongCount = data.details.length - correctCount;
+  let unansweredCount = data.details.filter(d=> !d.user_answer || d.user_answer==='').length;
+  html += '<div style="font-size:14px;color:#666;margin-bottom:8px">共 '+data.details.length+' 题 · 正确 '+correctCount+' 题 · 错误 '+wrongCount+' 题'+(unansweredCount>0?' · 未答 '+unansweredCount+' 题':'')+'</div>';
   html += '</div>';
   
-  // 按钮
+  // 按钮组
   html += '<div style="display:flex;gap:10px;margin-bottom:12px">';
   html += '<button onclick="backHome();setTimeout(startGTExam,100)" style="flex:1;padding:10px;background:#3498db;color:#fff;border:none;border-radius:8px;font-size:15px;cursor:pointer">再来一套</button>';
   html += '</div>';
   
-  // 每题详情
+  // 查看模式切换
+  html += '<div style="display:flex;gap:8px;margin-bottom:12px;padding:10px 0;border-bottom:2px solid #eee">';
+  html += '<button id="filterBtnAll" class="filter-btn active" onclick="switchExamFilter(\'all\')" style="flex:1;padding:8px;border-radius:6px;font-size:14px;cursor:pointer;border:none;background:#4a90d9;color:#fff;font-weight:600">📋 全部45题</button>';
+  html += '<button id="filterBtnWrong" class="filter-btn" onclick="switchExamFilter(\'wrong\')" style="flex:1;padding:8px;border-radius:6px;font-size:14px;cursor:pointer;border:none;background:#f0f0f0;color:#666">❌ 仅错题 ('+wrongCount+'题)</button>';
+  html += '</div>';
+  
+  // 题目列表容器
   html += '<div id="reviewSection">';
-  data.details.forEach((d,i)=>{
+  html += renderExamItems(data.details, 'all');
+  html += '</div>';
+  
+  el.innerHTML = html;
+  showPage('pageResult');
+  setTimeout(()=>{
+    const card = document.querySelector('.result-card');
+    if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
+  },100);
+}
+
+// 渲染题目列表
+function renderExamItems(details, filter){
+  let html = '';
+  details.forEach((d,i)=>{
+    if(filter==='wrong' && d.correct) return;
     const q = examData.items[i];
     if(!q) return;
     const isCorrect = d.correct;
@@ -777,14 +811,13 @@ function showExamResult(data) {
     } else if(q.image){
       html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
     }
-    // 你的答案 & 正确答案
     html += '<div style="margin-top:8px;padding:8px 10px;background:#f8f9fa;border-radius:6px;font-size:14px">';
     html += '<div><span style="font-weight:600">你的答案：</span><span style="color:'+(isCorrect?'#27ae60':'#e74c3c')+';font-weight:600">'+htmlEscape(userAns)+'</span></div>';
     if(!isCorrect){
       html += '<div><span style="font-weight:600">正确答案：</span><span style="color:#27ae60;font-weight:600">'+htmlEscape(correctAns)+'</span></div>';
     }
     html += '</div>';
-    // 解析
+    // 解析 - 每道题都有
     html += '<div style="margin-top:8px;padding:10px 12px;background:#f0f4ff;border-radius:6px;font-size:13px;color:#444;line-height:1.7;border-left:3px solid #4a90d9">';
     html += '<span style="font-weight:600;color:#4a90d9">📖 解析：</span>'+htmlEscape(analysisText);
     html += '</div>';
@@ -794,15 +827,32 @@ function showExamResult(data) {
       try{addWrongId(q.id);}catch(e){}
     }
   });
-  html += '</div>';
+  return html;
+}
+
+// 切换查看模式
+function switchExamFilter(mode){
+  window._examFilter = mode;
+  const data = window._examResultData;
+  if(!data) return;
   
-  el.innerHTML = html;
-  showPage('pageResult');
-  // 自动滚动到结果卡片
-  setTimeout(()=>{
-    const card = document.querySelector('.result-card');
-    if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
-  },100);
+  const btnAll = document.getElementById('filterBtnAll');
+  const btnWrong = document.getElementById('filterBtnWrong');
+  if(btnAll){
+    btnAll.style.background = mode==='all' ? '#4a90d9' : '#f0f0f0';
+    btnAll.style.color = mode==='all' ? '#fff' : '#666';
+    btnAll.style.fontWeight = mode==='all' ? '600' : 'normal';
+  }
+  if(btnWrong){
+    btnWrong.style.background = mode==='wrong' ? '#e74c3c' : '#f0f0f0';
+    btnWrong.style.color = mode==='wrong' ? '#fff' : '#666';
+    btnWrong.style.fontWeight = mode==='wrong' ? '600' : 'normal';
+  }
+  
+  const section = document.getElementById('reviewSection');
+  if(section){
+    section.innerHTML = renderExamItems(data.details, mode);
+  }
 }
 // ========== 分层训练 ==========
 var trainType = '';
