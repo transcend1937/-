@@ -248,6 +248,7 @@ def get_train_questions(
     items = filtered[start:end]
 
     has_more = end < len(filtered)
+    total = len(filtered)
 
     # 不返回答案（前端判题用）
     result_items = []
@@ -264,6 +265,7 @@ def get_train_questions(
         "data": {
             "items": result_items,
             "has_more": has_more,
+            "total": total,
         }
     }
 
@@ -854,11 +856,19 @@ function loadTypes() {
 function startTrainType(type) {
   trainType = type;
   trainPage = 1;
+  trainCache = {};   // 切换题型时清空缓存
+  trainTotal = 0;
   showPage('pageTrain');
   loadTrainQuestion();
 }
 
 function loadTrainQuestion() {
+  // 如果该页已缓存，直接渲染（不请求API）
+  if(trainCache[trainPage]){
+    const cached = trainCache[trainPage];
+    renderTrainQuestion(cached.q, cached.hasMore, cached.total, true);
+    return;
+  }
   const el = document.getElementById('trainContent');
   el.innerHTML = '<div style="text-align:center;padding:40px 0;color:#999">加载中...</div>';
   fetch('./api/train/questions?type='+encodeURIComponent(trainType)+'&page='+trainPage+'&page_size=1')
@@ -867,19 +877,34 @@ function loadTrainQuestion() {
         el.innerHTML = '<div style="padding:40px;text-align:center"><p style="color:#888;margin-bottom:20px">没有更多题目了</p><button class="btn btn-outline btn-sm" onclick="loadTypes()">返回题型列表</button></div>';
         return;
       }
-      renderTrainQuestion(res.data.items[0], res.data.has_more);
+      trainTotal = res.data.total || 0;
+      const q = res.data.items[0];
+      // 缓存题目数据（不含答案）
+      trainCache[trainPage] = {q: q, hasMore: res.data.has_more, total: trainTotal, selected: null, result: null};
+      renderTrainQuestion(q, res.data.has_more, trainTotal, false);
     }).catch(()=>{});
 }
 
 var currentTrainQ = null;
+var trainCache = {};   // 缓存已答题目和结果 {page: {q, selected, result, hasMore}}
+var trainTotal = 0;    // 当前题型总题数
 
-function renderTrainQuestion(q, hasMore) {
+function renderTrainQuestion(q, hasMore, total, fromCache) {
   currentTrainQ = q;
   const el = document.getElementById('trainContent');
+  // 顶部导航：返回 + 进度
   let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0">';
   html += '<button class="btn btn-outline btn-sm" onclick="loadTypes()">&larr; 返回题型</button>';
-  html += '<span style="font-size:13px;color:#888">'+trainType+'</span>';
+  html += '<span style="font-size:13px;color:#888">'+trainType+' · 第 '+trainPage+'/'+(total||'?')+' 题</span>';
   html += '</div>';
+  // 上一题 / 下一题 导航栏
+  html += '<div style="display:flex;gap:8px;margin-bottom:10px">';
+  if(trainPage > 1) html += '<button class="btn btn-outline btn-sm" onclick="prevTrain()" style="flex:1">&larr; 上一题</button>';
+  else html += '<div style="flex:1"></div>';
+  if(hasMore) html += '<button class="btn btn-outline btn-sm" onclick="nextTrain()" style="flex:1">下一题 &rarr;</button>';
+  else html += '<div style="flex:1"></div>';
+  html += '</div>';
+  // 题目卡片
   html += '<div class="q-card">';
   html += '<div class="q-header">';
   html += '<span class="q-num">第 <span class="n">'+(trainPage)+'</span> 题</span>';
@@ -906,10 +931,37 @@ function renderTrainQuestion(q, hasMore) {
   html += '<div id="trainResult" style="margin-top:12px"></div>';
   html += '<div style="display:flex;gap:10px;margin-top:14px">';
   html += '<button class="btn btn-primary btn-sm" style="flex:1" id="trainSubmitBtn" onclick="submitTrain()">提交答案</button>';
-  if(hasMore) html += '<button class="btn btn-outline btn-sm" onclick="nextTrain()">下一题 &rarr;</button>';
   html += '</div></div>';
   el.innerHTML = html;
   window.trainSelected = q.question_type==='多选'?[]:'';
+  
+  // 如果从缓存回来，恢复答案和结果
+  if(fromCache && trainCache[trainPage]){
+    const cached = trainCache[trainPage];
+    if(cached.selected !== null){
+      window.trainSelected = cached.selected;
+      // 恢复选项高亮
+      const opts = document.getElementById('trainOpts');
+      if(opts){
+        if(Array.isArray(cached.selected)){
+          opts.querySelectorAll('.option').forEach(o=>{
+            const letter = o.querySelector('.letter').textContent;
+            if(cached.selected.includes(letter)) o.classList.add('selected');
+          });
+        } else if(cached.selected){
+          opts.querySelectorAll('.option').forEach(o=>{
+            if(o.querySelector('.letter').textContent===cached.selected) o.classList.add('selected');
+          });
+        }
+      }
+    }
+    if(cached.result){
+      showTrainResult(cached.result);
+      document.getElementById('trainSubmitBtn').disabled = true;
+    } else {
+      document.getElementById('trainSubmitBtn').disabled = false;
+    }
+  }
 }
 
 function trainSelectOpt(opt, isMulti) {
@@ -944,6 +996,11 @@ function submitTrain() {
     .then(r=>r.json()).then(res=>{
       if(res.code!==0) return;
       showTrainResult(res.data);
+      // 缓存结果
+      if(trainCache[trainPage]){
+        trainCache[trainPage].selected = window.trainSelected;
+        trainCache[trainPage].result = res.data;
+      }
       if(!res.data.correct) addWrongId(currentTrainQ.id);
     }).catch(()=>{if(btn) btn.disabled = false});
 }
@@ -972,6 +1029,13 @@ function showTrainResult(data) {
 
 function nextTrain() {
   trainPage++;
+  document.getElementById('trainSubmitBtn').disabled = false;
+  loadTrainQuestion();
+}
+
+function prevTrain() {
+  if(trainPage <= 1) return;
+  trainPage--;
   document.getElementById('trainSubmitBtn').disabled = false;
   loadTrainQuestion();
 }
