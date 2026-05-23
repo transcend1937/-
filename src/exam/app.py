@@ -96,6 +96,63 @@ def generate_exam():
     }
 
 
+@app.get("/api/exam/generate_gt")
+def generate_gt_exam():
+    """生成广铁限时模拟题（按顺序：37单选→4多选→4填空）"""
+    selected = []
+    qid_offset = 0
+
+    # 1. 单选（按题型顺序出题）
+    for qtype, count in EXAM_CONFIG["单选"]:
+        pool = [q for q in QUESTIONS if q["type"] == qtype and q["question_type"] == "单选"]
+        chosen = random.sample(pool, min(count, len(pool)))
+        for q in chosen:
+            item = dict(q)
+            item["exam_index"] = qid_offset + 1
+            if "answer" in item:
+                del item["answer"]
+            if "analysis" in item:
+                del item["analysis"]
+            selected.append(item)
+            qid_offset += 1
+
+    # 2. 多选
+    multi_pool = [q for q in QUESTIONS if q["question_type"] == "多选"]
+    chosen = random.sample(multi_pool, min(EXAM_CONFIG["多选"], len(multi_pool)))
+    for q in chosen:
+        item = dict(q)
+        item["exam_index"] = qid_offset + 1
+        if "answer" in item:
+            del item["answer"]
+        if "analysis" in item:
+            del item["analysis"]
+        selected.append(item)
+        qid_offset += 1
+
+    # 3. 填空
+    fill_pool = [q for q in QUESTIONS if q["question_type"] == "填空"]
+    chosen = random.sample(fill_pool, min(EXAM_CONFIG["填空"], len(fill_pool)))
+    for q in chosen:
+        item = dict(q)
+        item["exam_index"] = qid_offset + 1
+        if "answer" in item:
+            del item["answer"]
+        if "analysis" in item:
+            del item["analysis"]
+        selected.append(item)
+        qid_offset += 1
+
+    # 不shuffle，保持顺序：单选→多选→填空
+    return {
+        "code": 0,
+        "data": {
+            "items": selected,
+            "duration": EXAM_CONFIG["duration"],
+            "title": "广铁限时模拟题",
+        }
+    }
+
+
 class ExamSubmitRequest(BaseModel):
     answers: list[dict[str, Any]]  # [{"exam_index": 1, "selected": "A"}, ...]
     time_used: int  # 秒
@@ -391,8 +448,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
     <div class="home-cards">
       <div class="home-card exam" onclick="startExam()">
         <div class="icon">📝</div>
-        <div class="name">广铁机考限时模拟</div>
-        <div class="desc">45分钟限时答题<br>单选37题+多选4题+填空4题<br>满分100分</div>
+        <div class="name">随机模拟</div>
+        <div class="desc">45分钟限时答题<br>单选37题+多选4题+填空4题<br>随机顺序</div>
+      </div>
+      <div class="home-card" style="border-top:4px solid #e91e63" onclick="startGTExam()">
+        <div class="icon">🎯</div>
+        <div class="name">广铁限时模拟题</div>
+        <div class="desc">45分钟限时答题<br>37单选 → 4多选 → 4填空<br>按序出题，自动算分</div>
       </div>
       <div class="home-card train" onclick="startTrain()">
         <div class="icon">📚</div>
@@ -466,7 +528,8 @@ function backHome() {
 }
 
 // ========== 首页按钮 ==========
-function startExam() { showPage('pageExam'); loadExam(); }
+function startExam() { showPage('pageExam'); loadExam('random'); }
+function startGTExam() { showPage('pageExam'); loadExam('gt'); }
 function startTrain() { showPage('pageTrain'); loadTypes(); }
 function showWrongBook() { showPage('pageWrong'); loadWrongBook(); }
 
@@ -534,11 +597,16 @@ var examData = null;
 var examAnswers = {};
 var examTimerId = null;
 var examTimeLeft = 0;
+var examMode = 'random'; // 'random' or 'gt'
 
-function loadExam() {
+function loadExam(mode) {
+  examMode = mode || 'random';
   const el = document.getElementById('examContent');
+  // Update header title
+  document.querySelector('#pageExam .header .title').textContent = examMode === 'gt' ? '广铁限时模拟题' : '广铁随机模拟';
   el.innerHTML = '<div style="text-align:center;padding:60px 0;color:#999">生成试卷中...</div>';
-  fetch('./api/exam/generate').then(r=>r.json()).then(res=>{
+  const apiUrl = examMode === 'gt' ? './api/exam/generate_gt' : './api/exam/generate';
+  fetch(apiUrl).then(r=>r.json()).then(res=>{
     if(res.code!==0){el.innerHTML='<div style="text-align:center;padding:60px 0;color:#f44336">生成失败</div>';return}
     examData = res.data;
     examAnswers = {};
@@ -641,7 +709,7 @@ function showExamResult(data) {
   const m = Math.floor(data.time_used/60);
   const s = data.time_used%60;
   let html = '<div class="result-card">';
-  html += '<div style="font-size:16px;color:#888">模拟考试</div>';
+  html += '<div style="font-size:16px;color:#888">'+(examMode==='gt'?'广铁限时模拟题':'模拟考试')+'</div>';
   const scorePercent = data.total_score/data.full_score*100;
   const color = scorePercent>=80?'#4caf50':scorePercent>=60?'#ff9800':'#f44336';
   html += '<div class="result-score" style="color:'+color+'">'+data.total_score+'<span class="unit"> / '+data.full_score+'</span></div>';
