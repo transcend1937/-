@@ -687,7 +687,7 @@ function submitExam() {
   if(btn) btn.disabled = true;
   const answers = Object.values(examAnswers);
   const timeUsed = examData.duration * 60 - examTimeLeft;
-  fetch('./api/exam/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers,timeUsed})})
+  fetch('./api/exam/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers,time_used:timeUsed})})
     .then(r=>r.json()).then(res=>{
       if(res.code!==0) return;
       showExamResult(res.data);
@@ -699,7 +699,7 @@ function showExamResult(data) {
   const m = Math.floor(data.time_used/60);
   const s = data.time_used%60;
   let html = '<div class="result-card">';
-  html += '<div style="font-size:16px;color:#888">'+(examMode==='gt'?'广铁限时模拟题':'模拟考试')+'</div>';
+  html += '<div style="font-size:16px;color:#888">广铁限时模拟题</div>';
   const scorePercent = data.total_score/data.full_score*100;
   const color = scorePercent>=80?'#4caf50':scorePercent>=60?'#ff9800':'#f44336';
   html += '<div class="result-score" style="color:'+color+'">'+data.total_score+'<span class="unit"> / '+data.full_score+'</span></div>';
