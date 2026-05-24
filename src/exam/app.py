@@ -562,7 +562,7 @@ function loadWrongBook() {
     return;
   }
   el.innerHTML = '<div style="text-align:center;padding:20px;color:#999">加载中...</div>';
-  fetch('./api/wrong/list', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ids})})
+  fetch('/api/wrong/list', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ids})})
     .then(r=>r.json()).then(res=>{
       if(res.code!==0||!res.data.items.length){el.innerHTML='<div class="wrong-empty"><p>暂无错题</p></div>';return}
       let html = '<div style="margin:16px 0;text-align:right"><button class="btn btn-sm btn-outline" onclick="clearWrongBook()">清空错题本</button></div>';
@@ -573,12 +573,12 @@ function loadWrongBook() {
         html += '<span style="font-size:12px;color:#f44336;cursor:pointer" onclick="removeWrongId('+q.id+');loadWrongBook()">✕ 移除</span>';
         html += '</div>';
         if(q.image && q.type==='图形推理'){
-        html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+        html += '<div class="q-img-full"><img src="/static/'+q.image[0]+'" alt="题图"></div>';
       } else {
         html += '<div style="font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:10px">'+htmlEscape(q.question)+'</div>';
       }
       if(q.image && q.type!=='图形推理'){
-        html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+        html += '<div class="q-img-wrap"><img src="/static/'+q.image[0]+'" alt="题图"></div>';
       }
         if(q.options){
           html += '<div style="font-size:13px;color:#666;margin-bottom:6px">选项：</div>';
@@ -610,7 +610,7 @@ function loadExam() {
   const el = document.getElementById('examContent');
   document.querySelector('#pageExam .header .title').textContent = '广铁限时模拟题';
   el.innerHTML = '<div style="text-align:center;padding:60px 0;color:#999">生成试卷中...</div>';
-  fetch('./api/exam/generate_gt').then(r=>r.json()).then(res=>{
+  fetch('/api/exam/generate_gt').then(r=>r.json()).then(res=>{
     if(res.code!==0){el.innerHTML='<div style="text-align:center;padding:60px 0;color:#f44336">生成失败</div>';return}
     examData = res.data;
     examAnswers = {};
@@ -630,12 +630,12 @@ function renderExam() {
     html += '<span class="q-type">'+q.type+' · '+(q.question_type==='单选'?'单选题':q.question_type==='多选'?'多选题':'填空题')+'</span>';
     html += '</div>';
     if(q.image && q.type==='图形推理'){
-      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+      html += '<div class="q-img-full"><img src="/static/'+q.image[0]+'" alt="题图"></div>';
     } else {
       html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     }
     if(q.image && q.type!=='图形推理'){
-      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+      html += '<div class="q-img-wrap"><img src="/static/'+q.image[0]+'" alt="题图"></div>';
     }
     if(q.question_type==='填空'){
       html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value}">';
@@ -722,7 +722,7 @@ function submitExam() {
     });
   }
   const timeUsed = examData.duration * 60 - examTimeLeft;
-  fetch('./api/exam/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers,time_used:timeUsed})})
+  fetch('/api/exam/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers,time_used:timeUsed})})
     .then(r=>r.json()).then(res=>{
       if(res.code!==0) return;
       showExamResult(res.data);
@@ -788,9 +788,9 @@ function renderExamItems(details, filter){
     html += '<div style="font-size:14px;font-weight:600;color:#333;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #eee">第 '+(i+1)+' 题 <span style="float:right;font-size:13px">'+(isCorrect?'✅ 正确 (+'+d.score+'分)':'❌ 错误')+'</span></div>';
     html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     if(q.image && q.type==='图形推理'){
-      html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+      html += '<div class="q-img-full"><img src="/static/'+q.image[0]+'" alt="题图"></div>';
     } else if(q.image){
-      html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+      html += '<div class="q-img-wrap"><img src="/static/'+q.image[0]+'" alt="题图"></div>';
     }
     html += '<div style="margin-top:8px;padding:8px 10px;background:#f8f9fa;border-radius:6px;font-size:14px">';
     html += '<div><span style="font-weight:600">你的答案：</span><span style="color:'+(isCorrect?'#27ae60':'#e74c3c')+';font-weight:600">'+htmlEscape(userAns)+'</span></div>';
@@ -842,7 +842,7 @@ var trainPage = 1;
 function loadTypes() {
   const el = document.getElementById('trainContent');
   el.innerHTML = '<div style="text-align:center;padding:20px 0;color:#999">加载中...</div>';
-  fetch('./api/train/types').then(r=>r.json()).then(res=>{
+  fetch('/api/train/types').then(r=>r.json()).then(res=>{
     if(res.code!==0||!res.data.length){el.innerHTML='<div style="padding:20px;text-align:center;color:#999">暂无题目</div>';return}
     let html = '<div style="padding:12px 0;font-size:14px;color:#666;text-align:center">选择题型开始练习</div><div class="type-grid">';
     res.data.forEach(t=>{
@@ -871,7 +871,7 @@ function loadTrainQuestion() {
   }
   const el = document.getElementById('trainContent');
   el.innerHTML = '<div style="text-align:center;padding:40px 0;color:#999">加载中...</div>';
-  fetch('./api/train/questions?type='+encodeURIComponent(trainType)+'&page='+trainPage+'&page_size=1')
+  fetch('/api/train/questions?type='+encodeURIComponent(trainType)+'&page='+trainPage+'&page_size=1')
     .then(r=>r.json()).then(res=>{
       if(res.code!==0||!res.data.items.length){
         el.innerHTML = '<div style="padding:40px;text-align:center"><p style="color:#888;margin-bottom:20px">没有更多题目了</p><button class="btn btn-outline btn-sm" onclick="loadTypes()">返回题型列表</button></div>';
@@ -911,12 +911,12 @@ function renderTrainQuestion(q, hasMore, total, fromCache) {
   html += '<span class="q-type">'+(q.question_type==='多选'?'多选题':'单选题')+'</span>';
   html += '</div>';
   if(q.image && q.type==='图形推理'){
-  html += '<div class="q-img-full"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+  html += '<div class="q-img-full"><img src="/static/'+q.image[0]+'" alt="题图"></div>';
     } else {
   html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     }
     if(q.image && q.type!=='图形推理'){
-  html += '<div class="q-img-wrap"><img src="static/'+q.image[0]+'" alt="题图"></div>';
+  html += '<div class="q-img-wrap"><img src="/static/'+q.image[0]+'" alt="题图"></div>';
     }
   if(q.options){
     if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
@@ -992,7 +992,7 @@ function submitTrain() {
   if(btn) btn.disabled = true;
   const selected = Array.isArray(window.trainSelected)?window.trainSelected.join(','):window.trainSelected;
   if(!selected) { if(btn) btn.disabled = false; return; }
-  fetch('./api/train/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question_id:currentTrainQ.id,selected})})
+  fetch('/api/train/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question_id:currentTrainQ.id,selected})})
     .then(r=>r.json()).then(res=>{
       if(res.code!==0) return;
       showTrainResult(res.data);
@@ -1053,6 +1053,7 @@ function htmlEscape(s) {
 
 @app.get("/")
 @app.get("/exam")
+@app.get("/exam/")
 def exam_page():
     return HTMLResponse(content=EXAM_HTML)
 
