@@ -256,14 +256,13 @@ def submit_exam(req: ExamSubmitRequest):
 # ============================================================
 @app.get("/api/train/types")
 def get_train_types():
-    """获取所有可训练的类型及题数，图形推理排在首位"""
-    seen = {}
+    """获取所有可训练的类型"""
+    seen = set()
     for q in QUESTIONS:
         if q["question_type"] in ("单选", "多选"):
-            seen[q["type"]] = seen.get(q["type"], 0) + 1
-    # 固定顺序：图形推理排首位，其余按科目逻辑排序
+            seen.add(q["type"])
     type_order = ["图形推理", "数字推理", "言语理解", "文学常识", "地理常识", "数学物理", "高中数学", "高中物理", "综合"]
-    result = [{"type": t, "count": seen[t]} for t in type_order if t in seen]
+    result = [t for t in type_order if t in seen]
     return {"code": 0, "data": result}
 
 
@@ -884,7 +883,7 @@ function loadTypes() {
     if(res.code!==0||!res.data.length){el.innerHTML='<div style="padding:20px;text-align:center;color:#999">暂无题目</div>';return}
     let html = '<div style="padding:12px 0;font-size:14px;color:#666;text-align:center">选择题型开始练习</div><div class="type-grid">';
     res.data.forEach(t=>{
-      html += '<div class="type-btn" onclick="startTrainType(\''+t.type+'\')">'+t.type+'<span style="font-size:12px;color:#999;margin-left:6px">('+t.count+'题)</span></div>';
+      html += '<div class="type-btn" onclick="startTrainType(\''+t+'\')">'+t+'</div>';
     });
     html += '</div>';
     el.innerHTML = html;
@@ -933,7 +932,7 @@ function renderTrainQuestion(q, hasMore, total, fromCache) {
   // 顶部导航：返回 + 进度
   let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0">';
   html += '<button class="btn btn-outline btn-sm" onclick="loadTypes()">&larr; 返回题型</button>';
-  html += '<span style="font-size:13px;color:#888">'+trainType+' · 第 '+trainPage+'/'+(total||'?')+' 题</span>';
+  html += '<span style="font-size:13px;color:#888">'+trainType+' · 第 '+trainPage+' 题</span>';
   html += '</div>';
   // 上一题 / 下一题 导航栏
   html += '<div style="display:flex;gap:8px;margin-bottom:10px">';
