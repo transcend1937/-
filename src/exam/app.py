@@ -96,16 +96,34 @@ def generate_exam():
     }
 
 
+# 防止重复出题：记录已出过的题ID，按题型轮换
+_used_tracker: dict[str, set[int]] = {}
+
+
+def _pick_questions(pool, need: int, type_key: str):
+    """优先选没出过的，该题型轮完一遍就重置重新开始"""
+    global _used_tracker
+    used = _used_tracker.setdefault(type_key, set())
+    fresh = [q for q in pool if q["id"] not in used]
+    if len(fresh) < need:
+        # 该题型轮完一遍，全部重置重新抽
+        used.clear()
+        fresh = pool[:]
+    chosen = random.sample(fresh, need)
+    used.update(q["id"] for q in chosen)
+    return chosen
+
+
 @app.get("/api/exam/generate_gt")
 def generate_gt_exam():
-    """生成广铁限时模拟题（按顺序：37单选→4多选→4填空）"""
+    """生成广铁限时模拟题（按顺序：37单选→4多选→4填空，不重复）"""
     selected = []
     qid_offset = 0
 
     # 1. 单选（按题型顺序出题）
     for qtype, count in EXAM_CONFIG["单选"]:
         pool = [q for q in QUESTIONS if q["type"] == qtype and q["question_type"] == "单选"]
-        chosen = random.sample(pool, min(count, len(pool)))
+        chosen = _pick_questions(pool, count, qtype)
         for q in chosen:
             item = dict(q)
             item["exam_index"] = qid_offset + 1
@@ -118,8 +136,7 @@ def generate_gt_exam():
 
     # 2. 多选
     multi_pool = [q for q in QUESTIONS if q["question_type"] == "多选"]
-    chosen = random.sample(multi_pool, min(EXAM_CONFIG["多选"], len(multi_pool)))
-    for q in chosen:
+    for q in _pick_questions(multi_pool, EXAM_CONFIG["多选"], "多选"):
         item = dict(q)
         item["exam_index"] = qid_offset + 1
         if "answer" in item:
@@ -131,8 +148,7 @@ def generate_gt_exam():
 
     # 3. 填空
     fill_pool = [q for q in QUESTIONS if q["question_type"] == "填空"]
-    chosen = random.sample(fill_pool, min(EXAM_CONFIG["填空"], len(fill_pool)))
-    for q in chosen:
+    for q in _pick_questions(fill_pool, EXAM_CONFIG["填空"], "填空"):
         item = dict(q)
         item["exam_index"] = qid_offset + 1
         if "answer" in item:
@@ -142,7 +158,8 @@ def generate_gt_exam():
         selected.append(item)
         qid_offset += 1
 
-    # 不shuffle，保持顺序：单选→多选→填空
+    # 记录本次用过的题（已由pick函数内部记录）
+
     return {
         "code": 0,
         "data": {
