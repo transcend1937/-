@@ -153,15 +153,29 @@ def generate_gt_exam():
         selected.append(item)
         qid_offset += 1
 
-    # 3. 填空
-    fill_pool = [q for q in QUESTIONS if q["question_type"] == "填空"]
-    for q in _pick_questions(fill_pool, EXAM_CONFIG["填空"], "填空"):
+    # 3. 填空（2物理+1地理+1文学）
+    fill_pool_wl = [q for q in QUESTIONS if q["type"] == "高中物理" and q["question_type"] == "填空"]
+    fill_pool_dl = [q for q in QUESTIONS if q["type"] == "地理常识" and q["question_type"] == "填空"]
+    fill_pool_wx = [q for q in QUESTIONS if q["type"] == "文学常识" and q["question_type"] == "填空"]
+    for q in _pick_questions(fill_pool_wl, 2, "填空_高中物理"):
         item = dict(q)
         item["exam_index"] = qid_offset + 1
-        if "answer" in item:
-            del item["answer"]
-        if "analysis" in item:
-            del item["analysis"]
+        if "answer" in item: del item["answer"]
+        if "analysis" in item: del item["analysis"]
+        selected.append(item)
+        qid_offset += 1
+    for q in _pick_questions(fill_pool_dl, 1, "填空_地理常识"):
+        item = dict(q)
+        item["exam_index"] = qid_offset + 1
+        if "answer" in item: del item["answer"]
+        if "analysis" in item: del item["analysis"]
+        selected.append(item)
+        qid_offset += 1
+    for q in _pick_questions(fill_pool_wx, 1, "填空_文学常识"):
+        item = dict(q)
+        item["exam_index"] = qid_offset + 1
+        if "answer" in item: del item["answer"]
+        if "analysis" in item: del item["analysis"]
         selected.append(item)
         qid_offset += 1
 
@@ -242,15 +256,15 @@ def submit_exam(req: ExamSubmitRequest):
 # ============================================================
 @app.get("/api/train/types")
 def get_train_types():
-    """获取所有可训练的类型 (不返回题目数量)，图形推理排在首位"""
-    seen = set()
+    """获取所有可训练的类型及题数，图形推理排在首位"""
+    seen = {}
     for q in QUESTIONS:
         if q["question_type"] in ("单选", "多选"):
-            seen.add(q["type"])
+            seen[q["type"]] = seen.get(q["type"], 0) + 1
     # 固定顺序：图形推理排首位，其余按科目逻辑排序
     type_order = ["图形推理", "数字推理", "言语理解", "文学常识", "地理常识", "数学物理", "高中数学", "高中物理", "综合"]
-    type_order = [t for t in type_order if t in seen]
-    return {"code": 0, "data": type_order}
+    result = [{"type": t, "count": seen[t]} for t in type_order if t in seen]
+    return {"code": 0, "data": result}
 
 
 @app.get("/api/train/questions")
@@ -870,7 +884,7 @@ function loadTypes() {
     if(res.code!==0||!res.data.length){el.innerHTML='<div style="padding:20px;text-align:center;color:#999">暂无题目</div>';return}
     let html = '<div style="padding:12px 0;font-size:14px;color:#666;text-align:center">选择题型开始练习</div><div class="type-grid">';
     res.data.forEach(t=>{
-      html += '<div class="type-btn" onclick="startTrainType(\''+t+'\')">'+t+'</div>';
+      html += '<div class="type-btn" onclick="startTrainType(\''+t.type+'\')">'+t.type+'<span style="font-size:12px;color:#999;margin-left:6px">('+t.count+'题)</span></div>';
     });
     html += '</div>';
     el.innerHTML = html;
