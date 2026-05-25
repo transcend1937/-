@@ -452,7 +452,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
   <div class="home-page">
     <div class="home-title">广铁机考模拟题库</div>
     <div class="home-sub">广州铁路局机考模拟 · 分层训练</div>
-    <div class="blessing">🌟 祝你考试顺利，成功上岸！</div>
+    <div class="blessing">祝考试顺利，成功上岸</div>
     <div class="home-cards">
       <div class="home-card" style="border-top:4px solid #e91e63" onclick="startGTExam()">
         <div class="icon">🎯</div>
