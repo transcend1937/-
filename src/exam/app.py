@@ -945,10 +945,9 @@ function renderTrainQuestion(q, hasMore, total, fromCache) {
   html += '<span class="q-num">第 <span class="n">'+(trainPage)+'</span> 题</span>';
   html += '<span class="q-type">'+(q.question_type==='多选'?'多选题':'单选题')+'</span>';
   html += '</div>';
+  html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
   if(q.image && q.type==='图形推理'){
   html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
-    } else {
-  html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     }
     if(q.image && q.type!=='图形推理'){
   html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
