@@ -609,10 +609,9 @@ function loadWrongBook() {
         html += '<span style="font-size:12px;color:#888">'+q.type+' · '+q.question_type+'</span>';
         html += '<span style="font-size:12px;color:#f44336;cursor:pointer" onclick="removeWrongId('+q.id+');loadWrongBook()">✕ 移除</span>';
         html += '</div>';
-        if(q.image && q.type==='图形推理'){
-        html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
-      } else {
         html += '<div style="font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:10px">'+htmlEscape(q.question)+'</div>';
+      if(q.image && q.type==='图形推理'){
+        html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
       }
       if(q.image && q.type!=='图形推理'){
         html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
@@ -666,10 +665,9 @@ function renderExam() {
     html += '<span class="q-num">第 <span class="n">'+(i+1)+'</span> 题</span>';
     html += '<span class="q-type">'+q.type+' · '+(q.question_type==='单选'?'单选题':q.question_type==='多选'?'多选题':'填空题')+'</span>';
     html += '</div>';
+    html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     if(q.image && q.type==='图形推理'){
       html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
-    } else {
-      html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     }
     if(q.image && q.type!=='图形推理'){
       html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
