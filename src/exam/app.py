@@ -261,7 +261,7 @@ def get_train_types():
     for q in QUESTIONS:
         if q["question_type"] in ("单选", "多选"):
             seen.add(q["type"])
-    type_order = ["图形推理", "数字推理", "言语理解", "文学常识", "地理常识", "数学物理", "高中数学", "高中物理", "综合"]
+    type_order = ["图形推理", "数字推理", "言语理解", "文学常识", "地理常识", "数学物理", "高中数学", "高中物理"]
     result = [t for t in type_order if t in seen]
     return {"code": 0, "data": result}
 
