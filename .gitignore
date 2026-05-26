@@ -6,3 +6,4 @@ nohup.out
 *.log
 .venv/
 uv.lock
+.cozeproj/reduction
