@@ -225,23 +225,7 @@ body {
     color: var(--primary-light);
     margin-bottom: 6px;
 }
-.msg .sound-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 8px;
-    padding: 6px 14px;
-    border: none;
-    border-radius: 20px;
-    background: #eef3f9;
-    color: var(--primary);
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.msg .sound-btn:hover { background: #dce6f2; }
-.msg .sound-btn.playing { background: var(--accent); color: white; }
-.sound-btn svg { width: 16px; height: 16px; }
+
 
 .bottom-bar {
     flex-shrink: 0;
@@ -596,7 +580,7 @@ function addMessage(role, label, content) {
     div.className = 'msg ' + role;
     div.innerHTML = '<div class="label">' + label + '</div>' + formatContent(content);
     if (role === 'ai') {
-        div.innerHTML += '<button class="sound-btn" onclick="playTTS(this.dataset.text)" data-text="' + escapeHtml(content.substring(0, 500)) + '">🔊 听语音</button>';
+        // 语音自动播报，不需要按钮
     }
     chatArea.appendChild(div);
     chatArea.scrollTop = chatArea.scrollHeight;
