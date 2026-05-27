@@ -1,1 +1,0 @@
-web: bash scripts/railway_run.sh
