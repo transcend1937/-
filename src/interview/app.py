@@ -309,6 +309,31 @@ body {
 }
 .hint-text.recording { color: #e74c3c; font-weight: 600; }
 
+/* 下一题按钮 */
+.next-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 4px 0;
+}
+.next-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 36px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(41,65,112,0.3);
+}
+.next-btn:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(41,65,112,0.4);
+}
+
 .loading-dots::after {
     content: '';
     animation: dots 1.5s infinite;
@@ -389,6 +414,7 @@ let mediaRecorder = null;
 let audioChunks = [];
 let isProcessing = false;
 let finished = false;
+let nextQuestionText = '';
 
 const chatArea = document.getElementById('chatArea');
 const startBtn = document.getElementById('startBtn');
@@ -403,12 +429,20 @@ async function startInterview() {
     addMessage('ai', '🎯 AI 面试官', '面试即将开始，请准备好...');
 
     try {
-        const resp = await fetch('api/interview/start?session_id=' + encodeURIComponent(sessionId));
-        const data = await resp.json();
-        if (data.code === 0) {
-            addMessage('ai', '🎯 AI 面试官', data.data.content);
-            playTTS(data.data.content);
-        }
+                const msg = data.data.content;
+                addMessage('ai', '🎯 AI 面试官', msg);
+                playTTS(msg, function() { enableRecording(); });
+    startBtn.classList.add('hidden');
+    }
+
+    function enableRecording() {
+        voiceControls.classList.remove('hidden');
+        voiceControls.style.display = 'flex';
+        micBtn.disabled = false;
+        isProcessing = false;
+        hintText.textContent = '🎤 请点击🎤按钮，语音回答';
+    }
+
         startBtn.classList.add('hidden');
         voiceControls.classList.remove('hidden');
         voiceControls.style.display = 'flex';
@@ -496,10 +530,17 @@ async function startRecording() {
                 const chatResp = await fetch('api/interview/chat', { method: 'POST', body: chatFormData });
 
                 const chatData = await chatResp.json();
-                if (chatData.code === 0) {
-                    addMessage('ai', '🎯 AI 面试官', chatData.data.content);
-                    playTTS(chatData.data.content);
-
+                    const respContent = chatData.data.content;
+                    // 解析【评估】和【下一题】
+                    const evalMatch = respContent.match(/【评估】([\s\S]*?)(?=【下一题】|$)/);
+                    const nextMatch = respContent.match(/【下一题】([\s\S]*?)$/);
+                    let displayText = respContent;
+                    nextQuestionText = '';
+                    if (nextMatch) {
+                        nextQuestionText = nextMatch[1].trim();
+                    }
+                    addMessage('ai', '🎯 AI 面试官', displayText);
+                    // 不自动TTS，显示下一题按钮
                     if (chatData.data.finished) {
                         finished = true;
                         hintText.textContent = '✅ 面试已全部完成！点击按钮重新开始';
@@ -508,7 +549,8 @@ async function startRecording() {
                         startBtn.textContent = '🔄 重新面试';
                         startBtn.disabled = false;
                     } else {
-                        hintText.textContent = '🎤 请点击麦克风，语音回答下一题';
+                        // 显示"下一题"按钮
+                        showNextBtn();
                     }
                 } else {
                     hintText.textContent = '❌ 回答处理失败，请重试';
@@ -542,7 +584,61 @@ function stopRecording() {
 }
 
 // === TTS ===
-async function playTTS(text) {
+    // === TTS - 可选回调 ===
+    async function playTTS(text, onEnd) {
+        try {
+            const ttsText = text.length > 500 ? text.substring(0, 500) + '...' : text;
+            const resp = await fetch('api/interview/tts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'message=' + encodeURIComponent(ttsText)
+            });
+            const data = await resp.json();
+            if (data.code === 0 && data.data.audio_url) {
+                const audio = new Audio(data.data.audio_url);
+                if (onEnd) audio.onended = onEnd;
+                audio.play().catch(function() { if (onEnd) onEnd(); });
+            } else {
+                if (onEnd) onEnd();
+            }
+        } catch (e) {
+            console.log('TTS play failed:', e);
+            if (onEnd) onEnd();
+        }
+    }
+
+    // === 下一题按钮 ===
+    function showNextBtn() {
+        // 在底部添加下一题按钮
+        const existing = document.getElementById('nextBtn');
+        if (existing) existing.remove();
+        
+        const nextDiv = document.createElement('div');
+        nextDiv.id = 'nextBtn';
+        nextDiv.className = 'next-btn-wrapper';
+        nextDiv.innerHTML = '<button class="next-btn" onclick="onNextQuestion()">📌 下一题</button>';
+        document.getElementById('bottomBar').appendChild(nextDiv);
+        
+        hintText.textContent = '✅ 已回答，点击「下一题」继续';
+        micBtn.disabled = true;
+    }
+
+    function onNextQuestion() {
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) nextBtn.remove();
+        
+        if (finished) {
+            hintText.textContent = '🎉 面试已全部完成';
+            return;
+        }
+        
+        // TTS播放下一题问题
+        if (nextQuestionText) {
+            playTTS(nextQuestionText, function() { enableRecording(); });
+        } else {
+            enableRecording();
+        }
+    }
     try {
         // 只对AI回复的前500字做语音合成（太长播放体验不好）
         const ttsText = text.length > 500 ? text.substring(0, 500) + '...' : text;
