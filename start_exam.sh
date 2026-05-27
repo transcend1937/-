@@ -23,9 +23,9 @@ else
     echo "[1/3] 端口 5000 空闲"
 fi
 
-# 3. 启动新服务
-echo "[2/3] 启动 uvicorn 服务..."
-nohup uvicorn src.exam.app:app --host 0.0.0.0 --port 5000 > /tmp/exam_server.log 2>&1 &
+# 3. 启动新服务（多工作者模式，提升并发能力）
+echo "[2/3] 启动 uvicorn 服务 (workers=4)..."
+nohup uvicorn src.exam.app:app --host 0.0.0.0 --port 5000 --workers 4 > /tmp/exam_server.log 2>&1 &
 sleep 2
 
 # 4. 验证启动

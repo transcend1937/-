@@ -3,29 +3,60 @@
 import json
 import random
 import logging
+import time
+import hashlib
 from typing import Any
 from fastapi import FastAPI, Query, HTTPException, Body
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+from starlette.responses import Response
 
 from exam.questions import QUESTIONS
 
 logger = logging.getLogger(__name__)
+
+# ============== 性能优化：TTL缓存 ==============
+class TTLCache:
+    """带过期时间的缓存，用于减少高并发下的重复计算"""
+    def __init__(self, ttl=5):
+        self._cache = {}
+        self.ttl = ttl
+
+    def get(self, key):
+        if key in self._cache:
+            value, timestamp = self._cache[key]
+            if time.time() - timestamp < self.ttl:
+                return value
+            del self._cache[key]
+        return None
+
+    def set(self, key, value):
+        self._cache[key] = (value, time.time())
+
+exam_cache = TTLCache(ttl=5)  # 试卷缓存5秒，应对突发并发
+
+# ============== 优化静态文件缓存 ==============
+class CacheStaticFiles(StaticFiles):
+    """带缓存头的静态文件服务，浏览器缓存图片减少请求"""
+    async def get_response(self, path: str, scope):
+        response = await super().get_response(path, scope)
+        if path.endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico')):
+            response.headers["Cache-Control"] = "public, max-age=86400, immutable"
+        elif path.endswith(('.css', '.js')):
+            response.headers["Cache-Control"] = "public, max-age=3600"
+        return response
 
 app = FastAPI(title="广铁机考模拟题库")
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
-
-
-
 import os
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 if os.path.exists(static_dir):
-    app.mount("/static", StaticFiles(directory=static_dir), name="static")
-app.mount("/exam/static", StaticFiles(directory=static_dir), name="static_exam")
+    app.mount("/static", CacheStaticFiles(directory=static_dir), name="static")
+app.mount("/exam/static", CacheStaticFiles(directory=static_dir), name="static_exam")
 
 # ============================================================
 # 模拟考试试卷生成
@@ -44,15 +75,46 @@ EXAM_CONFIG = {
     "duration": 45,  # 分钟
 }
 
+# ============== 预计算题目池（启动时一次计算） ==============
+_PRE_COMPUTED_POOLS: dict[str, list] = {}
+_LAST_POOL_REFRESH: float = 0
+
+def _refresh_pools():
+    """预计算所有题型池，避免每次请求重新筛选"""
+    global _PRE_COMPUTED_POOLS, _LAST_POOL_REFRESH
+    pool = {}
+    for qtype, count in EXAM_CONFIG["单选"]:
+        pool[qtype] = [q for q in QUESTIONS if q["type"] == qtype and q["question_type"] == "单选"]
+    pool["多选"] = [q for q in QUESTIONS if q["question_type"] == "多选"]
+    pool["填空_高中物理"] = [q for q in QUESTIONS if q["type"] == "高中物理" and q["question_type"] == "填空"]
+    pool["填空_地理常识"] = [q for q in QUESTIONS if q["type"] == "地理常识" and q["question_type"] == "填空"]
+    pool["填空_文学常识"] = [q for q in QUESTIONS if q["type"] == "文学常识" and q["question_type"] == "填空"]
+    all_types = set(q["type"] for q in QUESTIONS)
+    for t in sorted(all_types):
+        pool[f"train_{t}"] = [q for q in QUESTIONS if q["type"] == t]
+    _PRE_COMPUTED_POOLS = pool
+    _LAST_POOL_REFRESH = time.time()
+
+def get_pool(name):
+    """获取预计算池，带自动刷新（每5分钟刷新一次）"""
+    if not _PRE_COMPUTED_POOLS or time.time() - _LAST_POOL_REFRESH > 300:
+        _refresh_pools()
+    return _PRE_COMPUTED_POOLS.get(name, [])
+
+# 启动时预计算
+_refresh_pools()
+
 @app.get("/api/exam/generate")
 def generate_exam():
     """生成一套模拟考试试卷"""
     selected = []
     qid_offset = 0
 
-    # 1. 单选
+    # 1. 单选（使用预计算池）
     for qtype, count in EXAM_CONFIG["单选"]:
-        pool = [q for q in QUESTIONS if q["type"] == qtype and q["question_type"] == "单选"]
+        pool = get_pool(qtype)
+        if not pool:
+            continue
         chosen = random.sample(pool, min(count, len(pool)))
         for q in chosen:
             item = dict(q)
@@ -65,8 +127,8 @@ def generate_exam():
             selected.append(item)
             qid_offset += 1
 
-    # 2. 多选
-    multi_pool = [q for q in QUESTIONS if q["question_type"] == "多选"]
+    # 2. 多选（使用预计算池）
+    multi_pool = get_pool("多选")
     chosen = random.sample(multi_pool, min(EXAM_CONFIG["多选"], len(multi_pool)))
     for q in chosen:
         item = dict(q)
@@ -124,13 +186,22 @@ def _pick_questions(pool, need: int, type_key: str):
 @app.get("/api/exam/generate_gt")
 def generate_gt_exam():
     """生成广铁限时模拟题（按顺序：37单选→4多选→4填空，不重复）"""
+    # 缓存Key基于时间+题库哈希，5秒内同一时间段的请求共享一份试卷
+    today = time.strftime("%Y%m%d%H%M")
+    cache_key = f"gt_{today[:10]}"
+    cached = exam_cache.get(cache_key)
+    if cached:
+        return cached
+
     selected = []
     qid_offset = 0
 
-    # 1. 单选（按题型顺序出题）
+    # 1. 单选（使用预计算池）
     for qtype, count in EXAM_CONFIG["单选"]:
-        pool = [q for q in QUESTIONS if q["type"] == qtype and q["question_type"] == "单选"]
-        chosen = _pick_questions(pool, count, qtype)
+        pool = get_pool(qtype)
+        if not pool:
+            continue
+        chosen = _pick_questions(pool, min(count, len(pool)), qtype)
         for q in chosen:
             item = dict(q)
             item["exam_index"] = qid_offset + 1
@@ -142,7 +213,7 @@ def generate_gt_exam():
             qid_offset += 1
 
     # 2. 多选
-    multi_pool = [q for q in QUESTIONS if q["question_type"] == "多选"]
+    multi_pool = get_pool("多选")
     for q in _pick_questions(multi_pool, EXAM_CONFIG["多选"], "多选"):
         item = dict(q)
         item["exam_index"] = qid_offset + 1
@@ -153,25 +224,22 @@ def generate_gt_exam():
         selected.append(item)
         qid_offset += 1
 
-    # 3. 填空（2物理+1地理+1文学）
-    fill_pool_wl = [q for q in QUESTIONS if q["type"] == "高中物理" and q["question_type"] == "填空"]
-    fill_pool_dl = [q for q in QUESTIONS if q["type"] == "地理常识" and q["question_type"] == "填空"]
-    fill_pool_wx = [q for q in QUESTIONS if q["type"] == "文学常识" and q["question_type"] == "填空"]
-    for q in _pick_questions(fill_pool_wl, 2, "填空_高中物理"):
+    # 3. 填空（2物理+1地理+1文学）- 使用预计算池
+    for q in _pick_questions(get_pool("填空_高中物理"), 2, "填空_高中物理"):
         item = dict(q)
         item["exam_index"] = qid_offset + 1
         if "answer" in item: del item["answer"]
         if "analysis" in item: del item["analysis"]
         selected.append(item)
         qid_offset += 1
-    for q in _pick_questions(fill_pool_dl, 1, "填空_地理常识"):
+    for q in _pick_questions(get_pool("填空_地理常识"), 1, "填空_地理常识"):
         item = dict(q)
         item["exam_index"] = qid_offset + 1
         if "answer" in item: del item["answer"]
         if "analysis" in item: del item["analysis"]
         selected.append(item)
         qid_offset += 1
-    for q in _pick_questions(fill_pool_wx, 1, "填空_文学常识"):
+    for q in _pick_questions(get_pool("填空_文学常识"), 1, "填空_文学常识"):
         item = dict(q)
         item["exam_index"] = qid_offset + 1
         if "answer" in item: del item["answer"]
@@ -273,7 +341,8 @@ def get_train_questions(
     page_size: int = Query(1, ge=1, le=5),
 ):
     """获取分层训练题目（不返回总数量）"""
-    filtered = [q for q in QUESTIONS if q["type"] == type_name and q["question_type"] in ("单选", "多选")]
+    pool = get_pool(f"train_{type_name}")
+    filtered = [q for q in pool if q["question_type"] in ("单选", "多选")]
     if not filtered:
         return {"code": 0, "data": {"items": [], "has_more": False}}
 
