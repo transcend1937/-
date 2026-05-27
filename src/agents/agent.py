@@ -20,9 +20,12 @@ LLM_CONFIG = "config/agent_llm_config.json"
 # 默认保留最近 20 轮对话（40 条消息）
 MAX_MESSAGES = 40
 
-def _windowed_messages(old, new):
+def _windowed_messages(old: list, new: list) -> list:
     """滑动窗口：只保留最近 MAX_MESSAGES 条消息"""
-    return add_messages(old, new)[-MAX_MESSAGES:]
+    result = add_messages(old, new)
+    if isinstance(result, list):
+        return result[-MAX_MESSAGES:]
+    return [result]
 
 class AgentState(MessagesState):
     messages: Annotated[list[AnyMessage], _windowed_messages]
