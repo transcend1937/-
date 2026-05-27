@@ -496,7 +496,7 @@ function toggleCaption() {
 
 // ====== Voice Detection via AudioContext ======
 const SILENCE_THRESHOLD = 0.02;  // RMS threshold
-const SILENCE_TIMEOUT = 1200;    // ms of silence before submit
+const SILENCE_TIMEOUT = 600;    // ms of silence before submit (缩短到0.6秒)
 
 async function startContinuousRecording() {
     try {
@@ -570,7 +570,7 @@ async function submitRecording() {
     if (!isRecording || !hasSpoken) {
         // No speech detected, restart
         stopRecording();
-        setTimeout(startContinuousRecording, 500);
+        setTimeout(startContinuousRecording, 200);
         return;
     }
 
@@ -578,7 +578,7 @@ async function submitRecording() {
     stopRecording();
 
     if (audioChunks.length === 0) {
-        setTimeout(startContinuousRecording, 500);
+        setTimeout(startContinuousRecording, 200);
         return;
     }
 
@@ -603,12 +603,12 @@ async function submitRecording() {
             showSubtitle('你说：' + transcript);
             await submitAnswer(transcript);
         } else {
-            setStatus('listening', '没听清，请再说一遍', '👩‍💼');
-            setTimeout(startContinuousRecording, 500);
+            setStatus('listening', '请再说一遍', '👩‍💼');
+            setTimeout(startContinuousRecording, 200);
         }
     } catch(e) {
-        setStatus('listening', '网络错误，重试中...', '👩‍💼');
-        setTimeout(startContinuousRecording, 1000);
+        setStatus('listening', '重试中...', '👩‍💼');
+        setTimeout(startContinuousRecording, 300);
     }
 }
 
@@ -667,20 +667,20 @@ async function submitAnswer(text) {
                 await playTTS(questionText);
 
                 isProcessing = false;
-                setTimeout(startContinuousRecording, 500);
+                setTimeout(startContinuousRecording, 200);
             } else {
                 isProcessing = false;
-                setTimeout(startContinuousRecording, 500);
+                setTimeout(startContinuousRecording, 200);
             }
         } else {
             setStatus('listening', '出错了，请重试', '👩‍💼');
             isProcessing = false;
-            setTimeout(startContinuousRecording, 1000);
+            setTimeout(startContinuousRecording, 300);
         }
     } catch(e) {
         setStatus('listening', '网络错误，重试', '👩‍💼');
         isProcessing = false;
-        setTimeout(startContinuousRecording, 1000);
+        setTimeout(startContinuousRecording, 300);
     }
 }
 
@@ -723,7 +723,7 @@ async function startInterview() {
             await playTTS(content);
 
             isProcessing = false;
-            setTimeout(startContinuousRecording, 500);
+            setTimeout(startContinuousRecording, 200);
         }
     } catch(e) {
         setStatus('thinking', '连接失败，刷新重试', '❌');
@@ -739,7 +739,7 @@ function endCall() {
         // Show partial report
         setTimeout(function() {
             location.reload();
-        }, 1500);
+        }, 500);
     }
 }
 
