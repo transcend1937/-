@@ -147,413 +147,329 @@ SPA_HTML = r"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>铁路校招模拟面试</title>
 <style>
-:root {
-    --primary: #1a3a5c;
-    --primary-light: #2c5f8a;
-    --primary-dark: #0f2440;
-    --accent: #e8a838;
-    --bg: #f0f4f8;
-    --card-bg: #ffffff;
-    --text: #1a2332;
-    --text-muted: #6b7a8f;
-    --success: #2ecc71;
-    --warning: #f39c12;
-    --shadow: 0 4px 24px rgba(26,58,92,0.1);
-}
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
+    background: #0f172a;
+    color: #e2e8f0;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
 }
-.header {
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-    color: white;
-    padding: 16px 24px;
+
+/* ===== 顶部通话状态 ===== */
+.call-header {
+    background: linear-gradient(135deg, #1a237e, #0d47a1);
+    padding: 24px 20px 20px;
     text-align: center;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
     flex-shrink: 0;
 }
-.header h1 { font-size: 20px; font-weight: 600; }
-.header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
-
-.chat-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    scroll-behavior: smooth;
-}
-.chat-area:empty { justify-content: center; align-items: center; }
-
-.msg {
-    max-width: 85%;
-    padding: 14px 18px;
-    border-radius: 16px;
-    line-height: 1.7;
-    font-size: 15px;
-    animation: fadeIn 0.3s ease;
-    word-break: break-word;
-    white-space: pre-wrap;
-}
-.msg.ai {
-    align-self: flex-start;
-    background: var(--card-bg);
-    border: 1px solid #e8edf4;
-    border-bottom-left-radius: 4px;
-    box-shadow: var(--shadow);
-    color: var(--text);
-}
-.msg.user {
-    align-self: flex-end;
-    background: var(--primary);
-    color: white;
-    border-bottom-right-radius: 4px;
-}
-.msg.ai .label {
-    display: inline-block;
-    font-size: 12px;
+.call-header h1 {
+    font-size: 20px;
     font-weight: 600;
-    color: var(--primary-light);
-    margin-bottom: 6px;
+    color: white;
+    margin-bottom: 4px;
+}
+.call-header .subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
 }
 
-
-.bottom-bar {
-    flex-shrink: 0;
-    padding: 16px 24px 24px;
-    background: white;
-    border-top: 1px solid #e8edf4;
+/* ===== 状态指示器 ===== */
+.status-area {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    padding: 32px 20px 20px;
+    flex-shrink: 0;
 }
-.start-btn {
-    padding: 14px 48px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 16px rgba(26,58,92,0.25);
-}
-.start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(26,58,92,0.3); }
-.start-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-.mic-btn {
-    width: 72px;
-    height: 72px;
+.status-ring {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    border: 4px solid var(--primary);
-    background: white;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 36px;
     transition: all 0.3s;
-    position: relative;
+    margin-bottom: 12px;
 }
-.mic-btn:hover { background: #f0f4ff; transform: scale(1.05); }
-.mic-btn.recording {
-    border-color: #e74c3c;
-    background: #fdedec;
-    animation: pulse 1.2s infinite;
+.status-ring.idle { background: #1e293b; border: 2px solid #334155; }
+.status-ring.listening {
+    background: #065f46;
+    border: 2px solid #34d399;
+    box-shadow: 0 0 30px rgba(52,211,153,0.3);
+    animation: pulse 1.5s ease-in-out infinite;
 }
-.mic-btn.recording .mic-icon { color: #e74c3c; }
-.mic-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-.mic-btn .mic-icon { font-size: 32px; color: var(--primary); }
-.mic-btn .recording-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #e74c3c;
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    display: none;
+.status-ring.speaking {
+    background: #1e3a5f;
+    border: 2px solid #60a5fa;
+    box-shadow: 0 0 20px rgba(96,165,250,0.3);
 }
-.mic-btn.recording .recording-dot { display: block; }
-
-.hint-text {
-    font-size: 13px;
-    color: var(--text-muted);
-    text-align: center;
-}
-.hint-text.recording { color: #e74c3c; font-weight: 600; }
-
-/* 下一题按钮 */
-
-.loading-dots::after {
-    content: '';
-    animation: dots 1.5s infinite;
-}
-@keyframes dots {
-    0% { content: ''; }
-    33% { content: '.'; }
-    66% { content: '..'; }
-    100% { content: '...'; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+.status-ring.thinking {
+    background: #5b21b6;
+    border: 2px solid #a78bfa;
 }
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(231,76,60,0.4); }
-    70% { box-shadow: 0 0 0 16px rgba(231,76,60,0); }
-    100% { box-shadow: 0 0 0 0 rgba(231,76,60,0); }
+    0%, 100% { box-shadow: 0 0 20px rgba(52,211,153,0.2); }
+    50% { box-shadow: 0 0 40px rgba(52,211,153,0.5); }
 }
 
-.waiting-anim {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    padding: 14px 18px;
-    background: var(--card-bg);
-    border: 1px solid #e8edf4;
-    border-radius: 16px;
-    align-self: flex-start;
-}
-.waiting-anim .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--primary-light);
-    animation: bounce 1.4s infinite ease-in-out;
-}
-.waiting-anim .dot:nth-child(2) { animation-delay: 0.2s; }
-.waiting-anim .dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes bounce {
-    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-    40% { transform: scale(1); opacity: 1; }
+.status-text {
+    font-size: 15px;
+    color: #94a3b8;
+    text-align: center;
 }
 
-.hidden { display: none !important; }
+/* ===== 实时语音转写 ===== */
+.transcript-area {
+    padding: 8px 20px 12px;
+    text-align: center;
+    min-height: 60px;
+    flex-shrink: 0;
+}
+.transcript-text {
+    font-size: 18px;
+    color: #f1f5f9;
+    line-height: 1.5;
+    transition: all 0.1s;
+}
+.transcript-text.interim { color: #94a3b8; font-style: italic; }
+.transcript-text:empty::before {
+    content: '等待语音...';
+    color: #475569;
+}
+
+/* ===== 对话记录 ===== */
+.chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    scroll-behavior: smooth;
+}
+.chat-area::-webkit-scrollbar { width: 4px; }
+.chat-area::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+.msg {
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    max-width: 92%;
+    font-size: 14px;
+    line-height: 1.6;
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.msg.user {
+    background: #1e293b;
+    color: #e2e8f0;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+.msg.ai {
+    background: #1a237e;
+    color: #e8eaf6;
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+}
+.msg .label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+.msg .content { white-space: pre-wrap; word-break: break-word; }
+
+/* ===== 底部操作区 ===== */
+.bottom-bar {
+    padding: 12px 20px 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+.call-btn {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    border: none;
+    padding: 14px 48px;
+    border-radius: 100px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.call-btn:hover { transform: scale(1.03); box-shadow: 0 4px 20px rgba(37,99,235,0.4); }
+.call-btn.secondary {
+    background: #1e293b;
+    color: #94a3b8;
+}
+.call-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 </style>
 </head>
 <body>
 
-<div class="header">
+<div class="call-header">
     <h1>🚂 铁路校招模拟面试</h1>
-    <p>AI 面试官 · 全程语音回答</p>
+    <div class="subtitle">全程语音 · AI 面试官</div>
 </div>
 
-<div class="chat-area" id="chatArea">
-    <div class="msg ai">
-        <div class="label">🎯 AI 面试官</div>
-        欢迎参加铁路校招模拟面试！点击下方「开始面试」按钮，AI 面试官将逐题提问，你用语音回答即可。
-    </div>
+<div class="status-area">
+    <div class="status-ring idle" id="statusRing">🎙</div>
+    <div class="status-text" id="statusText">加载中...</div>
 </div>
 
-<div class="bottom-bar" id="bottomBar">
-    <button class="start-btn" id="startBtn" onclick="startInterview()">🚀 开始面试</button>
-    <div id="voiceControls" class="hidden" style="display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;">
-        <button class="mic-btn" id="micBtn" onclick="toggleRecording()">
-            <span class="mic-icon">🎤</span>
-            <span class="recording-dot"></span>
-        </button>
-        <div class="hint-text" id="hintText">点击🎤按钮，开始语音回答</div>
-    </div>
+<div class="transcript-area">
+    <div class="transcript-text" id="transcriptText"></div>
+</div>
+
+<div class="chat-area" id="chatArea"></div>
+
+<div class="bottom-bar">
+    <button class="call-btn" id="callBtn" onclick="toggleCall()">📞 开始面试</button>
 </div>
 
 <script>
-let sessionId = 'default_' + Date.now();
-let isRecording = false;
-let mediaRecorder = null;
-let audioChunks = [];
+// ============== 全局状态 ==============
+let sessionId = 'call_' + Date.now();
+let recognition = null;
+let silenceTimer = null;
+let collectedText = '';
 let isProcessing = false;
+let isAiSpeaking = false;
 let finished = false;
 let nextQuestionText = '';
+let isCallActive = false;
 
+const statusRing = document.getElementById('statusRing');
+const statusText = document.getElementById('statusText');
+const transcriptText = document.getElementById('transcriptText');
 const chatArea = document.getElementById('chatArea');
-const startBtn = document.getElementById('startBtn');
-const voiceControls = document.getElementById('voiceControls');
-const micBtn = document.getElementById('micBtn');
-const hintText = document.getElementById('hintText');
+const callBtn = document.getElementById('callBtn');
 
-// === 开始面试 ===
-async function startInterview() {
-    startBtn.disabled = true;
-    startBtn.textContent = '⏳ 面试准备中...';
-    addMessage('ai', '🎯 AI 面试官', '面试即将开始，请准备好...');
+// ============== UI 更新 ==============
+function setStatus(mode, text) {
+    statusRing.className = 'status-ring ' + mode;
+    statusText.textContent = text;
+}
 
-    try {
-        const resp = await fetch('api/interview/start?session_id=' + encodeURIComponent(sessionId));
-        const data = await resp.json();
-        if (data.code === 0) {
-            const msg = data.data.content;
-            addMessage('ai', '🎯 AI 面试官', msg);
-            playTTS(msg, function() { enableRecording(); });
-        }
-        startBtn.classList.add('hidden');
-    } catch (e) {
-        addMessage('ai', '⚠️ 系统', '连接失败，请检查服务是否正常');
-        startBtn.disabled = false;
-        startBtn.textContent = '🚀 重新开始';
+function addMessage(role, content) {
+    const div = document.createElement('div');
+    div.className = 'msg ' + role;
+    const label = role === 'user' ? '🧑 你' : '🤖 面试官';
+    div.innerHTML = '<div class="label">' + label + '</div><div class="content">' + escapeHtml(content) + '</div>';
+    chatArea.appendChild(div);
+    chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function showTranscript(text, isInterim) {
+    transcriptText.textContent = text || '';
+    transcriptText.className = 'transcript-text' + (isInterim ? ' interim' : '');
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// ============== SpeechRecognition ==============
+function initRecognition() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+        setStatus('idle', '⚠️ 浏览器不支持语音识别，请使用Chrome');
+        return false;
     }
-}
-
-function enableRecording() {
-    voiceControls.classList.remove('hidden');
-    voiceControls.style.display = 'flex';
-    micBtn.disabled = false;
-    isProcessing = false;
-    hintText.textContent = '🎤 请点击🎤按钮，语音回答';
-}
-
-// === 录音 ===
-async function toggleRecording() {
-    if (isRecording) {
-        stopRecording();
-    } else {
-        startRecording();
-    }
-}
-
-async function startRecording() {
-    if (isProcessing) return;
-
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        audioChunks = [];
-        mediaRecorder = new MediaRecorder(stream, {
-            mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ?
-                'audio/webm;codecs=opus' : 'audio/webm'
-        });
-
-        mediaRecorder.ondataavailable = (e) => {
-            if (e.data.size > 0) audioChunks.push(e.data);
-        };
-
-        mediaRecorder.onstop = async () => {
-            // 停止所有音轨
-            stream.getTracks().forEach(t => t.stop());
-
-            if (audioChunks.length === 0) return;
-
-            isProcessing = true;
-            micBtn.disabled = true;
-            hintText.textContent = '🔊 正在识别你的回答...';
-
-            // 合成音频blob
-            const audioBlob = new Blob(audioChunks, {
-                type: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ?
-                    'audio/webm;codecs=opus' : 'audio/webm'
-            });
-
-            // 显示录入完成的消息
-            addMessage('user', '👤 你', '(语音回答已提交，正在识别...)');
-
-            // 发送ASR
-            try {
-                const formData = new FormData();
-                formData.append('audio', audioBlob, 'recording.webm');
-                const asrResp = await fetch('api/interview/asr', { method: 'POST', body: formData });
-                const asrData = await asrResp.json();
-
-                if (asrData.code !== 0) {
-                    hintText.textContent = '❌ 语音识别失败，请重试';
-                    isProcessing = false;
-                    micBtn.disabled = false;
-                    return;
-                }
-
-                const userText = asrData.data.text;
-                if (!userText || userText.trim() === '') {
-                    hintText.textContent = '❌ 未识别到语音，请重试';
-                    isProcessing = false;
-                    micBtn.disabled = false;
-                    return;
-                }
-
-                // 更新用户消息为识别后的文字
-                updateLastUserMessage(userText);
-
-                hintText.textContent = '🤔 AI 面试官正在思考...';
-
-                // 发送到AI面试官
-                const chatFormData = new FormData();
-                chatFormData.append('session_id', sessionId);
-                chatFormData.append('message', userText);
-                const chatResp = await fetch('api/interview/chat', { method: 'POST', body: chatFormData });
-
-                const chatData = await chatResp.json();
-                if (chatData.code === 0) {
-                    const respContent = chatData.data.content;
-                    // 解析【评估】和【下一题】
-                    const evalMatch = respContent.match(/【评估】([\s\S]*?)(?=【下一题】|$)/);
-                    const nextMatch = respContent.match(/【下一题】([\s\S]*?)$/);
-                    let displayText = respContent;
-                    nextQuestionText = '';
-                    if (nextMatch) {
-                        nextQuestionText = nextMatch[1].trim();
-                    }
-                    addMessage('ai', '🎯 AI 面试官', displayText);
-                    // 自动语音播报下一题（不播评估），播完后启用录音
-                    if (chatData.data.finished) {
-                        finished = true;
-                        hintText.textContent = '✅ 面试已全部完成！点击按钮重新开始';
-                        voiceControls.classList.add('hidden');
-                        startBtn.classList.remove('hidden');
-                        startBtn.textContent = '🔄 重新面试';
-                        startBtn.disabled = false;
-                    } else {
-                        // 自动播报下一题问题，播完后启用录音
-                        if (nextQuestionText) {
-                            hintText.textContent = '🎧 AI正在提问...';
-                            playTTS(nextQuestionText, function() { 
-                                hintText.textContent = '🎤 请语音回答';
-                                micBtn.disabled = false;
-                            });
-                        } else {
-                            micBtn.disabled = false;
-                        }
-                    }
-                } else {
-                    hintText.textContent = '❌ 回答处理失败，请重试';
-                }
-            } catch (e) {
-                hintText.textContent = '❌ 网络错误，请重试';
+    recognition = new SR();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'zh-CN';
+    
+    recognition.onresult = function(e) {
+        let interim = '';
+        let final = '';
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) {
+                final += e.results[i][0].transcript;
+            } else {
+                interim += e.results[i][0].transcript;
             }
-
-            isProcessing = false;
-            micBtn.disabled = false;
-        };
-
-        mediaRecorder.start();
-        isRecording = true;
-        micBtn.classList.add('recording');
-        hintText.textContent = '🔴 录音中...点击停止结束录音';
-        hintText.classList.add('recording');
-    } catch (e) {
-        hintText.textContent = '❌ 无法访问麦克风，请授权或检查浏览器设置';
-    }
+        }
+        if (final) {
+            collectedText += final;
+            showTranscript(collectedText + interim, true);
+            resetSilenceTimer();
+        } else {
+            showTranscript(collectedText + (interim ? '...' + interim : ''), true);
+        }
+    };
+    
+    recognition.onerror = function(e) {
+        console.log('Recognition error:', e.error);
+        if (e.error === 'no-speech') return;
+        if (e.error === 'aborted') return;
+        setStatus('idle', '⚠️ 语音识别出错，点击重试');
+        setTimeout(tryRestartRecognition, 1000);
+    };
+    
+    recognition.onend = function() {
+        if (isProcessing || isAiSpeaking || !isCallActive) return;
+        // If we have collected text, process it
+        if (collectedText.trim()) {
+            submitAnswer(collectedText.trim());
+            collectedText = '';
+        }
+        // Restart recognition
+        tryRestartRecognition();
+    };
+    
+    return true;
 }
 
-function stopRecording() {
-    if (mediaRecorder && mediaRecorder.state === 'recording') {
-        mediaRecorder.stop();
-        isRecording = false;
-        micBtn.classList.remove('recording');
-        hintText.classList.remove('recording');
-        hintText.textContent = '⏳ 处理中...';
-    }
+function tryRestartRecognition() {
+    if (isProcessing || isAiSpeaking || !isCallActive || finished) return;
+    try {
+        if (recognition) recognition.start();
+    } catch(e) {}
 }
 
-// === TTS - 语音播报 ===
+function startRecognition() {
+    if (!recognition) initRecognition();
+    if (!recognition) return;
+    try {
+        recognition.start();
+        setStatus('listening', '🎤 请回答...');
+    } catch(e) {}
+}
+
+function stopRecognition() {
+    try { if (recognition) recognition.stop(); } catch(e) {}
+}
+
+function resetSilenceTimer() {
+    if (silenceTimer) clearTimeout(silenceTimer);
+    silenceTimer = setTimeout(function() {
+        if (collectedText.trim()) {
+            stopRecognition();
+            const text = collectedText.trim();
+            collectedText = '';
+            showTranscript('');
+            submitAnswer(text);
+        }
+    }, 1500);
+}
+
+// ============== TTS 语音播报 ==============
 async function playTTS(text, onEnd) {
+    isAiSpeaking = true;
+    setStatus('speaking', '🔊 AI正在说话...');
+    stopRecognition();
+    
     try {
         const ttsText = text.length > 500 ? text.substring(0, 500) + '...' : text;
         const resp = await fetch('api/interview/tts', {
@@ -564,54 +480,139 @@ async function playTTS(text, onEnd) {
         const data = await resp.json();
         if (data.code === 0 && data.data.audio_url) {
             const audio = new Audio(data.data.audio_url);
-            if (onEnd) audio.onended = onEnd;
-            audio.play().catch(function() { if (onEnd) onEnd(); });
+            audio.onended = function() {
+                isAiSpeaking = false;
+                if (onEnd) onEnd();
+            };
+            audio.play().catch(function() {
+                isAiSpeaking = false;
+                if (onEnd) onEnd();
+            });
         } else {
+            isAiSpeaking = false;
             if (onEnd) onEnd();
         }
-    } catch (e) {
-        console.log('TTS play failed:', e);
+    } catch(e) {
+        isAiSpeaking = false;
         if (onEnd) onEnd();
     }
 }
 
-function addMessage(role, label, content) {
-    const div = document.createElement('div');
-    div.className = 'msg ' + role;
-    div.innerHTML = '<div class="label">' + label + '</div>' + formatContent(content);
-    if (role === 'ai') {
-        // 语音自动播报，不需要按钮
+// ============== API 交互 ==============
+async function submitAnswer(text) {
+    if (isProcessing) return;
+    isProcessing = true;
+    setStatus('thinking', '⏳ 面试官正在思考...');
+    
+    addMessage('user', text);
+    
+    try {
+        const resp = await fetch('api/interview/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'session_id=' + encodeURIComponent(sessionId) + '&message=' + encodeURIComponent(text)
+        });
+        const data = await resp.json();
+        
+        if (data.code === 0) {
+            const respContent = data.data.content;
+            finished = data.data.finished;
+            
+            // 解析评估和下一题
+            const nextMatch = respContent.match(/【下一题】([\s\S]*?)$/);
+            nextQuestionText = nextMatch ? nextMatch[1].trim() : '';
+            
+            addMessage('ai', respContent);
+            
+            if (finished) {
+                setStatus('idle', '🎉 面试全部完成！');
+                callBtn.textContent = '🔄 重新面试';
+                callBtn.disabled = false;
+                isProcessing = false;
+                return;
+            }
+            
+            // 自动播报下一题
+            if (nextQuestionText) {
+                await playTTS(nextQuestionText, function() {
+                    isProcessing = false;
+                    collectedText = '';
+                    showTranscript('');
+                    setStatus('listening', '🎤 请回答...');
+                    startRecognition();
+                });
+            } else {
+                isProcessing = false;
+                startRecognition();
+            }
+        } else {
+            setStatus('idle', '❌ 处理失败，请重试');
+            isProcessing = false;
+        }
+    } catch(e) {
+        setStatus('idle', '❌ 网络错误，请重试');
+        isProcessing = false;
     }
-    chatArea.appendChild(div);
-    chatArea.scrollTop = chatArea.scrollHeight;
-    return div;
 }
 
-function updateLastUserMessage(text) {
-    const msgs = chatArea.querySelectorAll('.msg.user');
-    const last = msgs[msgs.length - 1];
-    if (last) {
-        last.innerHTML = '<div class="label">👤 你</div>' + formatContent(text);
+async function startInterview() {
+    callBtn.disabled = true;
+    callBtn.textContent = '⏳ 准备中...';
+    setStatus('thinking', '⏳ 正在连接面试官...');
+    
+    try {
+        const resp = await fetch('api/interview/start?session_id=' + encodeURIComponent(sessionId));
+        const data = await resp.json();
+        
+        if (data.code === 0) {
+            const msg = data.data.content;
+            addMessage('ai', msg);
+            
+            // 解析第一题
+            const nextMatch = msg.match(/【下一题】([\s\S]*?)$/) || msg.match(/请问[^。]*。/);
+            const firstQ = nextMatch ? nextMatch[1] || nextMatch[0] : msg;
+            
+            await playTTS(firstQ, function() {
+                setStatus('listening', '🎤 请回答...');
+                if (initRecognition()) {
+                    startRecognition();
+                }
+            });
+        } else {
+            setStatus('idle', '❌ 连接失败');
+            callBtn.disabled = false;
+            callBtn.textContent = '📞 重新开始';
+        }
+    } catch(e) {
+        setStatus('idle', '❌ 网络错误');
+        callBtn.disabled = false;
+        callBtn.textContent = '📞 重新开始';
     }
 }
 
-function showWaiting() {
-    const w = document.createElement('div');
-    w.className = 'waiting-anim';
-    w.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-    chatArea.appendChild(w);
-    chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-function formatContent(text) {
-    if (!text) return '';
-    return escapeHtml(text).replace(/\n/g, '<br>');
-}
-
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+// ============== 呼叫控制 ==============
+function toggleCall() {
+    if (!isCallActive) {
+        isCallActive = true;
+        callBtn.textContent = '📞 通话中...';
+        callBtn.disabled = true;
+        chatArea.innerHTML = '';
+        finishMatch = null;
+        collectedText = '';
+        nextQuestionText = '';
+        finished = false;
+        // Reset session
+        fetch('api/interview/reset?session_id=' + encodeURIComponent(sessionId));
+        setTimeout(startInterview, 300);
+    } else {
+        // Hang up
+        isCallActive = false;
+        stopRecognition();
+        if (silenceTimer) clearTimeout(silenceTimer);
+        setStatus('idle', '📴 通话已结束');
+        callBtn.textContent = '📞 重新面试';
+        callBtn.disabled = false;
+    }
 }
 </script>
 </body>
