@@ -144,8 +144,6 @@ async def interview_page():
     return HTMLResponse(SPA_HTML)
 
 SPA_HTML = r"""<!DOCTYPE html>
-
-<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -155,409 +153,548 @@ SPA_HTML = r"""<!DOCTYPE html>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #0a1628 0%, #1a2a4a 50%, #0d1b3e 100%);
+    background: linear-gradient(160deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: #1a1a2e;
     padding: 20px;
+    overflow: hidden;
 }
 .phone-container {
-    max-width: 420px;
+    max-width: 400px;
     width: 100%;
-    text-align: center;
-}
-.header {
-    margin-bottom: 40px;
-}
-.header h1 {
-    font-size: 22px;
-    font-weight: 600;
-    background: linear-gradient(90deg, #60a5fa, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 6px;
-}
-.header .sub {
-    font-size: 14px;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 2px;
-}
-/* 状态圆圈 */
-.status-ring {
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    margin: 0 auto 30px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: all 0.5s ease;
-}
-.status-ring.idle {
-    border: 3px solid rgba(255,255,255,0.15);
-}
-.status-ring.listening {
-    border: 3px solid #22c55e;
-    box-shadow: 0 0 40px rgba(34,197,94,0.3);
-    animation: pulse-green 1.5s ease-in-out infinite;
-}
-.status-ring.speaking {
-    border: 3px solid #8b5cf6;
-    box-shadow: 0 0 40px rgba(139,92,246,0.3);
-    animation: pulse-purple 1.5s ease-in-out infinite;
-}
-.status-ring.thinking {
-    border: 3px solid #f59e0b;
-    box-shadow: 0 0 40px rgba(245,158,11,0.2);
-}
-@keyframes pulse-green {
-    0%,100% { box-shadow: 0 0 30px rgba(34,197,94,0.2); }
-    50% { box-shadow: 0 0 60px rgba(34,197,94,0.4); }
-}
-@keyframes pulse-purple {
-    0%,100% { box-shadow: 0 0 30px rgba(139,92,246,0.2); }
-    50% { box-shadow: 0 0 60px rgba(139,92,246,0.4); }
-}
-.status-icon {
-    font-size: 48px;
-    line-height: 1;
-}
-.status-text {
-    font-size: 15px;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 20px;
-    min-height: 24px;
-}
-.progress-dots {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 30px;
-}
-.dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    transition: all 0.3s;
-}
-.dot.done { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); }
-.dot.active { background: #8b5cf6; box-shadow: 0 0 8px rgba(139,92,246,0.5); }
-/* 对话记录 - 简洁 */
-.chat-log {
-    max-height: 200px;
-    overflow-y: auto;
-    text-align: left;
-    margin-top: 10px;
-    padding: 0 10px;
-}
-.chat-log::-webkit-scrollbar { width: 3px; }
-.chat-log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-.chat-item {
-    padding: 8px 12px;
-    margin-bottom: 6px;
-    border-radius: 12px;
-    font-size: 13px;
-    line-height: 1.5;
-    opacity: 0.8;
-}
-.chat-item.q { background: rgba(139,92,246,0.15); color: #c4b5fd; }
-.chat-item.a { background: rgba(34,197,94,0.1); color: #86efac; }
-/* 结束报告 */
-.report {
-    display: none;
-    background: rgba(255,255,255,0.05);
-    border-radius: 20px;
-    padding: 24px;
-    margin-top: 20px;
-    text-align: left;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-    max-height: 70vh;
-    overflow-y: auto;
-}
-.report h2 {
-    font-size: 18px;
-    margin-bottom: 16px;
-    text-align: center;
-    background: linear-gradient(90deg, #60a5fa, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-.report .q-item {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 12px;
-}
-.report .q-item h3 {
-    font-size: 14px;
-    color: #93c5fd;
-    margin-bottom: 6px;
-}
-.report .q-item .label { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
-.report .q-item .val { font-size: 13px; color: rgba(255,255,255,0.85); }
-.report .q-item .better { color: #fbbf24; }
-.restart-btn {
-    display: none;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-    border: none;
-    color: white;
-    padding: 12px 40px;
-    border-radius: 100px;
-    font-size: 15px;
-    cursor: pointer;
-    margin: 20px auto 0;
-}
-.restart-btn:hover { transform: scale(1.02); }
-/* 按住说话按钮 */
-.hold-talk-btn {
-    margin: 20px auto 0;
-    display: none;
-}
-.hold-inner {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+}
+/* 顶部标题 */
+.top-bar {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+.top-bar .title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #5c4d7a;
+}
+.btn-caption {
+    background: rgba(255,255,255,0.7);
+    border: none;
+    color: #5c4d7a;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
     cursor: pointer;
-    margin: 0 auto;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.btn-caption.active { background: #7c5cbf; color: #fff; }
+/* 头像圆圈 */
+.avatar-ring {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e8d5f5, #c9b8e8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    position: relative;
+    transition: all 0.3s;
+    border: 3px solid rgba(255,255,255,0.8);
+    box-shadow: 0 8px 32px rgba(90,60,140,0.15);
+}
+.avatar-ring.listening {
+    border-color: #7c5cbf;
+    box-shadow: 0 0 40px rgba(124,92,191,0.25);
+}
+.avatar-ring.speaking {
+    border-color: #e8a0bf;
+    box-shadow: 0 0 40px rgba(232,160,191,0.3);
+}
+.avatar-ring.thinking {
+    border-color: #f5c842;
+    box-shadow: 0 0 40px rgba(245,200,66,0.2);
+}
+.avatar-icon {
+    font-size: 52px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
+}
+/* 状态文字 */
+.status-area {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.status-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 8px;
+    height: 16px;
+}
+.status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #c9b8e8;
+    transition: all 0.3s;
+}
+.status-dot.active {
+    background: #7c5cbf;
+    animation: dot-bounce 0.8s ease-in-out infinite;
+}
+.status-dot.active:nth-child(2) { animation-delay: 0.15s; }
+.status-dot.active:nth-child(3) { animation-delay: 0.3s; }
+@keyframes dot-bounce {
+    0%,100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(-4px); opacity: 1; }
+}
+.status-label {
+    font-size: 15px;
+    color: #8a7aaa;
+    min-height: 22px;
+}
+/* 进度条 */
+.progress-bar {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 80%;
+}
+.progress-seg {
+    flex: 1;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(200,180,220,0.4);
+    transition: all 0.3s;
+}
+.progress-seg.done { background: #7c5cbf; }
+.progress-seg.active { background: #7c5cbf; opacity: 0.6; }
+/* 字幕（可选） */
+.subtitle-area {
+    display: none;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin: 0 20px 16px;
+    max-height: 100px;
+    overflow-y: auto;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: #5c4d7a;
+    line-height: 1.5;
+    border: 1px solid rgba(200,180,220,0.3);
+}
+.subtitle-area.show { display: block; }
+.subtitle-area .sub-label {
+    font-size: 11px;
+    color: #b0a0c8;
+    margin-bottom: 4px;
+}
+/* 底部按钮 */
+.bottom-bar {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 30px;
+}
+.bottom-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     transition: all 0.2s;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
+    font-size: 22px;
 }
-.hold-inner:active, .hold-inner.recording {
-    transform: scale(1.15);
-    background: linear-gradient(135deg, #ef4444, #f97316);
-    box-shadow: 0 0 30px rgba(239,68,68,0.4);
+.bottom-btn:active { transform: scale(0.9); }
+.btn-end {
+    background: #ff6b6b;
+    color: white;
+    box-shadow: 0 4px 16px rgba(255,107,107,0.3);
 }
-.hold-icon { font-size: 28px; line-height: 1; }
-.hold-label { font-size: 12px; color: rgba(255,255,255,0.9); margin-top: 4px; }
+.btn-end:hover { transform: scale(1.05); }
+/* 报告覆盖层 */
+.report-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    padding: 30px 20px;
+    overflow-y: auto;
+}
+.report-card {
+    background: linear-gradient(160deg, #fce4ec, #f3e5f5);
+    border-radius: 24px;
+    padding: 24px;
+    max-width: 400px;
+    margin: 40px auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+}
+.report-card h2 {
+    font-size: 20px;
+    text-align: center;
+    color: #5c4d7a;
+    margin-bottom: 16px;
+}
+.report-item {
+    margin-bottom: 14px;
+    padding: 12px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 14px;
+}
+.report-item h3 { font-size: 13px; color: #7c5cbf; margin-bottom: 4px; }
+.report-item .rl { font-size: 11px; color: #b0a0c8; margin-top: 3px; }
+.report-item .rv { font-size: 13px; color: #3a2a5a; }
+.report-item .better { color: #e07b3a; font-weight: 500; }
+.report-restart {
+    display: block;
+    margin: 20px auto 0;
+    background: linear-gradient(135deg, #7c5cbf, #b08ad8);
+    border: none;
+    color: white;
+    padding: 12px 36px;
+    border-radius: 100px;
+    font-size: 15px;
+    cursor: pointer;
+}
 </style>
 </head>
 <body>
 <div class="phone-container">
-    <div class="header">
-        <h1>🚂 铁路校招模拟面试</h1>
-        <div class="sub">AI 面试官 · 全程语音</div>
+    <!-- 顶部 -->
+    <div class="top-bar">
+        <span class="title">🚂 铁路校招模拟面试</span>
+        <button class="btn-caption" id="captionBtn" onclick="toggleCaption()">💬 字幕</button>
     </div>
 
-    <div class="status-ring idle" id="statusRing">
-        <div class="status-icon" id="statusIcon">🎧</div>
-    </div>
-    <div class="status-text" id="statusText">准备中...</div>
-
-    <div class="progress-dots" id="progressDots">
-        <div class="dot" data-idx="0"></div>
-        <div class="dot" data-idx="1"></div>
-        <div class="dot" data-idx="2"></div>
-        <div class="dot" data-idx="3"></div>
-        <div class="dot" data-idx="4"></div>
-        <div class="dot" data-idx="5"></div>
+    <!-- 头像 -->
+    <div class="avatar-ring listening" id="avatarRing">
+        <div class="avatar-icon" id="avatarIcon">👩‍💼</div>
     </div>
 
-    <div class="chat-log" id="chatLog"></div>
-
-    <!-- 按住说话按钮 -->
-    <div class="hold-talk-btn" id="holdTalkBtn" style="display:none">
-        <div class="hold-inner" id="holdInner">
-            <span class="hold-icon" id="holdIcon">🎤</span>
-            <span class="hold-label" id="holdLabel">按住说话</span>
+    <!-- 状态 -->
+    <div class="status-area">
+        <div class="status-dots" id="statusDots">
+            <span class="status-dot active"></span>
+            <span class="status-dot active"></span>
+            <span class="status-dot active"></span>
         </div>
+        <div class="status-label" id="statusLabel">准备中...</div>
     </div>
 
-    <div class="report" id="report"></div>
-    <button class="restart-btn" id="restartBtn" onclick="location.reload()">🔄 重新面试</button>
+    <!-- 进度 -->
+    <div class="progress-bar" id="progressBar">
+        <div class="progress-seg" data-idx="0"></div>
+        <div class="progress-seg" data-idx="1"></div>
+        <div class="progress-seg" data-idx="2"></div>
+        <div class="progress-seg" data-idx="3"></div>
+        <div class="progress-seg" data-idx="4"></div>
+        <div class="progress-seg" data-idx="5"></div>
+    </div>
+
+    <!-- 字幕 -->
+    <div class="subtitle-area" id="subtitleArea">
+        <div class="sub-label">实时字幕</div>
+        <div id="subtitleText">-</div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="bottom-bar">
+        <button class="bottom-btn btn-end" id="endBtn" onclick="endCall()">📞</button>
+    </div>
+</div>
+
+<!-- 报告覆盖层 -->
+<div class="report-overlay" id="reportOverlay">
+    <div class="report-card" id="reportCard"></div>
 </div>
 
 <script>
+'use strict';
 const sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
-let mediaRecorder = null;
-let audioChunks = [];
 let isProcessing = false;
 let finished = false;
-let currentQuestionIdx = -1;
+let currentIdx = -1;
 let allAnswers = [];
+let mediaRecorder = null;
+let audioCtx = null;
+let analyser = null;
+let audioStream = null;
+let audioChunks = [];
+let isRecording = false;
+let silenceStart = 0;
+let hasSpoken = false;
+let captionOn = false;
 
 // DOM
-const statusRing = document.getElementById('statusRing');
-const statusIcon = document.getElementById('statusIcon');
-const statusText = document.getElementById('statusText');
-const progressDots = document.getElementById('progressDots');
-const chatLog = document.getElementById('chatLog');
-const report = document.getElementById('report');
-const restartBtn = document.getElementById('restartBtn');
-const holdTalkBtn = document.getElementById('holdTalkBtn');
-const holdInner = document.getElementById('holdInner');
-const holdIcon = document.getElementById('holdIcon');
-const holdLabel = document.getElementById('holdLabel');
+const avatarRing = document.getElementById('avatarRing');
+const avatarIcon = document.getElementById('avatarIcon');
+const statusLabel = document.getElementById('statusLabel');
+const statusDots = document.querySelectorAll('.status-dot');
+const subtitleText = document.getElementById('subtitleText');
+const subtitleArea = document.getElementById('subtitleArea');
+const progressBar = document.getElementById('progressBar');
+const reportOverlay = document.getElementById('reportOverlay');
+const reportCard = document.getElementById('reportCard');
 
-function setStatus(mode, text, icon) {
-    statusRing.className = 'status-ring ' + mode;
-    statusText.textContent = text;
-    if (icon) statusIcon.textContent = icon;
-}
-
-function updateProgress(idx) {
-    const dots = progressDots.querySelectorAll('.dot');
-    dots.forEach((d, i) => {
-        d.className = 'dot';
-        if (i < idx) d.classList.add('done');
-        else if (i === idx) d.classList.add('active');
+function setStatus(mode, label, icon) {
+    avatarRing.className = 'avatar-ring ' + mode;
+    statusLabel.textContent = label;
+    if (icon) avatarIcon.textContent = icon;
+    // Dots animation
+    statusDots.forEach(function(d) {
+        d.classList.toggle('active', mode === 'listening');
     });
 }
 
-function addLog(type, text) {
-    const div = document.createElement('div');
-    div.className = 'chat-item ' + type;
-    div.textContent = text.length > 80 ? text.substring(0, 80) + '...' : text;
-    chatLog.appendChild(div);
-    chatLog.scrollTop = chatLog.scrollHeight;
+function updateProgress(idx) {
+    var segs = progressBar.querySelectorAll('.progress-seg');
+    segs.forEach(function(s, i) {
+        s.className = 'progress-seg';
+        if (i < idx) s.classList.add('done');
+        else if (i === idx) s.classList.add('active');
+    });
 }
 
-// ====== Hold-to-Talk ======
-function setupHoldToTalk() {
-    holdTalkBtn.style.display = 'block';
-    setStatus('idle', '按住🎤说话，说完松手', '🎧');
-    
-    holdInner.addEventListener('mousedown', startHoldRecord);
-    holdInner.addEventListener('mouseup', stopHoldRecord);
-    holdInner.addEventListener('mouseleave', stopHoldRecord);
-    holdInner.addEventListener('touchstart', function(e) { e.preventDefault(); startHoldRecord(); });
-    holdInner.addEventListener('touchend', function(e) { e.preventDefault(); stopHoldRecord(); });
+function showSubtitle(text) {
+    if (captionOn) {
+        subtitleText.textContent = text || '-';
+    }
 }
 
-async function startHoldRecord() {
-    if (isProcessing || finished) return;
-    
+function toggleCaption() {
+    captionOn = !captionOn;
+    document.getElementById('captionBtn').classList.toggle('active', captionOn);
+    subtitleArea.classList.toggle('show', captionOn);
+}
+
+// ====== Voice Detection via AudioContext ======
+const SILENCE_THRESHOLD = 0.02;  // RMS threshold
+const SILENCE_TIMEOUT = 1200;    // ms of silence before submit
+
+async function startContinuousRecording() {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var source = audioCtx.createMediaStreamSource(audioStream);
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 512;
+        source.connect(analyser);
+
         audioChunks = [];
-        mediaRecorder = new MediaRecorder(stream);
-        
+        isRecording = true;
+        hasSpoken = false;
+        silenceStart = 0;
+
+        // Start MediaRecorder
+        mediaRecorder = new MediaRecorder(audioStream);
         mediaRecorder.ondataavailable = function(e) {
             audioChunks.push(e.data);
         };
-        
-        mediaRecorder.onstop = async function() {
-            stream.getTracks().forEach(function(t) { t.stop(); });
-            if (audioChunks.length === 0) return;
-            
-            const blob = new Blob(audioChunks, { type: 'audio/webm' });
-            if (blob.size < 1000) return;
-            
-            setStatus('thinking', '⏳ 识别语音中...', '⏳');
-            
-            const formData = new FormData();
-            formData.append('audio', blob, 'recording.webm');
-            
-            try {
-                const resp = await fetch('api/interview/asr', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await resp.json();
-                
-                if (data.code === 0 && data.data.text.trim()) {
-                    submitAnswer(data.data.text.trim());
-                } else {
-                    setStatus('idle', '⚠️ 未识别到语音，重试', '⚠️');
-                }
-            } catch(e) {
-                setStatus('idle', '⚠️ 识别失败，重试', '⚠️');
-            }
+        mediaRecorder.onstop = function() {
+            // Handle in submitRecording
         };
-        
-        holdIcon.textContent = '🔴';
-        holdLabel.textContent = '松手发送';
-        holdInner.classList.add('recording');
-        mediaRecorder.start();
+        mediaRecorder.start(200);
+
+        setStatus('listening', '正在听...', '👩‍💼');
+
+        // Start voice activity detection loop
+        detectVoice();
     } catch(e) {
-        setStatus('idle', '⚠️ 麦克风权限被拒绝', '⚠️');
+        setStatus('thinking', '⚠️ 麦克风权限被拒绝，请允许后刷新', '❌');
     }
 }
 
-function stopHoldRecord() {
+function detectVoice() {
+    if (!isRecording || !analyser) return;
+
+    var data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteTimeDomainData(data);
+
+    // Calculate RMS
+    var sum = 0;
+    for (var i = 0; i < data.length; i++) {
+        var val = (data[i] - 128) / 128;
+        sum += val * val;
+    }
+    var rms = Math.sqrt(sum / data.length);
+
+    if (rms > SILENCE_THRESHOLD) {
+        // Voice detected
+        hasSpoken = true;
+        silenceStart = 0;
+    } else if (hasSpoken) {
+        // Silence detected after speech
+        var now = Date.now();
+        if (silenceStart === 0) {
+            silenceStart = now;
+        } else if (now - silenceStart > SILENCE_TIMEOUT) {
+            // Silence for too long, submit
+            submitRecording();
+            return;
+        }
+    }
+
+    if (isRecording) {
+        requestAnimationFrame(detectVoice);
+    }
+}
+
+async function submitRecording() {
+    if (!isRecording || !hasSpoken) {
+        // No speech detected, restart
+        stopRecording();
+        setTimeout(startContinuousRecording, 500);
+        return;
+    }
+
+    isRecording = false;
+    stopRecording();
+
+    if (audioChunks.length === 0) {
+        setTimeout(startContinuousRecording, 500);
+        return;
+    }
+
+    var blob = new Blob(audioChunks, { type: 'audio/webm' });
+    if (blob.size < 2000) {
+        // Too short, restart
+        setTimeout(startContinuousRecording, 300);
+        return;
+    }
+
+    setStatus('thinking', '识别中...', '🤔');
+
+    var formData = new FormData();
+    formData.append('audio', blob, 'recording.webm');
+
+    try {
+        var resp = await fetch('api/interview/asr', { method: 'POST', body: formData });
+        var data = await resp.json();
+
+        if (data.code === 0 && data.data.text.trim()) {
+            var transcript = data.data.text.trim();
+            showSubtitle('你说：' + transcript);
+            await submitAnswer(transcript);
+        } else {
+            setStatus('listening', '没听清，请再说一遍', '👩‍💼');
+            setTimeout(startContinuousRecording, 500);
+        }
+    } catch(e) {
+        setStatus('listening', '网络错误，重试中...', '👩‍💼');
+        setTimeout(startContinuousRecording, 1000);
+    }
+}
+
+function stopRecording() {
+    isRecording = false;
     if (mediaRecorder && mediaRecorder.state === 'recording') {
-        mediaRecorder.stop();
-        holdIcon.textContent = '🎤';
-        holdLabel.textContent = '按住说话';
-        holdInner.classList.remove('recording');
+        try { mediaRecorder.stop(); } catch(e) {}
     }
+    if (audioStream) {
+        audioStream.getTracks().forEach(function(t) { t.stop(); });
+        audioStream = null;
+    }
+    if (audioCtx) {
+        audioCtx.close().catch(function(){});
+        audioCtx = null;
+    }
+    analyser = null;
 }
 
-// === Submit Answer ===
+// ====== Submit Answer ======
 async function submitAnswer(text) {
     if (isProcessing) return;
     isProcessing = true;
-    
+
     allAnswers.push(text);
-    addLog('a', '你的回答：' + text);
-    setStatus('thinking', '⏳ AI正在评估...', '⏳');
-    
+    setStatus('thinking', '思考中...', '🤔');
+    showSubtitle('AI评估中...');
+
     try {
-        const resp = await fetch('api/interview/chat', {
+        var resp = await fetch('api/interview/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'session_id=' + encodeURIComponent(sessionId) + '&message=' + encodeURIComponent(text)
         });
-        const data = await resp.json();
-        
+        var data = await resp.json();
+
         if (data.code === 0) {
-            const content = data.data.content;
-            
+            var content = data.data.content;
+
             if (data.data.finished) {
                 finished = true;
                 showFinalReport(content);
                 return;
             }
-            
-            const nextMatch = content.match(/【下一题】([\s\S]*?)$/);
-            const questionText = nextMatch ? nextMatch[1].trim() : '';
-            
+
+            // Parse 【下一题】
+            var nextMatch = content.match(/【下一题】([\s\S]*?)$/);
+            var questionText = nextMatch ? nextMatch[1].trim() : '';
+
             if (questionText) {
-                currentQuestionIdx++;
-                updateProgress(currentQuestionIdx);
-                addLog('q', '第' + (currentQuestionIdx+1) + '题：' + questionText);
-                
-                setStatus('speaking', '🔊 AI正在提问...', '🔊');
+                currentIdx++;
+                updateProgress(currentIdx);
+                showSubtitle('第' + (currentIdx+1) + '题：' + questionText);
+
+                setStatus('speaking', '正在提问...', '👩‍💼');
                 await playTTS(questionText);
-                
+
                 isProcessing = false;
-                setStatus('idle', '按住🎤说话，说完松手', '🎧');
+                setTimeout(startContinuousRecording, 500);
             } else {
                 isProcessing = false;
-                setStatus('idle', '按住🎤说话，说完松手', '🎧');
+                setTimeout(startContinuousRecording, 500);
             }
         } else {
-            setStatus('idle', '⚠️ 处理出错，重试', '⚠️');
+            setStatus('listening', '出错了，请重试', '👩‍💼');
             isProcessing = false;
+            setTimeout(startContinuousRecording, 1000);
         }
     } catch(e) {
-        setStatus('idle', '⚠️ 网络错误，重试', '⚠️');
+        setStatus('listening', '网络错误，重试', '👩‍💼');
         isProcessing = false;
+        setTimeout(startContinuousRecording, 1000);
     }
 }
 
-// === TTS ===
+// ====== TTS ======
 function playTTS(text) {
     return new Promise(function(resolve) {
-        const ttsText = text.length > 500 ? text.substring(0, 500) + '...' : text;
+        var ttsText = text.length > 500 ? text.substring(0, 500) + '...' : text;
         fetch('api/interview/tts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'message=' + encodeURIComponent(ttsText)
         }).then(function(r) { return r.json(); }).then(function(data) {
             if (data.code === 0 && data.data.audio_url) {
-                const audio = new Audio(data.data.audio_url);
+                var audio = new Audio(data.data.audio_url);
                 audio.onended = resolve;
                 audio.play().catch(resolve);
             } else {
@@ -567,76 +704,88 @@ function playTTS(text) {
     });
 }
 
-// === Start Interview ===
+// ====== Start ======
 async function startInterview() {
-    setStatus('thinking', '⏳ 面试准备中...', '⏳');
-    
+    setStatus('thinking', '准备中...', '🤔');
+
     try {
-        const resp = await fetch('api/interview/start?session_id=' + encodeURIComponent(sessionId));
-        const data = await resp.json();
-        
+        var resp = await fetch('api/interview/start?session_id=' + encodeURIComponent(sessionId));
+        var data = await resp.json();
+
         if (data.code === 0) {
-            currentQuestionIdx = 0;
+            currentIdx = 0;
             updateProgress(0);
-            
-            const content = data.data.content;
-            addLog('q', '第1题：' + content);
-            
-            setStatus('speaking', '🔊 AI正在提问...', '🔊');
+
+            var content = data.data.content;
+            showSubtitle('第1题：' + content);
+
+            setStatus('speaking', '正在提问...', '👩‍💼');
             await playTTS(content);
-            
+
             isProcessing = false;
-            setupHoldToTalk();
+            setTimeout(startContinuousRecording, 500);
         }
     } catch(e) {
-        setStatus('idle', '⚠️ 连接失败，刷新重试', '⚠️');
+        setStatus('thinking', '连接失败，刷新重试', '❌');
     }
 }
 
-// === Final Report ===
+// ====== End Call ======
+function endCall() {
+    stopRecording();
+    isProcessing = true;
+    setStatus('thinking', '已挂断', '📞');
+    if (!finished) {
+        // Show partial report
+        setTimeout(function() {
+            location.reload();
+        }, 1500);
+    }
+}
+
+// ====== Final Report ======
 function showFinalReport(content) {
-    holdTalkBtn.style.display = 'none';
-    setStatus('idle', '✅ 面试已结束', '✅');
-    
-    report.style.display = 'block';
-    restartBtn.style.display = 'block';
-    
-    let html = '<h2>📋 面试总结报告</h2>';
-    const lines = content.split('\n');
-    let inSection = false;
-    
-    html += '<div style="white-space:pre-wrap;font-size:13px;line-height:1.7;color:rgba(255,255,255,0.85)">';
-    for (let line of lines) {
-        line = line.trim();
+    stopRecording();
+    setStatus('thinking', '面试结束', '✅');
+
+    var html = '<h2>📋 面试总结报告</h2>';
+    var lines = content.split('\n');
+    var inSection = false;
+
+    html += '<div style="white-space:pre-wrap;font-size:13px;line-height:1.7;color:#3a2a5a">';
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
         if (!line) continue;
-        
+
         if (line.startsWith('第') && line.includes('题')) {
-            html += '<div class="q-item"><h3>' + line + '</h3>';
+            html += '<div class="report-item"><h3>' + line + '</h3>';
             inSection = true;
         } else if (line === '综合建议' || line.startsWith('总体评价')) {
             if (inSection) { html += '</div>'; inSection = false; }
-            html += '<div style="margin:16px 0 8px;font-size:14px;color:#a78bfa;font-weight:600">' + line + '</div>';
+            html += '<div style="margin:14px 0 6px;font-size:14px;color:#7c5cbf;font-weight:600">' + line + '</div>';
         } else if (line.startsWith('可以更好')) {
-            html += '<div class="label">可以更好：</div><div class="val better">' + line.replace('可以更好：', '') + '</div>';
+            html += '<div class="rl">可以更好：</div><div class="rv better">' + line.replace('可以更好：', '') + '</div>';
         } else if (line.startsWith('评分')) {
-            html += '<div class="label">' + line + '</div>';
+            html += '<div class="rl">' + line + '</div>';
         } else if (line.startsWith('你的回答')) {
-            html += '<div class="label">' + line + '</div>';
+            html += '<div class="rl">' + line + '</div>';
         } else if (line.startsWith('评价')) {
-            html += '<div class="val">' + line + '</div>';
+            html += '<div class="rv" style="margin-top:2px">' + line + '</div>';
         } else {
             html += '<div>' + line + '</div>';
         }
     }
     if (inSection) html += '</div>';
     html += '</div>';
-    
-    report.innerHTML = html;
+    html += '<button class="report-restart" onclick="location.reload()">🔄 重新面试</button>';
+
+    reportCard.innerHTML = html;
+    reportOverlay.style.display = 'block';
 }
 
-// Auto start on page load
+// Auto start
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(startInterview, 500);
+    setTimeout(startInterview, 600);
 });
 </script>
 </body>
