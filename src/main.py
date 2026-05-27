@@ -476,6 +476,67 @@ async def health_check():
 async def http_graph_inout_parameter(request: Request):
     return service.graph_inout_schema()
 
+# ====== 首页导航 ======
+from fastapi.responses import HTMLResponse
+
+@app.get("/", response_class=HTMLResponse)
+async def home():
+    return """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>铁路招聘服务平台</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:#0f172a;color:#e2e8f0;min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px
+}
+.container{max-width:400px;width:100%;text-align:center}
+h1{font-size:26px;margin-bottom:8px;background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+p.sub{color:#64748b;font-size:14px;margin-bottom:32px}
+.card{
+    background:#1e293b;border-radius:16px;padding:24px;margin-bottom:16px;
+    border:1px solid #334155;cursor:pointer;transition:all .2s;display:block;text-decoration:none
+}
+.card:hover{transform:translateY(-2px);border-color:#60a5fa}
+.card h2{font-size:18px;color:#f1f5f9;margin-bottom:6px}
+.card p{font-size:13px;color:#94a3b8;line-height:1.5}
+.card .icon{font-size:32px;margin-bottom:10px}
+.card .tag{
+    display:inline-block;font-size:11px;padding:2px 10px;border-radius:100px;margin-top:8px
+}
+.tag.exam{background:#1e3a5f;color:#60a5fa}
+.tag.interview{background:#3b1f5e;color:#a78bfa}
+.footer{font-size:12px;color:#475569;margin-top:32px}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>🚂 铁路招聘服务平台</h1>
+    <p class="sub">校招备考 · 模拟面试 · 一站搞定</p>
+
+    <a class="card" href="/exam/">
+        <div class="icon">📝</div>
+        <h2>广铁机考模拟题库</h2>
+        <p>铁路岗位招聘笔试练习，185道真题在线刷</p>
+        <span class="tag exam">📖 题库练习</span>
+    </a>
+
+    <a class="card" href="/interview/">
+        <div class="icon">🎙</div>
+        <h2>铁路校招模拟面试</h2>
+        <p>AI面试官全程语音提问，回答即评，改进建议</p>
+        <span class="tag interview">🎤 语音面试</span>
+    </a>
+
+    <div class="footer">铁路院校 · 校招备考平台</div>
+</div>
+</body>
+</html>"""
+
 # 挂载铁路就业题库应用
 from exam.app import app as exam_app
 app.mount("/exam", exam_app)
