@@ -259,15 +259,7 @@ def generate_gt_exam():
     }
 
 
-# ============================================================
-# 挂载面试网站（同一端口，不同路径）
-# ============================================================
-try:
-    from interview.app import app as interview_app
-    app.mount("/interview", interview_app)
-    logger.info("✅ 面试网站已挂载到 /interview")
-except Exception as e:
-    logger.warning(f"⚠️ 面试网站挂载失败: {e}")
+
 
 
 class ExamSubmitRequest(BaseModel):

@@ -480,6 +480,14 @@ async def http_graph_inout_parameter(request: Request):
 from exam.app import app as exam_app
 app.mount("/exam", exam_app)
 
+# 挂载模拟面试应用
+try:
+    from interview.app import app as interview_app
+    app.mount("/interview", interview_app)
+    logger.info("✅ 面试网站已挂载到 /interview")
+except Exception as e:
+    logger.warning(f"⚠️ 面试网站挂载失败: {e}")
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Start FastAPI server")
     parser.add_argument("-m", type=str, default="http", help="Run mode, support http,flow,node")
