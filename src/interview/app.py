@@ -570,7 +570,6 @@ async function startRecording() {
     } catch (e) {
         hintText.textContent = '❌ 无法访问麦克风，请授权或检查浏览器设置';
     }
-}
 
 function stopRecording() {
     if (mediaRecorder && mediaRecorder.state === 'recording') {
@@ -582,64 +581,9 @@ function stopRecording() {
     }
 }
 
-// === TTS ===
-    // === TTS - 可选回调 ===
-    async function playTTS(text, onEnd) {
-        try {
-            const ttsText = text.length > 500 ? text.substring(0, 500) + '...' : text;
-            const resp = await fetch('api/interview/tts', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'message=' + encodeURIComponent(ttsText)
-            });
-            const data = await resp.json();
-            if (data.code === 0 && data.data.audio_url) {
-                const audio = new Audio(data.data.audio_url);
-                if (onEnd) audio.onended = onEnd;
-                audio.play().catch(function() { if (onEnd) onEnd(); });
-            } else {
-                if (onEnd) onEnd();
-            }
-        } catch (e) {
-            console.log('TTS play failed:', e);
-            if (onEnd) onEnd();
-        }
-    }
-
-    // === 下一题按钮 ===
-    function showNextBtn() {
-        // 在底部添加下一题按钮
-        const existing = document.getElementById('nextBtn');
-        if (existing) existing.remove();
-        
-        const nextDiv = document.createElement('div');
-        nextDiv.id = 'nextBtn';
-        nextDiv.className = 'next-btn-wrapper';
-        nextDiv.innerHTML = '<button class="next-btn" onclick="onNextQuestion()">📌 下一题</button>';
-        document.getElementById('bottomBar').appendChild(nextDiv);
-        
-        hintText.textContent = '✅ 已回答，点击「下一题」继续';
-        micBtn.disabled = true;
-    }
-
-    function onNextQuestion() {
-        const nextBtn = document.getElementById('nextBtn');
-        if (nextBtn) nextBtn.remove();
-        
-        if (finished) {
-            hintText.textContent = '🎉 面试已全部完成';
-            return;
-        }
-        
-        // TTS播放下一题问题
-        if (nextQuestionText) {
-            playTTS(nextQuestionText, function() { enableRecording(); });
-        } else {
-            enableRecording();
-        }
-    }
+// === TTS - 语音播报 ===
+async function playTTS(text, onEnd) {
     try {
-        // 只对AI回复的前500字做语音合成（太长播放体验不好）
         const ttsText = text.length > 500 ? text.substring(0, 500) + '...' : text;
         const resp = await fetch('api/interview/tts', {
             method: 'POST',
@@ -649,11 +593,45 @@ function stopRecording() {
         const data = await resp.json();
         if (data.code === 0 && data.data.audio_url) {
             const audio = new Audio(data.data.audio_url);
-            audio.play().catch(() => {});
+            if (onEnd) audio.onended = onEnd;
+            audio.play().catch(function() { if (onEnd) onEnd(); });
+        } else {
+            if (onEnd) onEnd();
         }
     } catch (e) {
-        // TTS失败不影响主流程
         console.log('TTS play failed:', e);
+        if (onEnd) onEnd();
+    }
+}
+
+// === 下一题按钮 ===
+function showNextBtn() {
+    const existing = document.getElementById('nextBtn');
+    if (existing) existing.remove();
+    
+    const nextDiv = document.createElement('div');
+    nextDiv.id = 'nextBtn';
+    nextDiv.className = 'next-btn-wrapper';
+    nextDiv.innerHTML = '<button class="next-btn" onclick="onNextQuestion()">📌 下一题</button>';
+    document.getElementById('bottomBar').appendChild(nextDiv);
+    
+    hintText.textContent = '✅ 已回答，点击「下一题」继续';
+    micBtn.disabled = true;
+}
+
+function onNextQuestion() {
+    const nextBtn = document.getElementById('nextBtn');
+    if (nextBtn) nextBtn.remove();
+    
+    if (finished) {
+        hintText.textContent = '🎉 面试已全部完成';
+        return;
+    }
+    
+    if (nextQuestionText) {
+        playTTS(nextQuestionText, function() { enableRecording(); });
+    } else {
+        enableRecording();
     }
 }
 
