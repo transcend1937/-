@@ -529,6 +529,7 @@ async function startRecording() {
                 const chatResp = await fetch('api/interview/chat', { method: 'POST', body: chatFormData });
 
                 const chatData = await chatResp.json();
+                if (chatData.code === 0) {
                     const respContent = chatData.data.content;
                     // 解析【评估】和【下一题】
                     const evalMatch = respContent.match(/【评估】([\s\S]*?)(?=【下一题】|$)/);
@@ -570,6 +571,7 @@ async function startRecording() {
     } catch (e) {
         hintText.textContent = '❌ 无法访问麦克风，请授权或检查浏览器设置';
     }
+}
 
 function stopRecording() {
     if (mediaRecorder && mediaRecorder.state === 'recording') {
