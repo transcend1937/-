@@ -136,8 +136,6 @@ def reset_interview(session_id: str = "default"):
 # ============== 前端 SPA ==============
 
 @app.get("/")
-@app.get("/interview")
-@app.get("/interview/")
 async def interview_page():
     """返回面试模拟 SPA 页面"""
     return HTMLResponse(SPA_HTML)
@@ -691,7 +689,7 @@ async function startInterview() {
     updateStatus('面试官正在准备...');
 
     try {
-        const res = await fetch('/api/interview/start?session_id=default');
+        const res = await fetch('api/interview/start?session_id=default');
         const data = await res.json();
         if (data.code === 0) {
             addMessage('ai', data.data.content);
@@ -721,7 +719,7 @@ async function sendAnswer() {
     updateStatus('面试官正在评价...');
 
     try {
-        const res = await fetch('/api/interview/chat?session_id=default', {
+        const res = await fetch('api/interview/chat?session_id=default', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'message=' + encodeURIComponent(text)
@@ -764,7 +762,7 @@ async function sendAnswer() {
 async function resetInterview() {
     if (isWaiting) return;
     try {
-        await fetch('/api/interview/reset?session_id=default');
+        await fetch('api/interview/reset?session_id=default');
     } catch(e) {}
 
     interviewStarted = false;
