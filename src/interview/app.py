@@ -366,7 +366,7 @@ body {
 
     <div class="chat-log" id="chatLog"></div>
 
-    <!-- 按住说话按钮（后备方案 - 不自动录音时显示） -->
+    <!-- 按住说话按钮 -->
     <div class="hold-talk-btn" id="holdTalkBtn" style="display:none">
         <div class="hold-inner" id="holdInner">
             <span class="hold-icon" id="holdIcon">🎤</span>
@@ -380,16 +380,12 @@ body {
 
 <script>
 const sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
-let recognition = null;
 let mediaRecorder = null;
 let audioChunks = [];
 let isProcessing = false;
 let finished = false;
 let currentQuestionIdx = -1;
 let allAnswers = [];
-let silenceTimer = null;
-let lastSpeechTime = 0;
-let useAutoMode = false; // true=auto speech recog, false=hold-to-talk
 
 // DOM
 const statusRing = document.getElementById('statusRing');
@@ -427,88 +423,11 @@ function addLog(type, text) {
     chatLog.scrollTop = chatLog.scrollHeight;
 }
 
-// ====== Auto Speech Recognition (Chrome) ======
-function startAutoListening() {
-    if (isProcessing || finished) return;
-    if (!useAutoMode) return;
-    
-    try {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            useAutoMode = false;
-            switchToHoldTalk();
-            return;
-        }
-        
-        recognition = new SpeechRecognition();
-        recognition.lang = 'zh-CN';
-        recognition.continuous = true;
-        recognition.interimResults = false;
-        
-        let finalText = '';
-        let hasSpeech = false;
-        
-        recognition.onresult = function(event) {
-            lastSpeechTime = Date.now();
-            hasSpeech = true;
-            
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                if (event.results[i].isFinal) {
-                    finalText += event.results[i][0].transcript;
-                }
-            }
-            
-            if (silenceTimer) clearTimeout(silenceTimer);
-            silenceTimer = setTimeout(function() {
-                if (finalText.trim().length > 0 && !isProcessing) {
-                    submitAnswer(finalText.trim());
-                }
-            }, 800);
-        };
-        
-        recognition.onerror = function(event) {
-            if (event.error === 'no-speech') {
-                stopAutoListening();
-                setTimeout(startAutoListening, 500);
-                return;
-            }
-            if (event.error === 'not-allowed') {
-                useAutoMode = false;
-                switchToHoldTalk();
-                return;
-            }
-        };
-        
-        recognition.onend = function() {
-            if (hasSpeech && finalText.trim().length > 0 && !isProcessing) {
-                submitAnswer(finalText.trim());
-            } else if (!isProcessing && !finished && useAutoMode) {
-                setTimeout(startAutoListening, 300);
-            }
-        };
-        
-        recognition.start();
-        setStatus('listening', '🎤 请回答', '🎤');
-    } catch(e) {
-        useAutoMode = false;
-        switchToHoldTalk();
-    }
-}
-
-function stopAutoListening() {
-    if (silenceTimer) { clearTimeout(silenceTimer); silenceTimer = null; }
-    if (recognition) {
-        try { recognition.stop(); } catch(e) {}
-        recognition = null;
-    }
-}
-
-// ====== Hold-to-Talk (Fallback for all browsers) ======
-function switchToHoldTalk() {
+// ====== Hold-to-Talk ======
+function setupHoldToTalk() {
     holdTalkBtn.style.display = 'block';
-    setStatus('idle', '按住🎤按钮说话，说完松手', '🎧');
+    setStatus('idle', '按住🎤说话，说完松手', '🎧');
     
-    // Setup hold-to-talk
     holdInner.addEventListener('mousedown', startHoldRecord);
     holdInner.addEventListener('mouseup', stopHoldRecord);
     holdInner.addEventListener('mouseleave', stopHoldRecord);
@@ -529,17 +448,14 @@ async function startHoldRecord() {
         };
         
         mediaRecorder.onstop = async function() {
-            // Stop all tracks
             stream.getTracks().forEach(function(t) { t.stop(); });
-            
             if (audioChunks.length === 0) return;
             
             const blob = new Blob(audioChunks, { type: 'audio/webm' });
-            if (blob.size < 1000) return; // too short
+            if (blob.size < 1000) return;
             
             setStatus('thinking', '⏳ 识别语音中...', '⏳');
             
-            // Send to backend ASR
             const formData = new FormData();
             formData.append('audio', blob, 'recording.webm');
             
@@ -582,7 +498,6 @@ function stopHoldRecord() {
 async function submitAnswer(text) {
     if (isProcessing) return;
     isProcessing = true;
-    if (useAutoMode) stopAutoListening();
     
     allAnswers.push(text);
     addLog('a', '你的回答：' + text);
@@ -605,7 +520,6 @@ async function submitAnswer(text) {
                 return;
             }
             
-            // Parse 下一题
             const nextMatch = content.match(/【下一题】([\s\S]*?)$/);
             const questionText = nextMatch ? nextMatch[1].trim() : '';
             
@@ -614,30 +528,22 @@ async function submitAnswer(text) {
                 updateProgress(currentQuestionIdx);
                 addLog('q', '第' + (currentQuestionIdx+1) + '题：' + questionText);
                 
-                // Immediately speak the next question
                 setStatus('speaking', '🔊 AI正在提问...', '🔊');
                 await playTTS(questionText);
                 
-                // Start listening
                 isProcessing = false;
-                var nextFn = useAutoMode ? startAutoListening : function(){};
-                setTimeout(nextFn, 300);
+                setStatus('idle', '按住🎤说话，说完松手', '🎧');
             } else {
                 isProcessing = false;
-                var nextFn2 = useAutoMode ? startAutoListening : function(){};
-                setTimeout(nextFn2, 500);
+                setStatus('idle', '按住🎤说话，说完松手', '🎧');
             }
         } else {
-            setStatus('idle', '⚠️ 处理出错，重试中...', '⚠️');
+            setStatus('idle', '⚠️ 处理出错，重试', '⚠️');
             isProcessing = false;
-            var retryFn = useAutoMode ? startAutoListening : function(){};
-            setTimeout(retryFn, 1000);
         }
     } catch(e) {
-        setStatus('idle', '⚠️ 网络错误，重试中...', '⚠️');
+        setStatus('idle', '⚠️ 网络错误，重试', '⚠️');
         isProcessing = false;
-        var retryFn2 = useAutoMode ? startAutoListening : function(){};
-        setTimeout(retryFn2, 1000);
     }
 }
 
@@ -665,10 +571,6 @@ function playTTS(text) {
 async function startInterview() {
     setStatus('thinking', '⏳ 面试准备中...', '⏳');
     
-    // Detect if browser supports SpeechRecognition
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    useAutoMode = !!SpeechRecognition;
-    
     try {
         const resp = await fetch('api/interview/start?session_id=' + encodeURIComponent(sessionId));
         const data = await resp.json();
@@ -684,11 +586,7 @@ async function startInterview() {
             await playTTS(content);
             
             isProcessing = false;
-            if (useAutoMode) {
-                setTimeout(startAutoListening, 300);
-            } else {
-                switchToHoldTalk();
-            }
+            setupHoldToTalk();
         }
     } catch(e) {
         setStatus('idle', '⚠️ 连接失败，刷新重试', '⚠️');
@@ -697,16 +595,13 @@ async function startInterview() {
 
 // === Final Report ===
 function showFinalReport(content) {
-    stopAutoListening();
+    holdTalkBtn.style.display = 'none';
     setStatus('idle', '✅ 面试已结束', '✅');
     
     report.style.display = 'block';
     restartBtn.style.display = 'block';
     
-    // Parse and display nicely
     let html = '<h2>📋 面试总结报告</h2>';
-    
-    // Format the content
     const lines = content.split('\n');
     let inSection = false;
     
