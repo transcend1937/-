@@ -518,14 +518,14 @@ p.sub{color:#64748b;font-size:14px;margin-bottom:32px}
     <h1>🚂 铁路招聘服务平台</h1>
     <p class="sub">校招备考 · 模拟面试 · 一站搞定</p>
 
-    <a class="card" href="/exam/">
+    <a class="card" href="https://zonal-unity-production-06e6.up.railway.app/exam/">
         <div class="icon">📝</div>
         <h2>广铁机考模拟题库</h2>
         <p>铁路岗位招聘笔试练习，185道真题在线刷</p>
         <span class="tag exam">📖 题库练习</span>
     </a>
 
-    <a class="card" href="/interview/">
+    <a class="card" href="https://7744570e-7af9-4d80-9dcb-db4a950df08e.dev.coze.site/interview/">
         <div class="icon">🎙</div>
         <h2>铁路校招模拟面试</h2>
         <p>AI面试官全程语音提问，回答即评，改进建议</p>
