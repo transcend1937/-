@@ -429,28 +429,27 @@ async function startInterview() {
     addMessage('ai', '🎯 AI 面试官', '面试即将开始，请准备好...');
 
     try {
-                const msg = data.data.content;
-                addMessage('ai', '🎯 AI 面试官', msg);
-                playTTS(msg, function() { enableRecording(); });
-    startBtn.classList.add('hidden');
-    }
-
-    function enableRecording() {
-        voiceControls.classList.remove('hidden');
-        voiceControls.style.display = 'flex';
-        micBtn.disabled = false;
-        isProcessing = false;
-        hintText.textContent = '🎤 请点击🎤按钮，语音回答';
-    }
-
+        const resp = await fetch('api/interview/start?session_id=' + encodeURIComponent(sessionId));
+        const data = await resp.json();
+        if (data.code === 0) {
+            const msg = data.data.content;
+            addMessage('ai', '🎯 AI 面试官', msg);
+            playTTS(msg, function() { enableRecording(); });
+        }
         startBtn.classList.add('hidden');
-        voiceControls.classList.remove('hidden');
-        voiceControls.style.display = 'flex';
     } catch (e) {
         addMessage('ai', '⚠️ 系统', '连接失败，请检查服务是否正常');
         startBtn.disabled = false;
         startBtn.textContent = '🚀 重新开始';
     }
+}
+
+function enableRecording() {
+    voiceControls.classList.remove('hidden');
+    voiceControls.style.display = 'flex';
+    micBtn.disabled = false;
+    isProcessing = false;
+    hintText.textContent = '🎤 请点击🎤按钮，语音回答';
 }
 
 // === 录音 ===
