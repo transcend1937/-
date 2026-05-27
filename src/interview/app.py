@@ -1,4 +1,4 @@
-"""铁路院校模拟面试 - Web 应用（语音交互版）"""
+"""铁路校招模拟面试 - Web 应用（语音交互版）"""
 
 import os
 import json
@@ -14,7 +14,7 @@ from coze_coding_dev_sdk import ASRClient, TTSClient
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="铁路院校模拟面试")
+app = FastAPI(title="铁路校招模拟面试")
 
 # ============== 会话管理 ==============
 _sessions: dict[str, dict] = {}
@@ -148,7 +148,7 @@ SPA_HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>铁路院校模拟面试</title>
+<title>铁路校招模拟面试</title>
 <style>
 :root {
     --primary: #1a3a5c;
@@ -346,14 +346,14 @@ body {
 <body>
 
 <div class="header">
-    <h1>🚂 铁路院校模拟面试</h1>
+    <h1>🚂 铁路校招模拟面试</h1>
     <p>AI 面试官 · 全程语音回答</p>
 </div>
 
 <div class="chat-area" id="chatArea">
     <div class="msg ai">
         <div class="label">🎯 AI 面试官</div>
-        欢迎参加铁路院校模拟面试！点击下方「开始面试」按钮，AI 面试官将逐题提问，你用语音回答即可。
+        欢迎参加铁路校招模拟面试！点击下方「开始面试」按钮，AI 面试官将逐题提问，你用语音回答即可。
     </div>
 </div>
 
