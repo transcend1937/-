@@ -310,29 +310,6 @@ body {
 .hint-text.recording { color: #e74c3c; font-weight: 600; }
 
 /* 下一题按钮 */
-.next-btn-wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding: 4px 0;
-}
-.next-btn {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 12px 36px;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(41,65,112,0.3);
-}
-.next-btn:hover {
-    background: var(--secondary);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(41,65,112,0.4);
-}
 
 .loading-dots::after {
     content: '';
@@ -540,7 +517,7 @@ async function startRecording() {
                         nextQuestionText = nextMatch[1].trim();
                     }
                     addMessage('ai', '🎯 AI 面试官', displayText);
-                    // 不自动TTS，显示下一题按钮
+                    // 自动语音播报下一题（不播评估），播完后启用录音
                     if (chatData.data.finished) {
                         finished = true;
                         hintText.textContent = '✅ 面试已全部完成！点击按钮重新开始';
@@ -549,8 +526,16 @@ async function startRecording() {
                         startBtn.textContent = '🔄 重新面试';
                         startBtn.disabled = false;
                     } else {
-                        // 显示"下一题"按钮
-                        showNextBtn();
+                        // 自动播报下一题问题，播完后启用录音
+                        if (nextQuestionText) {
+                            hintText.textContent = '🎧 AI正在提问...';
+                            playTTS(nextQuestionText, function() { 
+                                hintText.textContent = '🎤 请语音回答';
+                                micBtn.disabled = false;
+                            });
+                        } else {
+                            micBtn.disabled = false;
+                        }
                     }
                 } else {
                     hintText.textContent = '❌ 回答处理失败，请重试';
@@ -606,43 +591,7 @@ async function playTTS(text, onEnd) {
     }
 }
 
-// === 下一题按钮 ===
-function showNextBtn() {
-    const existing = document.getElementById('nextBtn');
-    if (existing) existing.remove();
-    
-    const nextDiv = document.createElement('div');
-    nextDiv.id = 'nextBtn';
-    nextDiv.className = 'next-btn-wrapper';
-    nextDiv.innerHTML = '<button class="next-btn" onclick="onNextQuestion()">📌 下一题</button>';
-    document.getElementById('bottomBar').appendChild(nextDiv);
-    
-    hintText.textContent = '✅ 已回答，点击「下一题」继续';
-    micBtn.disabled = true;
-}
-
-function onNextQuestion() {
-    const nextBtn = document.getElementById('nextBtn');
-    if (nextBtn) nextBtn.remove();
-    
-    if (finished) {
-        hintText.textContent = '🎉 面试已全部完成';
-        return;
-    }
-    
-    if (nextQuestionText) {
-        playTTS(nextQuestionText, function() { enableRecording(); });
-    } else {
-        enableRecording();
-    }
-}
-
-// === UI 辅助函数 ===
 function addMessage(role, label, content) {
-    // 移除等待动画
-    const waiting = document.querySelector('.waiting-anim');
-    if (waiting) waiting.remove();
-
     const div = document.createElement('div');
     div.className = 'msg ' + role;
     div.innerHTML = '<div class="label">' + label + '</div>' + formatContent(content);
