@@ -67,7 +67,7 @@ def render_bureau_section(data):
 <div id="bureauGrid" class="bureau-grid">{cards_html}</div>"""
 
 def render_major_section(data):
-    """服务端渲染按专业视图的完整HTML"""
+    """服务端渲染按专业视图的完整HTML——点开直接展开各路局明细"""
     majors = data["majors"]
     cards = []
     for m in majors:
@@ -78,18 +78,24 @@ def render_major_section(data):
         mp = m["male_pct"]
         fp = m["female_pct"]
         bc = m["bureau_count"]
-        blist = m.get("bureaus", [])
+        bd_list = m.get("bureau_details", [])
 
-        # 生成路局标签
-        chips = "".join(f'<span class="bureau-chip">{b}</span>' for b in blist)
+        # 生成展开后的路局明细表格
+        rows = ""
+        for d in bd_list:
+            rows += f"""<div class="major-row">
+  <span class="mname">{d["name"]}</span>
+  <span class="mcount">{d["total"]}人</span>
+  <span class="mbreakdown">♂{d["male"]} ♀{d["female"]}</span>
+</div>"""
 
-        cards.append(f"""<div class="major-card" onclick="showMajorDetail(this)" data-name="{name}">
+        cards.append(f"""<div class="major-card" onclick="toggleCard(this)" data-name="{name}">
   <div class="card-header">
     <span class="name">{name}</span>
-    <span class="total">{total}<small>人</small></span>
+    <span><span class="total">{total}<small>人</small></span><span class="arrow">▾</span></span>
   </div>
   <div class="card-stats"><span>{bc}个路局</span><span>♂{male} {mp} ♀{female} {fp}</span></div>
-  <div class="card-tags">{chips}</div>
+  <div class="card-detail">{rows}</div>
 </div>""")
 
     cards_html = "\n".join(cards)
@@ -104,9 +110,6 @@ def build_page():
     data = RAILWAY_DATA
     bureau_html = render_bureau_section(data)
     major_html = render_major_section(data)
-
-    # 将 majors 数据构建为 JS 可用的 bureau_details 查找表
-    majors_json = json.dumps(data["majors"], ensure_ascii=False)
 
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -223,7 +226,8 @@ body {{
 .card-header .total {{ font-size: 18px; font-weight: 700; color: #2563eb; }}
 .card-header .total small {{ font-size: 12px; font-weight: 400; color: #6b7280; }}
 .card-header .arrow {{ color: #9ca3af; font-size: 18px; margin-left: 8px; transition: transform 0.2s; }}
-.bureau-card.expanded .card-header .arrow {{ transform: rotate(180deg); }}
+.bureau-card.expanded .card-header .arrow,
+.major-card.expanded .card-header .arrow {{ transform: rotate(180deg); }}
 .card-stats {{
     display: flex;
     justify-content: space-between;
@@ -232,8 +236,10 @@ body {{
     color: #6b7280;
 }}
 .card-tags {{ padding: 0 16px 12px; }}
-.bureau-card .card-detail {{ display: none; border-top: 1px solid #f3f4f6; padding: 8px 16px 12px; }}
-.bureau-card.expanded .card-detail {{ display: block; }}
+.bureau-card .card-detail,
+.major-card .card-detail {{ display: none; border-top: 1px solid #f3f4f6; padding: 8px 16px 12px; }}
+.bureau-card.expanded .card-detail,
+.major-card.expanded .card-detail {{ display: block; }}
 .bureau-card .major-row {{
     display: flex;
     justify-content: space-between;
@@ -241,49 +247,14 @@ body {{
     font-size: 14px;
     border-bottom: 1px solid #f9fafb;
 }}
-.bureau-card .major-row:last-child {{ border-bottom: none; }}
-.bureau-card .major-row .mname {{ color: #374151; flex: 1; }}
-.bureau-card .major-row .mcount {{ font-weight: 600; color: #2563eb; width: 50px; text-align: right; }}
-.bureau-card .major-row .mbreakdown {{ color: #9ca3af; font-size: 12px; width: 130px; text-align: right; }}
-.backdrop {{
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 20;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 40px;
-}}
-.modal {{
-    background: white;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 480px;
-    max-height: 80vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}}
-.modal-header {{
-    padding: 16px 20px;
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}}
-.modal-header h2 {{ font-size: 18px; font-weight: 600; }}
-.modal-header .close {{ width: 32px; height: 32px; border-radius: 50%; border: none; background: #f3f4f6; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }}
-.modal-body {{ padding: 12px 20px 20px; overflow-y: auto; flex: 1; }}
-.modal-body .info-line {{ display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f3f4f6; }}
-.modal-body .info-line:last-child {{ border-bottom: none; }}
-.modal-body .info-line .ilabel {{ color: #6b7280; }}
-.modal-body .info-line .ivalue {{ font-weight: 600; }}
-.bureau-table {{ width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }}
-.bureau-table th {{ background: #f8fafc; padding: 8px 6px; text-align: left; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; }}
-.bureau-table td {{ padding: 7px 6px; border-bottom: 1px solid #f3f4f6; }}
-.bureau-table tr:hover td {{ background: #fafafa; }}
-.bureau-table .num {{ text-align: center; }}
+.bureau-card .major-row:last-child,
+.major-card .major-row:last-child {{ border-bottom: none; }}
+.bureau-card .major-row .mname,
+.major-card .major-row .mname {{ color: #374151; flex: 1; }}
+.bureau-card .major-row .mcount,
+.major-card .major-row .mcount {{ font-weight: 600; color: #2563eb; width: 50px; text-align: right; }}
+.bureau-card .major-row .mbreakdown,
+.major-card .major-row .mbreakdown {{ color: #9ca3af; font-size: 12px; width: 130px; text-align: right; }}
 .bureau-chip {{ display: inline-block; background: #eff6ff; color: #2563eb; font-size: 12px; padding: 2px 10px; border-radius: 12px; margin: 2px 3px; }}
 .summary {{
     position: fixed;
@@ -314,14 +285,7 @@ body {{
     <div id="tabMajor" style="display:none">{major_html}</div>
 </div>
 <div class="summary">🏢 {data["total_bureaus"]}家铁路局 · 📚 {data["total_majors"]}个专业 · 👥 共{data["grand_total"]}人</div>
-<div class="backdrop" id="modalBackdrop" onclick="closeModal()">
-    <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-header"><h2 id="modalTitle">详情</h2><button class="close" onclick="closeModal()">✕</button></div>
-        <div class="modal-body" id="modalBody"></div>
-    </div>
-</div>
 <script>
-const MAJORS_DATA = {majors_json};
 
 function switchTab(tab, el) {{
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -346,28 +310,6 @@ function filterData() {{
         const name = c.getAttribute('data-name').toLowerCase();
         c.style.display = name.includes(q) ? '' : 'none';
     }});
-}}
-
-function showMajorDetail(el) {{
-    const name = el.getAttribute('data-name');
-    const m = MAJORS_DATA.find(x=>x.name===name);
-    if (!m) return;
-    let html = '<div class="info-line"><span class="ilabel">招录总数</span><span class="ivalue">'+m.total+'人</span></div>';
-    html += '<div class="info-line"><span class="ilabel">男生</span><span class="ivalue">'+m.male+'人 ('+m.male_pct+')</span></div>';
-    html += '<div class="info-line"><span class="ilabel">女生</span><span class="ivalue">'+m.female+'人 ('+m.female_pct+')</span></div>';
-    html += '<div class="info-line"><span class="ilabel">涉及路局</span><span class="ivalue">'+m.bureau_count+'家</span></div>';
-    html += '<br><table class="bureau-table"><thead><tr><th>路局</th><th class="num">♂</th><th class="num">♀</th><th class="num">合计</th></tr></thead><tbody>';
-    for (const d of m.bureau_details) {{
-        html += '<tr><td>'+d.name+'</td><td class="num">'+d.male+'</td><td class="num">'+d.female+'</td><td class="num"><b>'+d.total+'</b></td></tr>';
-    }}
-    html += '</tbody></table>';
-    document.getElementById('modalTitle').textContent = name;
-    document.getElementById('modalBody').innerHTML = html;
-    document.getElementById('modalBackdrop').style.display = 'flex';
-}}
-
-function closeModal() {{
-    document.getElementById('modalBackdrop').style.display = 'none';
 }}
 </script>
 </body>
