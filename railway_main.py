@@ -1,30 +1,37 @@
-"""Railway 独立入口 - 无需 Coze 依赖"""
+"""Railway 独立入口 - 使用importlib直接加载模块文件"""
 import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
-from fastapi import FastAPI
+import json
+from fastapi import FastAPI, Response
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
 
+WORKSPACE = os.path.dirname(os.path.abspath(__file__))
+
+# ========== 直接用文件路径加载 exam app ==========
+import importlib.util
+
+def load_module(name, filepath):
+    """从文件路径直接加载模块"""
+    spec = importlib.util.spec_from_file_location(name, filepath)
+    mod = importlib.util.module_from_spec(spec)
+    # 把 src/ 加入 sys.path，使得模块内 import 能正常工作
+    src_dir = os.path.join(WORKSPACE, "src")
+    if src_dir not in sys.path:
+        sys.path.insert(0, src_dir)
+    spec.loader.exec_module(mod)
+    return mod
+
+exam_mod = load_module("exam_app", os.path.join(WORKSPACE, "src", "exam", "app.py"))
+exam_app = exam_mod.app
+
+railway_mod = load_module("railway_app", os.path.join(WORKSPACE, "src", "railway", "app.py"))
+railway_app = railway_mod.app
+
+# ========== 主应用 ==========
 app = FastAPI(title="铁路校招服务平台")
 
-# 挂载静态文件
-assets_dir = os.path.join(os.path.dirname(__file__), "assets")
-if os.path.exists(assets_dir):
-    app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
-
-# 机考题库
-from exam.app import app as exam_app
-app.mount("/exam", exam_app)
-
-# 招录数据查询
-from railway.app import app as railway_app
-app.mount("/railway", railway_app)
-
-# 首页导航
-@app.get("/", response_class=HTMLResponse)
-async def home():
-    return """<!DOCTYPE html>
+# 首页
+HOME_HTML = """<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -52,11 +59,8 @@ body{
 .card .icon{font-size:36px;margin-bottom:8px}
 .card h2{font-size:18px;color:#e2e8f0;margin-bottom:4px}
 .card p{font-size:13px;color:#64748b;line-height:1.5}
-.card .tag{
-    display:inline-block;font-size:11px;padding:3px 10px;border-radius:100px;margin-top:8px
-}
+.card .tag{display:inline-block;font-size:11px;padding:3px 10px;border-radius:100px;margin-top:8px}
 .tag.exam{background:rgba(59,130,246,0.15);color:#60a5fa}
-.tag.interview{background:rgba(139,92,246,0.15);color:#a78bfa}
 .tag.data{background:rgba(34,197,94,0.15);color:#34d399}
 .footer{text-align:center;font-size:12px;color:#475569;margin-top:40px}
 </style>
@@ -65,7 +69,7 @@ body{
 <div class="container">
     <div class="header">
         <h1>🚂 铁路校招服务平台</h1>
-        <p>题库练习 · 面试模拟 · 招录数据查询</p>
+        <p>题库练习 · 招录数据查询</p>
     </div>
     <a class="card" href="/exam/">
         <div class="icon">📝</div>
@@ -79,16 +83,18 @@ body{
         <p>18家铁路局2025届招录数据，按路局或专业分类查询</p>
         <span class="tag data">📋 数据查询</span>
     </a>
-    <a class="card" href="https://7744570e-7af9-4d80-9dcb-db4a950df08e.dev.coze.site/interview/">
-        <div class="icon">🎙</div>
-        <h2>铁路校招模拟面试</h2>
-        <p>AI面试官全程语音提问，回答即评，改进建议</p>
-        <span class="tag interview">🎤 语音面试</span>
-    </a>
     <div class="footer">所有数据均来自中国铁路人才招聘网官方公示</div>
 </div>
 </body>
 </html>"""
+
+@app.get("/", response_class=HTMLResponse)
+async def home():
+    return HOME_HTML
+
+# 挂载子应用
+app.mount("/exam", exam_app)
+app.mount("/railway", railway_app)
 
 if __name__ == "__main__":
     import uvicorn
