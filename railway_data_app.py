@@ -206,7 +206,6 @@ body {{
 .stat-card .num {{ font-size: 24px; font-weight: 700; color: #2563eb; }}
 .stat-card .label {{ font-size: 12px; color: #6b7280; margin-top: 2px; }}
 .bureau-grid, .major-grid {{ display: flex; flex-direction: column; gap: 8px; }}
-.major-grid {{ display: none; }}
 .bureau-card, .major-card {{
     background: white;
     border-radius: 12px;
