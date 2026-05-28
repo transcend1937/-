@@ -7,14 +7,13 @@ from fastapi.responses import HTMLResponse
 
 WORKSPACE = os.path.dirname(os.path.abspath(__file__))
 
-# ========== 直接用文件路径加载 exam app ==========
+# ========== 加载子应用 ==========
+# exam app - 使用 importlib 从 src/exam/app.py 加载
 import importlib.util
 
 def load_module(name, filepath):
-    """从文件路径直接加载模块"""
     spec = importlib.util.spec_from_file_location(name, filepath)
     mod = importlib.util.module_from_spec(spec)
-    # 把 src/ 加入 sys.path，使得模块内 import 能正常工作
     src_dir = os.path.join(WORKSPACE, "src")
     if src_dir not in sys.path:
         sys.path.insert(0, src_dir)
@@ -24,8 +23,8 @@ def load_module(name, filepath):
 exam_mod = load_module("exam_app", os.path.join(WORKSPACE, "src", "exam", "app.py"))
 exam_app = exam_mod.app
 
-railway_mod = load_module("railway_app", os.path.join(WORKSPACE, "src", "railway", "app.py"))
-railway_app = railway_mod.app
+# railway_data_app - 根目录文件，直接导入
+from railway_data_app import app as railway_app
 
 # ========== 主应用 ==========
 app = FastAPI(title="铁路校招服务平台")
