@@ -174,6 +174,12 @@ body {
 .modal-body .info-line:last-child { border-bottom: none; }
 .modal-body .info-line .ilabel { color: #6b7280; }
 .modal-body .info-line .ivalue { font-weight: 600; }
+/* 专业详情 - 各路局表格 */
+.bureau-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.bureau-table th { background: #f8fafc; padding: 8px 6px; text-align: left; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; }
+.bureau-table td { padding: 7px 6px; border-bottom: 1px solid #f3f4f6; }
+.bureau-table tr:hover td { background: #fafafa; }
+.bureau-table .num { text-align: center; font-variant-numeric: tabular-nums; }
 .bureau-chip { display: inline-block; background: #eff6ff; color: #2563eb; font-size: 12px; padding: 2px 10px; border-radius: 12px; margin: 2px 3px; }
 .summary {
     position: fixed;
@@ -277,7 +283,7 @@ function renderMajor(query){
         '<div class="stat-card"><div class="num" style="font-size:13px;line-height:1.3">'+top+'</div><div class="label">最多</div></div>';
     let html='<div class="bureau-grid">';
     majors.forEach((m,i)=>{
-        html+='<div class="bureau-card" onclick="showMajorDetail('+i+')">'+
+        html+='<div class="bureau-card" onclick=\'showMajorDetail("'+m.name+'")\'>'+
             '<div class="card-header"><span class="name">📖 '+m.name+'</span>'+
             '<span><span class="total">'+m.total+'<small>人</small></span><span class="arrow">▸</span></span></div>'+
             '<div class="card-detail"><div style="display:flex;gap:8px;margin-bottom:6px;font-size:12px;color:#6b7280">'+
@@ -287,16 +293,29 @@ function renderMajor(query){
     html+='</div>';
     document.getElementById('dataList').innerHTML=html;
 }
-function showMajorDetail(idx){
-    const m=data.majors[idx];
+function showMajorDetail(name){
+    const m=data.majors.find(x=>x.name===name);
+    if(!m)return;
     document.getElementById('modalTitle').textContent='📖 '+m.name;
     let html='<div class="info-line"><span class="ilabel">招录总人数</span><span class="ivalue" style="color:#2563eb;font-size:18px">'+m.total+'</span></div>'+
         '<div class="info-line"><span class="ilabel">男生</span><span class="ivalue">'+m.male+' ('+m.male_pct+')</span></div>'+
         '<div class="info-line"><span class="ilabel">女生</span><span class="ivalue">'+m.female+' ('+m.female_pct+')</span></div>'+
         '<div class="info-line"><span class="ilabel">覆盖路局</span><span class="ivalue">'+m.bureau_count+'个</span></div>'+
-        '<div style="margin-top:10px"><div style="font-size:13px;color:#6b7280;margin-bottom:6px">招录路局：</div>';
-    m.bureaus.forEach(b=>{html+='<span class="bureau-chip">'+b+'</span>';});
-    html+='</div>';
+        '<div style="margin-top:12px"><div style="font-size:13px;font-weight:600;color:#374151;margin-bottom:8px">各路局招录详情：</div>'+
+        '<table style="width:100%;border-collapse:collapse;font-size:13px">'+
+        '<thead><tr style="background:#f3f4f6;border-bottom:2px solid #e5e7eb">'+
+        '<th style="padding:8px 10px;text-align:left;color:#374151;font-weight:600">路局</th>'+
+        '<th style="padding:8px 10px;text-align:center;color:#374151;font-weight:600">总计</th>'+
+        '<th style="padding:8px 10px;text-align:center;color:#374151;font-weight:600">男生</th>'+
+        '<th style="padding:8px 10px;text-align:center;color:#374151;font-weight:600">女生</th></tr></thead><tbody>';
+    m.bureau_details.forEach(d=>{
+        html+='<tr style="border-bottom:1px solid #f3f4f6">'+
+            '<td style="padding:8px 10px;color:#374151">'+d.name+'</td>'+
+            '<td style="padding:8px 10px;text-align:center;font-weight:600;color:#2563eb">'+d.total+'</td>'+
+            '<td style="padding:8px 10px;text-align:center;color:#6b7280">'+d.male+'</td>'+
+            '<td style="padding:8px 10px;text-align:center;color:#6b7280">'+d.female+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
     document.getElementById('modalBody').innerHTML=html;
     document.getElementById('modalBackdrop').style.display='flex';
 }
