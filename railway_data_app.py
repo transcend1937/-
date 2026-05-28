@@ -231,6 +231,7 @@ function switchTab(t){
     document.getElementById('searchInput').value='';
     filterData();
 }
+function toggleCard(el){el.classList.toggle('expanded');}
 function filterData(){
     const q=document.getElementById('searchInput').value.trim().toLowerCase();
     if(currentTab==='bureau') renderBureau(q);
@@ -247,7 +248,7 @@ function renderBureau(query){
         '<div class="stat-card"><div class="num" style="font-size:13px;line-height:1.3">'+top+'</div><div class="label">最多</div></div>';
     let html='<div class="bureau-grid">';
     bureaus.forEach((b,i)=>{
-        html+='<div class="bureau-card" onclick="this.classList.toggle(\'expanded\')">'+
+        html+='<div class="bureau-card" onclick="toggleCard(this)">'+
             '<div class="card-header"><span class="name">🚉 '+b.name+'</span>'+
             '<span><span class="total">'+b.total.total+'<small>人</small></span><span class="arrow">▾</span></span></div>'+
             '<div class="card-detail"><div style="display:flex;gap:8px;margin-bottom:6px;font-size:12px;color:#6b7280">'+
