@@ -13,6 +13,14 @@ with open(DATA_PATH, "r", encoding="utf-8") as f:
 
 app = FastAPI()
 
+def _gender_bar(male, female, total):
+    """生成男女比例色条"""
+    if total == 0:
+        return """<div class="gbar"><div class="gbar-empty"></div></div>"""
+    mpct = male / total * 100
+    fpct = female / total * 100
+    return f"""<div class="gbar"><div class="gbar-m" style="flex:{mpct:.1f}"></div><div class="gbar-f" style="flex:{fpct:.1f}"></div></div>"""
+
 def render_bureau_section(data):
     """服务端渲染按路局视图的完整HTML"""
     bureaus = data["bureaus"]
@@ -23,8 +31,6 @@ def render_bureau_section(data):
     cards = []
     idx = 0
     for b in bureaus:
-        if b["total"]["total"] == 0:
-            continue  # 跳过郑州局等空数据
         idx += 1
         name = b["name"]
         t = b["total"]
@@ -39,22 +45,20 @@ def render_bureau_section(data):
             mm = m["male"]
             mf = m["female"]
             mt = m["total"]
-            mp = m.get("male_pct", "0%")
-            fp = m.get("female_pct", "0%")
-            majors_html += f"""<div class="major-row"><span class="mname">{mn}</span><span class="mcount">{mt}人</span><span class="mbreakdown">♂{mm} {mp} ♀{mf} {fp}</span></div>"""
+            majors_html += f"""<div class="major-row"><span class="mname">{mn}</span><span class="mcount">{mt}<small>人</small></span><span class="mbreakdown"><span class="m-label">♂{mm}</span><span class="sep">|</span><span class="f-label">♀{mf}</span></span></div>"""
 
-        if female == 0 and male == 0:
-            gender = f"共{total_num}人"
-        else:
-            gender = f"♂{male}人 ♀{female}人"
+        gbar = _gender_bar(male, female, total_num)
+        gender_pct = f"""<span class="m-label">♂{male}</span><span class="sep">·</span><span class="f-label">♀{female}</span>"""
 
-        cards.append(f"""<div class="bureau-card" onclick="toggleCard(this)" data-index="{idx}">
+        cards.append(f"""<div class="bureau-card" onclick="toggleCard(this)">
   <div class="card-header">
     <span class="name">{name}</span>
-    <span><span class="total">{total_num}<small>人</small></span><span class="arrow">▾</span></span>
+    <span class="total">{total_num}<small>人</small></span>
   </div>
-  <div class="card-stats"><span>{major_count}个专业</span><span>{gender}</span></div>
+  {gbar}
+  <div class="card-stats"><span>{major_count}个专业</span><span>{gender_pct}</span></div>
   <div class="card-detail">{majors_html}</div>
+  <div class="card-arrow">▾</div>
 </div>""")
 
     cards_html = "\n".join(cards)
@@ -75,27 +79,32 @@ def render_major_section(data):
         total = m["total"]
         male = m["male"]
         female = m["female"]
-        mp = m["male_pct"]
-        fp = m["female_pct"]
         bc = m["bureau_count"]
         bd_list = m.get("bureau_details", [])
 
-        # 生成展开后的路局明细表格
+        # 生成展开后的路局明细
         rows = ""
         for d in bd_list:
+            db_gbar = _gender_bar(d["male"], d["female"], d["total"])
             rows += f"""<div class="major-row">
   <span class="mname">{d["name"]}</span>
-  <span class="mcount">{d["total"]}人</span>
-  <span class="mbreakdown">♂{d["male"]} ♀{d["female"]}</span>
+  <span class="mcount">{d["total"]}<small>人</small></span>
+  {db_gbar}
+  <span class="mbreakdown"><span class="m-label">♂{d["male"]}</span><span class="sep">|</span><span class="f-label">♀{d["female"]}</span></span>
 </div>"""
+
+        gbar = _gender_bar(male, female, total)
+        gender_pct = f"""<span class="m-label">♂{male}</span><span class="sep">·</span><span class="f-label">♀{female}</span>"""
 
         cards.append(f"""<div class="major-card" onclick="toggleCard(this)" data-name="{name}">
   <div class="card-header">
     <span class="name">{name}</span>
-    <span><span class="total">{total}<small>人</small></span><span class="arrow">▾</span></span>
+    <span class="total">{total}<small>人</small></span>
   </div>
-  <div class="card-stats"><span>{bc}个路局</span><span>♂{male} {mp} ♀{female} {fp}</span></div>
+  {gbar}
+  <div class="card-stats"><span>{bc}个路局</span><span>{gender_pct}</span></div>
   <div class="card-detail">{rows}</div>
+  <div class="card-arrow">▾</div>
 </div>""")
 
     cards_html = "\n".join(cards)
@@ -255,6 +264,43 @@ body {{
 .bureau-card .major-row .mbreakdown,
 .major-card .major-row .mbreakdown {{ color: #9ca3af; font-size: 12px; width: 130px; text-align: right; }}
 .bureau-chip {{ display: inline-block; background: #eff6ff; color: #2563eb; font-size: 12px; padding: 2px 10px; border-radius: 12px; margin: 2px 3px; }}
+.gbar {{
+    display: flex; height: 6px; margin: 0 16px 8px;
+    border-radius: 3px; overflow: hidden; background: #f3f4f6;
+}}
+.gbar-m {{ background: linear-gradient(90deg, #3b82f6, #60a5fa); min-width: 0; }}
+.gbar-f {{ background: linear-gradient(90deg, #f472b6, #fb7185); min-width: 0; }}
+.gbar-empty {{ flex: 1; }}
+.m-label {{ color: #3b82f6; font-weight: 600; }}
+.f-label {{ color: #e11d48; font-weight: 600; }}
+.sep {{ color: #d1d5db; margin: 0 4px; }}
+.card-arrow {{
+    position: absolute; right: 16px; top: 14px;
+    color: #9ca3af; font-size: 16px;
+    transition: transform 0.3s ease;
+}}
+.bureau-card, .major-card {{ position: relative; }}
+.bureau-card.expanded .card-arrow,
+.major-card.expanded .card-arrow {{ transform: rotate(180deg); }}
+.bureau-card .card-header, .major-card .card-header {{
+    padding-right: 36px;
+}}
+.bureau-card .major-row,
+.major-card .major-row {{
+    display: flex; align-items: center;
+    flex-wrap: wrap;
+    padding: 8px 0;
+    font-size: 14px;
+    gap: 4px;
+    border-bottom: 1px solid #f3f4f6;
+}}
+.bureau-card .major-row .mcount,
+.major-card .major-row .mcount {{ width: auto; margin-left: auto; }}
+.bureau-card .major-row .gbar,
+.major-card .major-row .gbar {{ flex: 0 0 40%; height: 4px; margin: 0 8px; }}
+.bureau-card .major-row .mbreakdown,
+.major-card .major-row .mbreakdown {{ width: auto; }}
+
 .summary {{
     position: fixed;
     bottom: 0; left: 0; right: 0;

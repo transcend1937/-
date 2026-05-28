@@ -1625,96 +1625,6 @@
       ]
     },
     {
-      "name": "动车组检修技术",
-      "male": 101,
-      "female": 10,
-      "total": 113,
-      "male_pct": "89.4%",
-      "female_pct": "8.8%",
-      "bureau_count": 11,
-      "bureaus": [
-        "广州局",
-        "南昌局",
-        "上海局",
-        "昆明局",
-        "武汉局",
-        "青藏集团",
-        "乌鲁木齐局",
-        "南宁局",
-        "济南局",
-        "北京局",
-        "成都局"
-      ],
-      "bureau_details": [
-        {
-          "name": "广州局",
-          "male": 35,
-          "female": 1,
-          "total": 36
-        },
-        {
-          "name": "南昌局",
-          "male": 21,
-          "female": 7,
-          "total": 28
-        },
-        {
-          "name": "上海局",
-          "male": 16,
-          "female": 0,
-          "total": 16
-        },
-        {
-          "name": "昆明局",
-          "male": 5,
-          "female": 0,
-          "total": 5
-        },
-        {
-          "name": "武汉局",
-          "male": 9,
-          "female": 1,
-          "total": 10
-        },
-        {
-          "name": "青藏集团",
-          "male": 4,
-          "female": 1,
-          "total": 5
-        },
-        {
-          "name": "乌鲁木齐局",
-          "male": 0,
-          "female": 0,
-          "total": 2
-        },
-        {
-          "name": "南宁局",
-          "male": 4,
-          "female": 0,
-          "total": 4
-        },
-        {
-          "name": "济南局",
-          "male": 3,
-          "female": 0,
-          "total": 3
-        },
-        {
-          "name": "北京局",
-          "male": 3,
-          "female": 0,
-          "total": 3
-        },
-        {
-          "name": "成都局",
-          "male": 1,
-          "female": 0,
-          "total": 1
-        }
-      ]
-    },
-    {
       "name": "铁道车辆技术",
       "male": 89,
       "female": 20,
@@ -1829,6 +1739,96 @@
           "male": 2,
           "female": 0,
           "total": 2
+        }
+      ]
+    },
+    {
+      "name": "动车组检修技术",
+      "male": 101,
+      "female": 10,
+      "total": 113,
+      "male_pct": "89.4%",
+      "female_pct": "8.8%",
+      "bureau_count": 11,
+      "bureaus": [
+        "广州局",
+        "南昌局",
+        "上海局",
+        "昆明局",
+        "武汉局",
+        "青藏集团",
+        "乌鲁木齐局",
+        "南宁局",
+        "济南局",
+        "北京局",
+        "成都局"
+      ],
+      "bureau_details": [
+        {
+          "name": "广州局",
+          "male": 35,
+          "female": 1,
+          "total": 36
+        },
+        {
+          "name": "南昌局",
+          "male": 21,
+          "female": 7,
+          "total": 28
+        },
+        {
+          "name": "上海局",
+          "male": 16,
+          "female": 0,
+          "total": 16
+        },
+        {
+          "name": "昆明局",
+          "male": 5,
+          "female": 0,
+          "total": 5
+        },
+        {
+          "name": "武汉局",
+          "male": 9,
+          "female": 1,
+          "total": 10
+        },
+        {
+          "name": "青藏集团",
+          "male": 4,
+          "female": 1,
+          "total": 5
+        },
+        {
+          "name": "乌鲁木齐局",
+          "male": 0,
+          "female": 0,
+          "total": 2
+        },
+        {
+          "name": "南宁局",
+          "male": 4,
+          "female": 0,
+          "total": 4
+        },
+        {
+          "name": "济南局",
+          "male": 3,
+          "female": 0,
+          "total": 3
+        },
+        {
+          "name": "北京局",
+          "male": 3,
+          "female": 0,
+          "total": 3
+        },
+        {
+          "name": "成都局",
+          "male": 1,
+          "female": 0,
+          "total": 1
         }
       ]
     },
