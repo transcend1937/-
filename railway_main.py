@@ -1,5 +1,7 @@
 """Railway 独立入口 - 无需 Coze 依赖"""
 import os
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -12,11 +14,11 @@ if os.path.exists(assets_dir):
     app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
 # 机考题库
-from src.exam.app import app as exam_app
+from exam.app import app as exam_app
 app.mount("/exam", exam_app)
 
 # 招录数据查询
-from src.railway.app import app as railway_app
+from railway.app import app as railway_app
 app.mount("/railway", railway_app)
 
 # 首页导航
