@@ -549,6 +549,14 @@ try:
 except Exception as e:
     logger.warning(f"⚠️ 面试网站挂载失败: {e}")
 
+# 挂载铁路局招录数据查询应用
+try:
+    from railway.app import app as railway_app
+    app.mount("/railway", railway_app)
+    logger.info("✅ 铁路局招录查询已挂载到 /railway")
+except Exception as e:
+    logger.warning(f"⚠️ 铁路局招录查询挂载失败: {e}")
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Start FastAPI server")
     parser.add_argument("-m", type=str, default="http", help="Run mode, support http,flow,node")

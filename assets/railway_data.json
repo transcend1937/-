@@ -1,0 +1,1784 @@
+{
+  "total_bureaus": 18,
+  "total_majors": 24,
+  "grand_total": 999,
+  "bureaus": [
+    {
+      "name": "广州局",
+      "majors": [
+        {
+          "name": "铁道交通运营管理",
+          "male": 73,
+          "female": 22,
+          "total": 95,
+          "male_pct": "76.8%",
+          "female_pct": "23.2%"
+        },
+        {
+          "name": "铁道机车运用与维护",
+          "male": 52,
+          "female": 0,
+          "total": 52,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 45,
+          "female": 6,
+          "total": 51,
+          "male_pct": "88.2%",
+          "female_pct": "11.8%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 35,
+          "female": 1,
+          "total": 36,
+          "male_pct": "97.2%",
+          "female_pct": "2.8%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 36,
+          "female": 0,
+          "total": 36,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道交通运营管理",
+          "male": 9,
+          "female": 20,
+          "total": 29,
+          "male_pct": "31.0%",
+          "female_pct": "69.0%"
+        },
+        {
+          "name": "铁道信号自动控制",
+          "male": 18,
+          "female": 6,
+          "total": 24,
+          "male_pct": "75.0%",
+          "female_pct": "25.0%"
+        },
+        {
+          "name": "高速铁路综合维修技术",
+          "male": 18,
+          "female": 2,
+          "total": 20,
+          "male_pct": "90.0%",
+          "female_pct": "10.0%"
+        },
+        {
+          "name": "城市轨道交通机电技术",
+          "male": 18,
+          "female": 0,
+          "total": 18,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道车辆应用技术",
+          "male": 13,
+          "female": 3,
+          "total": 16,
+          "male_pct": "81.2%",
+          "female_pct": "18.8%"
+        },
+        {
+          "name": "城市轨道交通通信信号技术",
+          "male": 14,
+          "female": 2,
+          "total": 16,
+          "male_pct": "87.5%",
+          "female_pct": "12.5%"
+        },
+        {
+          "name": "高速铁路施工与维护",
+          "male": 11,
+          "female": 2,
+          "total": 13,
+          "male_pct": "84.6%",
+          "female_pct": "15.4%"
+        },
+        {
+          "name": "铁道通信与信息化技术",
+          "male": 7,
+          "female": 3,
+          "total": 10,
+          "male_pct": "70.0%",
+          "female_pct": "30.0%"
+        },
+        {
+          "name": "电气自动化技术",
+          "male": 8,
+          "female": 1,
+          "total": 9,
+          "male_pct": "88.9%",
+          "female_pct": "11.1%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 8,
+          "female": 1,
+          "total": 9,
+          "male_pct": "88.9%",
+          "female_pct": "11.1%"
+        },
+        {
+          "name": "城市轨道交通供配电技术",
+          "male": 4,
+          "female": 3,
+          "total": 7,
+          "male_pct": "57.1%",
+          "female_pct": "42.9%"
+        },
+        {
+          "name": "机电一体化技术",
+          "male": 7,
+          "female": 0,
+          "total": 7,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "机械设计与制造",
+          "male": 5,
+          "female": 0,
+          "total": 5,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "数控技术",
+          "male": 2,
+          "female": 1,
+          "total": 3,
+          "male_pct": "66.7%",
+          "female_pct": "33.3%"
+        },
+        {
+          "name": "现代物流管理",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 385,
+        "female": 73,
+        "total": 458
+      }
+    },
+    {
+      "name": "南昌局",
+      "majors": [
+        {
+          "name": "铁道机车运用与维护",
+          "male": 27,
+          "female": 5,
+          "total": 32,
+          "male_pct": "84.4%",
+          "female_pct": "15.6%"
+        },
+        {
+          "name": "铁道交通运营管理",
+          "male": 17,
+          "female": 13,
+          "total": 30,
+          "male_pct": "56.7%",
+          "female_pct": "43.3%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 21,
+          "female": 7,
+          "total": 28,
+          "male_pct": "75.0%",
+          "female_pct": "25.0%"
+        },
+        {
+          "name": "现代物流管理",
+          "male": 12,
+          "female": 6,
+          "total": 18,
+          "male_pct": "66.7%",
+          "female_pct": "33.3%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 5,
+          "female": 7,
+          "total": 12,
+          "male_pct": "41.7%",
+          "female_pct": "58.3%"
+        },
+        {
+          "name": "城市轨道交通机电技术",
+          "male": 6,
+          "female": 4,
+          "total": 10,
+          "male_pct": "60.0%",
+          "female_pct": "40.0%"
+        },
+        {
+          "name": "高速铁路施工与维护",
+          "male": 6,
+          "female": 2,
+          "total": 8,
+          "male_pct": "75.0%",
+          "female_pct": "25.0%"
+        },
+        {
+          "name": "城市轨道交通运营管理",
+          "male": 5,
+          "female": 2,
+          "total": 7,
+          "male_pct": "71.4%",
+          "female_pct": "28.6%"
+        },
+        {
+          "name": "城市轨道车辆应用技术",
+          "male": 7,
+          "female": 0,
+          "total": 7,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 3,
+          "female": 3,
+          "total": 6,
+          "male_pct": "50.0%",
+          "female_pct": "50.0%"
+        },
+        {
+          "name": "铁道信号自动控制",
+          "male": 2,
+          "female": 3,
+          "total": 5,
+          "male_pct": "40.0%",
+          "female_pct": "60.0%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 4,
+          "female": 1,
+          "total": 5,
+          "male_pct": "80.0%",
+          "female_pct": "20.0%"
+        },
+        {
+          "name": "铁道通信与信息化技术",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "机械设计与制造",
+          "male": 1,
+          "female": 2,
+          "total": 3,
+          "male_pct": "33.3%",
+          "female_pct": "66.7%"
+        },
+        {
+          "name": "高速铁路综合维修技术",
+          "male": 2,
+          "female": 1,
+          "total": 3,
+          "male_pct": "66.7%",
+          "female_pct": "33.3%"
+        },
+        {
+          "name": "智能控制技术",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道交通通信信号技术",
+          "male": 0,
+          "female": 1,
+          "total": 1,
+          "male_pct": "0.0%",
+          "female_pct": "100.0%"
+        },
+        {
+          "name": "电气自动化技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "机电一体化技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "机电设备技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 126,
+        "female": 57,
+        "total": 183
+      }
+    },
+    {
+      "name": "上海局",
+      "majors": [
+        {
+          "name": "铁道工程技术",
+          "male": 17,
+          "female": 0,
+          "total": 17,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 16,
+          "female": 0,
+          "total": 16,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道机车运用与维护",
+          "male": 10,
+          "female": 0,
+          "total": 10,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道车辆应用技术",
+          "male": 9,
+          "female": 0,
+          "total": 9,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道信号自动控制",
+          "male": 5,
+          "female": 1,
+          "total": 6,
+          "male_pct": "83.3%",
+          "female_pct": "16.7%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 6,
+          "female": 0,
+          "total": 6,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "高速铁路施工与维护",
+          "male": 5,
+          "female": 0,
+          "total": 5,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道交通运营管理",
+          "male": 4,
+          "female": 0,
+          "total": 4,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 4,
+          "female": 0,
+          "total": 4,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "电气自动化技术",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道交通供配电技术",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道交通通信信号技术",
+          "male": 0,
+          "female": 2,
+          "total": 2,
+          "male_pct": "0.0%",
+          "female_pct": "100.0%"
+        },
+        {
+          "name": "机电一体化技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道交通运营管理",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道通信与信息化技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 84,
+        "female": 3,
+        "total": 87
+      }
+    },
+    {
+      "name": "昆明局",
+      "majors": [
+        {
+          "name": "铁道交通运营管理",
+          "male": 9,
+          "female": 1,
+          "total": 10,
+          "male_pct": "90.0%",
+          "female_pct": "10.0%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 7,
+          "female": 1,
+          "total": 8,
+          "male_pct": "87.5%",
+          "female_pct": "12.5%"
+        },
+        {
+          "name": "铁道机车运用与维护",
+          "male": 6,
+          "female": 0,
+          "total": 6,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 5,
+          "female": 0,
+          "total": 5,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道交通机电技术",
+          "male": 5,
+          "female": 0,
+          "total": 5,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道信号自动控制",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "电气自动化技术",
+          "male": 1,
+          "female": 1,
+          "total": 2,
+          "male_pct": "50.0%",
+          "female_pct": "50.0%"
+        },
+        {
+          "name": "机械设计与制造",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 40,
+        "female": 3,
+        "total": 43
+      }
+    },
+    {
+      "name": "武汉局",
+      "majors": [
+        {
+          "name": "动车组检修技术",
+          "male": 9,
+          "female": 1,
+          "total": 10,
+          "male_pct": "90.0%",
+          "female_pct": "10.0%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 6,
+          "female": 2,
+          "total": 8,
+          "male_pct": "75.0%",
+          "female_pct": "25.0%"
+        },
+        {
+          "name": "铁道机车运用与维护",
+          "male": 7,
+          "female": 1,
+          "total": 8,
+          "male_pct": "87.5%",
+          "female_pct": "12.5%"
+        },
+        {
+          "name": "铁道交通运营管理",
+          "male": 3,
+          "female": 3,
+          "total": 6,
+          "male_pct": "50.0%",
+          "female_pct": "50.0%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 2,
+          "female": 2,
+          "total": 4,
+          "male_pct": "50.0%",
+          "female_pct": "50.0%"
+        },
+        {
+          "name": "铁道信号自动控制",
+          "male": 0,
+          "female": 2,
+          "total": 2,
+          "male_pct": "0.0%",
+          "female_pct": "100.0%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 1,
+          "female": 1,
+          "total": 2,
+          "male_pct": "50.0%",
+          "female_pct": "50.0%"
+        },
+        {
+          "name": "城市轨道交通机电技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 29,
+        "female": 12,
+        "total": 41
+      }
+    },
+    {
+      "name": "兰州局",
+      "majors": [
+        {
+          "name": "铁道机车运用与维护",
+          "male": 5,
+          "female": 0,
+          "total": 5,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 7,
+          "female": 1,
+          "total": 8,
+          "male_pct": "87.5%",
+          "female_pct": "12.5%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 4,
+          "female": 0,
+          "total": 4,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道交通运营管理",
+          "male": 5,
+          "female": 5,
+          "total": 10,
+          "male_pct": "50%",
+          "female_pct": "50%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 5,
+          "female": 0,
+          "total": 5,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道信号控制",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        }
+      ],
+      "total": {
+        "male": 29,
+        "female": 6,
+        "total": 35
+      }
+    },
+    {
+      "name": "青藏集团",
+      "majors": [
+        {
+          "name": "铁道机车运用与维护",
+          "male": 7,
+          "female": 0,
+          "total": 7,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 4,
+          "female": 1,
+          "total": 5,
+          "male_pct": "80.0%",
+          "female_pct": "20.0%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 4,
+          "female": 3,
+          "total": 7,
+          "male_pct": "57.14.0%",
+          "female_pct": "42.86%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 3,
+          "female": 1,
+          "total": 4,
+          "male_pct": "75.0%",
+          "female_pct": "25.0%"
+        },
+        {
+          "name": "铁道交通运营管理",
+          "male": 0,
+          "female": 3,
+          "total": 3,
+          "male_pct": "0%",
+          "female_pct": "100%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道信号控制",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道通信与信息化技术",
+          "male": 0,
+          "female": 1,
+          "total": 1,
+          "male_pct": "0%",
+          "female_pct": "100%"
+        }
+      ],
+      "total": {
+        "male": 21,
+        "female": 9,
+        "total": 30
+      }
+    },
+    {
+      "name": "乌鲁木齐局",
+      "majors": [
+        {
+          "name": "铁道机车运用与维护",
+          "male": 0,
+          "female": 0,
+          "total": 2,
+          "male_pct": "-",
+          "female_pct": "-"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 0,
+          "female": 0,
+          "total": 7,
+          "male_pct": "-",
+          "female_pct": "-"
+        },
+        {
+          "name": "城市轨道车辆应用技术",
+          "male": 0,
+          "female": 0,
+          "total": 6,
+          "male_pct": "-",
+          "female_pct": "-"
+        },
+        {
+          "name": "铁道交通运营管理",
+          "male": 0,
+          "female": 0,
+          "total": 3,
+          "male_pct": "-",
+          "female_pct": "-"
+        },
+        {
+          "name": "城市轨道交通通信信号技术",
+          "male": 0,
+          "female": 0,
+          "total": 2,
+          "male_pct": "-",
+          "female_pct": "-"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 0,
+          "female": 0,
+          "total": 2,
+          "male_pct": "-",
+          "female_pct": "-"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 0,
+          "female": 0,
+          "total": 1,
+          "male_pct": "-",
+          "female_pct": "-"
+        },
+        {
+          "name": "智能控制技术",
+          "male": 0,
+          "female": 0,
+          "total": 1,
+          "male_pct": "-",
+          "female_pct": "-"
+        },
+        {
+          "name": "城市轨道交通运营管理",
+          "male": 0,
+          "female": 0,
+          "total": 1,
+          "male_pct": "-",
+          "female_pct": "-"
+        }
+      ],
+      "total": {
+        "male": 0,
+        "female": 0,
+        "total": 25
+      }
+    },
+    {
+      "name": "南宁局",
+      "majors": [
+        {
+          "name": "铁道机车运用与维护",
+          "male": 7,
+          "female": 0,
+          "total": 7,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 4,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "高速铁路施工与维护",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道供电",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "城市轨道交通机电技术",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "城市轨道车辆应用技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "智能控制技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "城市轨道交通运营管理",
+          "male": 1,
+          "female": 0,
+          "total": 0,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        }
+      ],
+      "total": {
+        "male": 25,
+        "female": 0,
+        "total": 23
+      }
+    },
+    {
+      "name": "太原局",
+      "majors": [
+        {
+          "name": "铁道机车运用与维护",
+          "male": 6,
+          "female": 1,
+          "total": 7,
+          "male_pct": "85.71",
+          "female_pct": "14.29%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 4,
+          "female": 0,
+          "total": 4,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "智能控制技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道交通运营管理",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        }
+      ],
+      "total": {
+        "male": 15,
+        "female": 1,
+        "total": 16
+      }
+    },
+    {
+      "name": "济南局",
+      "majors": [
+        {
+          "name": "铁道车辆技术",
+          "male": 6,
+          "female": 0,
+          "total": 6,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道机车运用与维护",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 1,
+          "female": 1,
+          "total": 2,
+          "male_pct": "50.0%",
+          "female_pct": "50.0%"
+        },
+        {
+          "name": "城市轨道交通运营管理",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道信号自动控制",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 14,
+        "female": 1,
+        "total": 15
+      }
+    },
+    {
+      "name": "北京局",
+      "majors": [
+        {
+          "name": "铁道机车运用与维护",
+          "male": 4,
+          "female": 0,
+          "total": 4,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 2,
+          "female": 0,
+          "total": 0,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "智能控制技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道交通运营管理",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "数控技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "电气自动化技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "城市轨道交通运营管理",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "城市轨道交通供配电技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        }
+      ],
+      "total": {
+        "male": 16,
+        "female": 0,
+        "total": 14
+      }
+    },
+    {
+      "name": "成都局",
+      "majors": [
+        {
+          "name": "铁道交通运营管理",
+          "male": 2,
+          "female": 0,
+          "total": 0,
+          "male_pct": "100.0%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "铁道机车运用与维护",
+          "male": 5,
+          "female": 0,
+          "total": 5,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "动车组检修技术",
+          "male": 1,
+          "female": 0,
+          "total": 0,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道车辆应用技术",
+          "male": 3,
+          "female": 0,
+          "total": 0,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道信号控制",
+          "male": 0,
+          "female": 1,
+          "total": 0,
+          "male_pct": "0%",
+          "female_pct": "100%"
+        },
+        {
+          "name": "铁道车辆技术",
+          "male": 0,
+          "female": 2,
+          "total": 0,
+          "male_pct": "0%",
+          "female_pct": "100%"
+        },
+        {
+          "name": "机电设备技术",
+          "male": 0,
+          "female": 1,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "100%"
+        },
+        {
+          "name": "智能控制技术",
+          "male": 0,
+          "female": 1,
+          "total": 1,
+          "male_pct": "0%",
+          "female_pct": "100%"
+        },
+        {
+          "name": "高速铁路综合维修技术",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        },
+        {
+          "name": "城市轨道交通供配电技术",
+          "male": 0,
+          "female": 1,
+          "total": 1,
+          "male_pct": "0%",
+          "female_pct": "100%"
+        },
+        {
+          "name": "高速铁路施工与维护",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100%",
+          "female_pct": "0%"
+        }
+      ],
+      "total": {
+        "male": 16,
+        "female": 6,
+        "total": 13
+      }
+    },
+    {
+      "name": "沈阳局",
+      "majors": [
+        {
+          "name": "铁道车辆技术",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道机车运用与维护",
+          "male": 3,
+          "female": 0,
+          "total": 3,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道工程技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 7,
+        "female": 0,
+        "total": 7
+      }
+    },
+    {
+      "name": "西安局",
+      "majors": [
+        {
+          "name": "铁道机车运用与维护",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "城市轨道车辆应用技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "电气自动化技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道供电技术",
+          "male": 1,
+          "female": 0,
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 5,
+        "female": 0,
+        "total": 5
+      }
+    },
+    {
+      "name": "呼和浩特局",
+      "majors": [
+        {
+          "name": "铁道车辆技术",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        },
+        {
+          "name": "铁道机车运用与维护",
+          "male": 2,
+          "female": 0,
+          "total": 2,
+          "male_pct": "100.0%",
+          "female_pct": "0.0%"
+        }
+      ],
+      "total": {
+        "male": 4,
+        "female": 0,
+        "total": 4
+      }
+    },
+    {
+      "name": "哈尔滨局",
+      "majors": [
+        {
+          "name": "铁道交通运营管理",
+          "male": 0,
+          "female": 1,
+          "total": 0,
+          "male_pct": "0%",
+          "female_pct": "100%"
+        }
+      ],
+      "total": {
+        "male": 0,
+        "female": 1,
+        "total": 0
+      }
+    },
+    {
+      "name": "郑州局",
+      "majors": [],
+      "total": {
+        "male": 0,
+        "female": 0,
+        "total": 0
+      }
+    }
+  ],
+  "majors": [
+    {
+      "name": "铁道交通运营管理",
+      "male": 112,
+      "female": 48,
+      "total": 160,
+      "male_pct": "70.0%",
+      "female_pct": "30.0%",
+      "bureau_count": 12,
+      "bureaus": [
+        "上海局",
+        "乌鲁木齐局",
+        "兰州局",
+        "北京局",
+        "南昌局",
+        "哈尔滨局",
+        "太原局",
+        "广州局",
+        "成都局",
+        "昆明局",
+        "武汉局",
+        "青藏集团"
+      ]
+    },
+    {
+      "name": "铁道机车运用与维护",
+      "male": 145,
+      "female": 7,
+      "total": 154,
+      "male_pct": "94.2%",
+      "female_pct": "4.5%",
+      "bureau_count": 16,
+      "bureaus": [
+        "上海局",
+        "乌鲁木齐局",
+        "兰州局",
+        "北京局",
+        "南宁局",
+        "南昌局",
+        "呼和浩特局",
+        "太原局",
+        "广州局",
+        "成都局",
+        "昆明局",
+        "武汉局",
+        "沈阳局",
+        "济南局",
+        "西安局",
+        "青藏集团"
+      ]
+    },
+    {
+      "name": "铁道车辆技术",
+      "male": 89,
+      "female": 20,
+      "total": 112,
+      "male_pct": "79.5%",
+      "female_pct": "17.9%",
+      "bureau_count": 15,
+      "bureaus": [
+        "上海局",
+        "乌鲁木齐局",
+        "兰州局",
+        "北京局",
+        "南宁局",
+        "南昌局",
+        "呼和浩特局",
+        "太原局",
+        "广州局",
+        "成都局",
+        "昆明局",
+        "武汉局",
+        "沈阳局",
+        "济南局",
+        "青藏集团"
+      ]
+    },
+    {
+      "name": "动车组检修技术",
+      "male": 101,
+      "female": 10,
+      "total": 111,
+      "male_pct": "91.0%",
+      "female_pct": "9.0%",
+      "bureau_count": 11,
+      "bureaus": [
+        "上海局",
+        "乌鲁木齐局",
+        "北京局",
+        "南宁局",
+        "南昌局",
+        "广州局",
+        "成都局",
+        "昆明局",
+        "武汉局",
+        "济南局",
+        "青藏集团"
+      ]
+    },
+    {
+      "name": "铁道工程技术",
+      "male": 73,
+      "female": 4,
+      "total": 77,
+      "male_pct": "94.8%",
+      "female_pct": "5.2%",
+      "bureau_count": 11,
+      "bureaus": [
+        "上海局",
+        "兰州局",
+        "北京局",
+        "南宁局",
+        "南昌局",
+        "太原局",
+        "广州局",
+        "武汉局",
+        "沈阳局",
+        "济南局",
+        "青藏集团"
+      ]
+    },
+    {
+      "name": "铁道供电技术",
+      "male": 40,
+      "female": 8,
+      "total": 49,
+      "male_pct": "81.6%",
+      "female_pct": "16.3%",
+      "bureau_count": 10,
+      "bureaus": [
+        "上海局",
+        "乌鲁木齐局",
+        "兰州局",
+        "南昌局",
+        "广州局",
+        "成都局",
+        "昆明局",
+        "武汉局",
+        "西安局",
+        "青藏集团"
+      ]
+    },
+    {
+      "name": "城市轨道交通运营管理",
+      "male": 21,
+      "female": 22,
+      "total": 43,
+      "male_pct": "48.8%",
+      "female_pct": "51.2%",
+      "bureau_count": 7,
+      "bureaus": [
+        "上海局",
+        "乌鲁木齐局",
+        "北京局",
+        "南宁局",
+        "南昌局",
+        "广州局",
+        "济南局"
+      ]
+    },
+    {
+      "name": "铁道信号自动控制",
+      "male": 29,
+      "female": 12,
+      "total": 41,
+      "male_pct": "70.7%",
+      "female_pct": "29.3%",
+      "bureau_count": 6,
+      "bureaus": [
+        "上海局",
+        "南昌局",
+        "广州局",
+        "昆明局",
+        "武汉局",
+        "济南局"
+      ]
+    },
+    {
+      "name": "城市轨道车辆应用技术",
+      "male": 34,
+      "female": 3,
+      "total": 40,
+      "male_pct": "85.0%",
+      "female_pct": "7.5%",
+      "bureau_count": 7,
+      "bureaus": [
+        "上海局",
+        "乌鲁木齐局",
+        "南宁局",
+        "南昌局",
+        "广州局",
+        "成都局",
+        "西安局"
+      ]
+    },
+    {
+      "name": "城市轨道交通机电技术",
+      "male": 32,
+      "female": 4,
+      "total": 36,
+      "male_pct": "88.9%",
+      "female_pct": "11.1%",
+      "bureau_count": 5,
+      "bureaus": [
+        "南宁局",
+        "南昌局",
+        "广州局",
+        "昆明局",
+        "武汉局"
+      ]
+    },
+    {
+      "name": "高速铁路施工与维护",
+      "male": 26,
+      "female": 4,
+      "total": 30,
+      "male_pct": "86.7%",
+      "female_pct": "13.3%",
+      "bureau_count": 5,
+      "bureaus": [
+        "上海局",
+        "南宁局",
+        "南昌局",
+        "广州局",
+        "成都局"
+      ]
+    },
+    {
+      "name": "高速铁路综合维修技术",
+      "male": 22,
+      "female": 3,
+      "total": 25,
+      "male_pct": "88.0%",
+      "female_pct": "12.0%",
+      "bureau_count": 3,
+      "bureaus": [
+        "南昌局",
+        "广州局",
+        "成都局"
+      ]
+    },
+    {
+      "name": "城市轨道交通通信信号技术",
+      "male": 14,
+      "female": 5,
+      "total": 21,
+      "male_pct": "66.7%",
+      "female_pct": "23.8%",
+      "bureau_count": 4,
+      "bureaus": [
+        "上海局",
+        "乌鲁木齐局",
+        "南昌局",
+        "广州局"
+      ]
+    },
+    {
+      "name": "现代物流管理",
+      "male": 14,
+      "female": 6,
+      "total": 20,
+      "male_pct": "70.0%",
+      "female_pct": "30.0%",
+      "bureau_count": 2,
+      "bureaus": [
+        "南昌局",
+        "广州局"
+      ]
+    },
+    {
+      "name": "电气自动化技术",
+      "male": 15,
+      "female": 2,
+      "total": 17,
+      "male_pct": "88.2%",
+      "female_pct": "11.8%",
+      "bureau_count": 6,
+      "bureaus": [
+        "上海局",
+        "北京局",
+        "南昌局",
+        "广州局",
+        "昆明局",
+        "西安局"
+      ]
+    },
+    {
+      "name": "铁道通信与信息化技术",
+      "male": 11,
+      "female": 4,
+      "total": 15,
+      "male_pct": "73.3%",
+      "female_pct": "26.7%",
+      "bureau_count": 4,
+      "bureaus": [
+        "上海局",
+        "南昌局",
+        "广州局",
+        "青藏集团"
+      ]
+    },
+    {
+      "name": "城市轨道交通供配电技术",
+      "male": 7,
+      "female": 4,
+      "total": 11,
+      "male_pct": "63.6%",
+      "female_pct": "36.4%",
+      "bureau_count": 4,
+      "bureaus": [
+        "上海局",
+        "北京局",
+        "广州局",
+        "成都局"
+      ]
+    },
+    {
+      "name": "机械设计与制造",
+      "male": 7,
+      "female": 2,
+      "total": 9,
+      "male_pct": "77.8%",
+      "female_pct": "22.2%",
+      "bureau_count": 3,
+      "bureaus": [
+        "南昌局",
+        "广州局",
+        "昆明局"
+      ]
+    },
+    {
+      "name": "机电一体化技术",
+      "male": 9,
+      "female": 0,
+      "total": 9,
+      "male_pct": "100.0%",
+      "female_pct": "-",
+      "bureau_count": 3,
+      "bureaus": [
+        "上海局",
+        "南昌局",
+        "广州局"
+      ]
+    },
+    {
+      "name": "智能控制技术",
+      "male": 5,
+      "female": 1,
+      "total": 7,
+      "male_pct": "71.4%",
+      "female_pct": "14.3%",
+      "bureau_count": 6,
+      "bureaus": [
+        "乌鲁木齐局",
+        "北京局",
+        "南宁局",
+        "南昌局",
+        "太原局",
+        "成都局"
+      ]
+    },
+    {
+      "name": "数控技术",
+      "male": 3,
+      "female": 1,
+      "total": 4,
+      "male_pct": "75.0%",
+      "female_pct": "25.0%",
+      "bureau_count": 2,
+      "bureaus": [
+        "北京局",
+        "广州局"
+      ]
+    },
+    {
+      "name": "铁道信号控制",
+      "male": 4,
+      "female": 1,
+      "total": 4,
+      "male_pct": "100.0%",
+      "female_pct": "25.0%",
+      "bureau_count": 3,
+      "bureaus": [
+        "兰州局",
+        "成都局",
+        "青藏集团"
+      ]
+    },
+    {
+      "name": "机电设备技术",
+      "male": 1,
+      "female": 1,
+      "total": 2,
+      "male_pct": "50.0%",
+      "female_pct": "50.0%",
+      "bureau_count": 2,
+      "bureaus": [
+        "南昌局",
+        "成都局"
+      ]
+    },
+    {
+      "name": "铁道供电",
+      "male": 2,
+      "female": 0,
+      "total": 2,
+      "male_pct": "100.0%",
+      "female_pct": "-",
+      "bureau_count": 1,
+      "bureaus": [
+        "南宁局"
+      ]
+    }
+  ]
+}
