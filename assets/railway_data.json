@@ -1,7 +1,7 @@
 {
   "total_bureaus": 18,
   "total_majors": 23,
-  "grand_total": 1000,
+  "grand_total": 1013,
   "bureaus": [
     {
       "name": "广州局",
@@ -20,7 +20,7 @@
           "female": 0,
           "total": 52,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道车辆技术",
@@ -44,7 +44,7 @@
           "female": 0,
           "total": 36,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通运营管理",
@@ -76,7 +76,7 @@
           "female": 0,
           "total": 18,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道车辆应用技术",
@@ -140,7 +140,7 @@
           "female": 0,
           "total": 7,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "机械设计与制造",
@@ -148,7 +148,7 @@
           "female": 0,
           "total": 5,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "数控技术",
@@ -164,13 +164,15 @@
           "female": 0,
           "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 385,
         "female": 73,
-        "total": 458
+        "total": 458,
+        "male_pct": "84.1%",
+        "female_pct": "15.9%"
       }
     },
     {
@@ -246,7 +248,7 @@
           "female": 0,
           "total": 7,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道供电技术",
@@ -278,7 +280,7 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "机械设计与制造",
@@ -302,14 +304,14 @@
           "female": 0,
           "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通通信信号技术",
           "male": 0,
           "female": 1,
           "total": 1,
-          "male_pct": "0.0%",
+          "male_pct": "-",
           "female_pct": "100.0%"
         },
         {
@@ -318,7 +320,7 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "机电一体化技术",
@@ -326,7 +328,7 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "机电设备技术",
@@ -334,13 +336,15 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 126,
         "female": 57,
-        "total": 183
+        "total": 183,
+        "male_pct": "68.9%",
+        "female_pct": "31.1%"
       }
     },
     {
@@ -352,7 +356,7 @@
           "female": 0,
           "total": 17,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "动车组检修技术",
@@ -360,7 +364,7 @@
           "female": 0,
           "total": 16,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道机车运用与维护",
@@ -368,7 +372,7 @@
           "female": 0,
           "total": 10,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道车辆应用技术",
@@ -376,7 +380,7 @@
           "female": 0,
           "total": 9,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道信号自动控制",
@@ -392,7 +396,7 @@
           "female": 0,
           "total": 6,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "高速铁路施工与维护",
@@ -400,7 +404,7 @@
           "female": 0,
           "total": 5,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通运营管理",
@@ -408,7 +412,7 @@
           "female": 0,
           "total": 4,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道车辆技术",
@@ -416,7 +420,7 @@
           "female": 0,
           "total": 4,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "电气自动化技术",
@@ -424,7 +428,7 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通供配电技术",
@@ -432,14 +436,14 @@
           "female": 0,
           "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通通信信号技术",
           "male": 0,
           "female": 2,
           "total": 2,
-          "male_pct": "0.0%",
+          "male_pct": "-",
           "female_pct": "100.0%"
         },
         {
@@ -448,7 +452,7 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道交通运营管理",
@@ -456,7 +460,7 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道通信与信息化技术",
@@ -464,13 +468,15 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 84,
         "female": 3,
-        "total": 87
+        "total": 87,
+        "male_pct": "96.6%",
+        "female_pct": "3.4%"
       }
     },
     {
@@ -498,7 +504,7 @@
           "female": 0,
           "total": 6,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "动车组检修技术",
@@ -506,7 +512,7 @@
           "female": 0,
           "total": 5,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通机电技术",
@@ -514,7 +520,7 @@
           "female": 0,
           "total": 5,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道信号自动控制",
@@ -522,7 +528,7 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道车辆技术",
@@ -530,7 +536,7 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "电气自动化技术",
@@ -546,13 +552,15 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 40,
         "female": 3,
-        "total": 43
+        "total": 43,
+        "male_pct": "93.0%",
+        "female_pct": "7.0%"
       }
     },
     {
@@ -603,7 +611,7 @@
           "male": 0,
           "female": 2,
           "total": 2,
-          "male_pct": "0.0%",
+          "male_pct": "-",
           "female_pct": "100.0%"
         },
         {
@@ -620,13 +628,15 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 29,
         "female": 12,
-        "total": 41
+        "total": 41,
+        "male_pct": "70.7%",
+        "female_pct": "29.3%"
       }
     },
     {
@@ -638,7 +648,7 @@
           "female": 0,
           "total": 5,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道车辆技术",
@@ -653,38 +663,40 @@
           "male": 4,
           "female": 0,
           "total": 4,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道交通运营管理",
           "male": 5,
           "female": 5,
           "total": 10,
-          "male_pct": "50%",
-          "female_pct": "50%"
+          "male_pct": "50.0%",
+          "female_pct": "50.0%"
         },
         {
           "name": "铁道工程技术",
           "male": 5,
           "female": 0,
           "total": 5,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道信号控制",
           "male": 3,
           "female": 0,
           "total": 3,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 29,
         "female": 6,
-        "total": 35
+        "total": 35,
+        "male_pct": "82.9%",
+        "female_pct": "17.1%"
       }
     },
     {
@@ -696,7 +708,7 @@
           "female": 0,
           "total": 7,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "动车组检修技术",
@@ -711,8 +723,8 @@
           "male": 4,
           "female": 3,
           "total": 7,
-          "male_pct": "57.14.0%",
-          "female_pct": "42.86%"
+          "male_pct": "57.1%",
+          "female_pct": "42.9%"
         },
         {
           "name": "铁道供电技术",
@@ -727,38 +739,40 @@
           "male": 0,
           "female": 3,
           "total": 3,
-          "male_pct": "0%",
-          "female_pct": "100%"
+          "male_pct": "-",
+          "female_pct": "100.0%"
         },
         {
           "name": "铁道工程技术",
           "male": 2,
           "female": 0,
           "total": 2,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道信号控制",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道通信与信息化技术",
           "male": 0,
           "female": 1,
           "total": 1,
-          "male_pct": "0%",
-          "female_pct": "100%"
+          "male_pct": "-",
+          "female_pct": "100.0%"
         }
       ],
       "total": {
         "male": 21,
         "female": 9,
-        "total": 30
+        "total": 30,
+        "male_pct": "70.0%",
+        "female_pct": "30.0%"
       }
     },
     {
@@ -840,7 +854,9 @@
       "total": {
         "male": 0,
         "female": 0,
-        "total": 25
+        "total": 25,
+        "male_pct": "-",
+        "female_pct": "-"
       }
     },
     {
@@ -852,15 +868,15 @@
           "female": 0,
           "total": 7,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "动车组检修技术",
           "male": 4,
           "female": 0,
-          "total": 3,
+          "total": 4,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道车辆技术",
@@ -868,7 +884,7 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "高速铁路施工与维护",
@@ -876,61 +892,63 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道供电技术",
           "male": 2,
           "female": 0,
           "total": 2,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通机电技术",
           "male": 2,
           "female": 0,
           "total": 2,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "城市轨道车辆应用技术",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道工程技术",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "智能控制技术",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通运营管理",
           "male": 1,
           "female": 0,
-          "total": 0,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "total": 1,
+          "male_pct": "100.0%",
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 25,
         "female": 0,
-        "total": 23
+        "total": 25,
+        "male_pct": "100.0%",
+        "female_pct": "-"
       }
     },
     {
@@ -941,46 +959,48 @@
           "male": 6,
           "female": 1,
           "total": 7,
-          "male_pct": "85.71",
-          "female_pct": "14.29%"
+          "male_pct": "85.7%",
+          "female_pct": "14.3%"
         },
         {
           "name": "铁道车辆技术",
           "male": 4,
           "female": 0,
           "total": 4,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "智能控制技术",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道交通运营管理",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道工程技术",
           "male": 3,
           "female": 0,
           "total": 3,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 15,
         "female": 1,
-        "total": 16
+        "total": 16,
+        "male_pct": "93.8%",
+        "female_pct": "6.2%"
       }
     },
     {
@@ -992,7 +1012,7 @@
           "female": 0,
           "total": 6,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "动车组检修技术",
@@ -1000,7 +1020,7 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道机车运用与维护",
@@ -1008,7 +1028,7 @@
           "female": 0,
           "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道工程技术",
@@ -1024,7 +1044,7 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道信号自动控制",
@@ -1032,13 +1052,15 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 14,
         "female": 1,
-        "total": 15
+        "total": 15,
+        "male_pct": "93.3%",
+        "female_pct": "6.7%"
       }
     },
     {
@@ -1050,7 +1072,7 @@
           "female": 0,
           "total": 4,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "动车组检修技术",
@@ -1058,15 +1080,15 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道车辆技术",
           "male": 2,
           "female": 0,
-          "total": 0,
+          "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "智能控制技术",
@@ -1074,61 +1096,63 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道交通运营管理",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道工程技术",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "数控技术",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "电气自动化技术",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通运营管理",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通供配电技术",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 16,
         "female": 0,
-        "total": 14
+        "total": 16,
+        "male_pct": "100.0%",
+        "female_pct": "-"
       }
     },
     {
@@ -1138,17 +1162,17 @@
           "name": "铁道交通运营管理",
           "male": 2,
           "female": 0,
-          "total": 0,
+          "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道供电技术",
           "male": 2,
           "female": 0,
           "total": 2,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "铁道机车运用与维护",
@@ -1156,85 +1180,87 @@
           "female": 0,
           "total": 5,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "动车组检修技术",
           "male": 1,
           "female": 0,
-          "total": 0,
+          "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道车辆应用技术",
           "male": 3,
           "female": 0,
-          "total": 0,
+          "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道信号控制",
           "male": 0,
           "female": 1,
-          "total": 0,
-          "male_pct": "0%",
-          "female_pct": "100%"
+          "total": 1,
+          "male_pct": "-",
+          "female_pct": "100.0%"
         },
         {
           "name": "铁道车辆技术",
           "male": 0,
           "female": 2,
-          "total": 0,
-          "male_pct": "0%",
-          "female_pct": "100%"
+          "total": 2,
+          "male_pct": "-",
+          "female_pct": "100.0%"
         },
         {
           "name": "机电设备技术",
           "male": 0,
           "female": 1,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "100%"
+          "male_pct": "-",
+          "female_pct": "100.0%"
         },
         {
           "name": "智能控制技术",
           "male": 0,
           "female": 1,
           "total": 1,
-          "male_pct": "0%",
-          "female_pct": "100%"
+          "male_pct": "-",
+          "female_pct": "100.0%"
         },
         {
           "name": "高速铁路综合维修技术",
           "male": 2,
           "female": 0,
           "total": 2,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         },
         {
           "name": "城市轨道交通供配电技术",
           "male": 0,
           "female": 1,
           "total": 1,
-          "male_pct": "0%",
-          "female_pct": "100%"
+          "male_pct": "-",
+          "female_pct": "100.0%"
         },
         {
           "name": "高速铁路施工与维护",
           "male": 1,
           "female": 0,
           "total": 1,
-          "male_pct": "100%",
-          "female_pct": "0%"
+          "male_pct": "100.0%",
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 16,
         "female": 6,
-        "total": 13
+        "total": 22,
+        "male_pct": "72.7%",
+        "female_pct": "27.3%"
       }
     },
     {
@@ -1246,7 +1272,7 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道机车运用与维护",
@@ -1254,7 +1280,7 @@
           "female": 0,
           "total": 3,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道工程技术",
@@ -1262,13 +1288,15 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 7,
         "female": 0,
-        "total": 7
+        "total": 7,
+        "male_pct": "100.0%",
+        "female_pct": "-"
       }
     },
     {
@@ -1280,7 +1308,7 @@
           "female": 0,
           "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "城市轨道车辆应用技术",
@@ -1288,7 +1316,7 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "电气自动化技术",
@@ -1296,7 +1324,7 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道供电技术",
@@ -1304,13 +1332,15 @@
           "female": 0,
           "total": 1,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 5,
         "female": 0,
-        "total": 5
+        "total": 5,
+        "male_pct": "100.0%",
+        "female_pct": "-"
       }
     },
     {
@@ -1322,7 +1352,7 @@
           "female": 0,
           "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         },
         {
           "name": "铁道机车运用与维护",
@@ -1330,13 +1360,15 @@
           "female": 0,
           "total": 2,
           "male_pct": "100.0%",
-          "female_pct": "0.0%"
+          "female_pct": "-"
         }
       ],
       "total": {
         "male": 4,
         "female": 0,
-        "total": 4
+        "total": 4,
+        "male_pct": "100.0%",
+        "female_pct": "-"
       }
     },
     {
@@ -1347,14 +1379,16 @@
           "male": 0,
           "female": 1,
           "total": 1,
-          "male_pct": "0%",
-          "female_pct": "100%"
+          "male_pct": "-",
+          "female_pct": "100.0%"
         }
       ],
       "total": {
         "male": 0,
         "female": 1,
-        "total": 1
+        "total": 1,
+        "male_pct": "-",
+        "female_pct": "100.0%"
       }
     },
     {
@@ -1372,21 +1406,22 @@
       "name": "铁道交通运营管理",
       "male": 112,
       "female": 48,
-      "total": 160,
-      "male_pct": "70.0%",
-      "female_pct": "30.0%",
-      "bureau_count": 11,
+      "total": 163,
+      "male_pct": "68.7%",
+      "female_pct": "29.4%",
+      "bureau_count": 12,
       "bureaus": [
         "广州局",
         "南昌局",
+        "上海局",
         "昆明局",
-        "兰州局",
         "武汉局",
+        "兰州局",
         "青藏集团",
         "乌鲁木齐局",
-        "上海局",
         "太原局",
         "北京局",
+        "成都局",
         "哈尔滨局"
       ],
       "bureau_details": [
@@ -1403,15 +1438,15 @@
           "total": 30
         },
         {
+          "name": "上海局",
+          "male": 1,
+          "female": 0,
+          "total": 1
+        },
+        {
           "name": "昆明局",
           "male": 9,
           "female": 1,
-          "total": 10
-        },
-        {
-          "name": "兰州局",
-          "male": 5,
-          "female": 5,
           "total": 10
         },
         {
@@ -1419,6 +1454,12 @@
           "male": 3,
           "female": 3,
           "total": 6
+        },
+        {
+          "name": "兰州局",
+          "male": 5,
+          "female": 5,
+          "total": 10
         },
         {
           "name": "青藏集团",
@@ -1433,12 +1474,6 @@
           "total": 3
         },
         {
-          "name": "上海局",
-          "male": 1,
-          "female": 0,
-          "total": 1
-        },
-        {
           "name": "太原局",
           "male": 1,
           "female": 0,
@@ -1449,6 +1484,12 @@
           "male": 1,
           "female": 0,
           "total": 1
+        },
+        {
+          "name": "成都局",
+          "male": 2,
+          "female": 0,
+          "total": 2
         },
         {
           "name": "哈尔滨局",
@@ -1462,25 +1503,25 @@
       "name": "铁道机车运用与维护",
       "male": 145,
       "female": 7,
-      "total": 152,
-      "male_pct": "95.4%",
-      "female_pct": "4.6%",
+      "total": 154,
+      "male_pct": "94.2%",
+      "female_pct": "4.5%",
       "bureau_count": 16,
       "bureaus": [
         "广州局",
         "南昌局",
         "上海局",
+        "昆明局",
         "武汉局",
+        "兰州局",
         "青藏集团",
+        "乌鲁木齐局",
         "南宁局",
         "太原局",
-        "昆明局",
-        "兰州局",
-        "成都局",
-        "北京局",
-        "沈阳局",
-        "乌鲁木齐局",
         "济南局",
+        "北京局",
+        "成都局",
+        "沈阳局",
         "西安局",
         "呼和浩特局"
       ],
@@ -1504,16 +1545,34 @@
           "total": 10
         },
         {
+          "name": "昆明局",
+          "male": 6,
+          "female": 0,
+          "total": 6
+        },
+        {
           "name": "武汉局",
           "male": 7,
           "female": 1,
           "total": 8
         },
         {
+          "name": "兰州局",
+          "male": 5,
+          "female": 0,
+          "total": 5
+        },
+        {
           "name": "青藏集团",
           "male": 7,
           "female": 0,
           "total": 7
+        },
+        {
+          "name": "乌鲁木齐局",
+          "male": 0,
+          "female": 0,
+          "total": 2
         },
         {
           "name": "南宁局",
@@ -1528,22 +1587,10 @@
           "total": 7
         },
         {
-          "name": "昆明局",
-          "male": 6,
+          "name": "济南局",
+          "male": 2,
           "female": 0,
-          "total": 6
-        },
-        {
-          "name": "兰州局",
-          "male": 5,
-          "female": 0,
-          "total": 5
-        },
-        {
-          "name": "成都局",
-          "male": 5,
-          "female": 0,
-          "total": 5
+          "total": 2
         },
         {
           "name": "北京局",
@@ -1552,22 +1599,16 @@
           "total": 4
         },
         {
+          "name": "成都局",
+          "male": 5,
+          "female": 0,
+          "total": 5
+        },
+        {
           "name": "沈阳局",
           "male": 3,
           "female": 0,
           "total": 3
-        },
-        {
-          "name": "乌鲁木齐局",
-          "male": 0,
-          "female": 0,
-          "total": 2
-        },
-        {
-          "name": "济南局",
-          "male": 2,
-          "female": 0,
-          "total": 2
         },
         {
           "name": "西安局",
@@ -1587,21 +1628,22 @@
       "name": "动车组检修技术",
       "male": 101,
       "female": 10,
-      "total": 111,
-      "male_pct": "91.0%",
-      "female_pct": "9.0%",
-      "bureau_count": 10,
+      "total": 113,
+      "male_pct": "89.4%",
+      "female_pct": "8.8%",
+      "bureau_count": 11,
       "bureaus": [
         "广州局",
         "南昌局",
         "上海局",
-        "武汉局",
         "昆明局",
+        "武汉局",
         "青藏集团",
+        "乌鲁木齐局",
         "南宁局",
         "济南局",
         "北京局",
-        "乌鲁木齐局"
+        "成都局"
       ],
       "bureau_details": [
         {
@@ -1623,16 +1665,16 @@
           "total": 16
         },
         {
-          "name": "武汉局",
-          "male": 9,
-          "female": 1,
-          "total": 10
-        },
-        {
           "name": "昆明局",
           "male": 5,
           "female": 0,
           "total": 5
+        },
+        {
+          "name": "武汉局",
+          "male": 9,
+          "female": 1,
+          "total": 10
         },
         {
           "name": "青藏集团",
@@ -1641,10 +1683,16 @@
           "total": 5
         },
         {
+          "name": "乌鲁木齐局",
+          "male": 0,
+          "female": 0,
+          "total": 2
+        },
+        {
           "name": "南宁局",
           "male": 4,
           "female": 0,
-          "total": 3
+          "total": 4
         },
         {
           "name": "济南局",
@@ -1659,10 +1707,10 @@
           "total": 3
         },
         {
-          "name": "乌鲁木齐局",
-          "male": 0,
+          "name": "成都局",
+          "male": 1,
           "female": 0,
-          "total": 2
+          "total": 1
         }
       ]
     },
@@ -1670,23 +1718,25 @@
       "name": "铁道车辆技术",
       "male": 89,
       "female": 20,
-      "total": 109,
-      "male_pct": "81.7%",
-      "female_pct": "18.3%",
-      "bureau_count": 13,
+      "total": 116,
+      "male_pct": "76.7%",
+      "female_pct": "17.2%",
+      "bureau_count": 15,
       "bureaus": [
         "广州局",
         "南昌局",
+        "上海局",
+        "昆明局",
+        "武汉局",
         "兰州局",
         "青藏集团",
         "乌鲁木齐局",
-        "济南局",
-        "上海局",
-        "太原局",
-        "昆明局",
         "南宁局",
+        "太原局",
+        "济南局",
+        "北京局",
+        "成都局",
         "沈阳局",
-        "武汉局",
         "呼和浩特局"
       ],
       "bureau_details": [
@@ -1701,6 +1751,24 @@
           "male": 5,
           "female": 7,
           "total": 12
+        },
+        {
+          "name": "上海局",
+          "male": 4,
+          "female": 0,
+          "total": 4
+        },
+        {
+          "name": "昆明局",
+          "male": 3,
+          "female": 0,
+          "total": 3
+        },
+        {
+          "name": "武汉局",
+          "male": 1,
+          "female": 1,
+          "total": 2
         },
         {
           "name": "兰州局",
@@ -1721,16 +1789,10 @@
           "total": 7
         },
         {
-          "name": "济南局",
-          "male": 6,
+          "name": "南宁局",
+          "male": 3,
           "female": 0,
-          "total": 6
-        },
-        {
-          "name": "上海局",
-          "male": 4,
-          "female": 0,
-          "total": 4
+          "total": 3
         },
         {
           "name": "太原局",
@@ -1739,28 +1801,28 @@
           "total": 4
         },
         {
-          "name": "昆明局",
-          "male": 3,
+          "name": "济南局",
+          "male": 6,
           "female": 0,
-          "total": 3
+          "total": 6
         },
         {
-          "name": "南宁局",
-          "male": 3,
+          "name": "北京局",
+          "male": 2,
           "female": 0,
-          "total": 3
+          "total": 2
+        },
+        {
+          "name": "成都局",
+          "male": 0,
+          "female": 2,
+          "total": 2
         },
         {
           "name": "沈阳局",
           "male": 3,
           "female": 0,
           "total": 3
-        },
-        {
-          "name": "武汉局",
-          "male": 1,
-          "female": 1,
-          "total": 2
         },
         {
           "name": "呼和浩特局",
@@ -1780,14 +1842,14 @@
       "bureau_count": 11,
       "bureaus": [
         "广州局",
-        "上海局",
         "南昌局",
-        "兰州局",
+        "上海局",
         "武汉局",
-        "太原局",
+        "兰州局",
         "青藏集团",
-        "济南局",
         "南宁局",
+        "太原局",
+        "济南局",
         "北京局",
         "沈阳局"
       ],
@@ -1799,22 +1861,16 @@
           "total": 36
         },
         {
-          "name": "上海局",
-          "male": 17,
-          "female": 0,
-          "total": 17
-        },
-        {
           "name": "南昌局",
           "male": 4,
           "female": 1,
           "total": 5
         },
         {
-          "name": "兰州局",
-          "male": 5,
+          "name": "上海局",
+          "male": 17,
           "female": 0,
-          "total": 5
+          "total": 17
         },
         {
           "name": "武汉局",
@@ -1823,10 +1879,10 @@
           "total": 4
         },
         {
-          "name": "太原局",
-          "male": 3,
+          "name": "兰州局",
+          "male": 5,
           "female": 0,
-          "total": 3
+          "total": 5
         },
         {
           "name": "青藏集团",
@@ -1835,16 +1891,22 @@
           "total": 2
         },
         {
-          "name": "济南局",
-          "male": 1,
-          "female": 1,
-          "total": 2
-        },
-        {
           "name": "南宁局",
           "male": 1,
           "female": 0,
           "total": 1
+        },
+        {
+          "name": "太原局",
+          "male": 3,
+          "female": 0,
+          "total": 3
+        },
+        {
+          "name": "济南局",
+          "male": 1,
+          "female": 1,
+          "total": 2
         },
         {
           "name": "北京局",
@@ -1864,21 +1926,21 @@
       "name": "铁道供电技术",
       "male": 42,
       "female": 8,
-      "total": 50,
-      "male_pct": "84.0%",
-      "female_pct": "16.0%",
+      "total": 51,
+      "male_pct": "82.4%",
+      "female_pct": "15.7%",
       "bureau_count": 11,
       "bureaus": [
         "广州局",
-        "昆明局",
-        "武汉局",
         "南昌局",
         "上海局",
+        "昆明局",
+        "武汉局",
         "兰州局",
         "青藏集团",
+        "乌鲁木齐局",
         "南宁局",
         "成都局",
-        "乌鲁木齐局",
         "西安局"
       ],
       "bureau_details": [
@@ -1887,18 +1949,6 @@
           "male": 8,
           "female": 1,
           "total": 9
-        },
-        {
-          "name": "昆明局",
-          "male": 7,
-          "female": 1,
-          "total": 8
-        },
-        {
-          "name": "武汉局",
-          "male": 6,
-          "female": 2,
-          "total": 8
         },
         {
           "name": "南昌局",
@@ -1913,6 +1963,18 @@
           "total": 6
         },
         {
+          "name": "昆明局",
+          "male": 7,
+          "female": 1,
+          "total": 8
+        },
+        {
+          "name": "武汉局",
+          "male": 6,
+          "female": 2,
+          "total": 8
+        },
+        {
           "name": "兰州局",
           "male": 4,
           "female": 0,
@@ -1923,6 +1985,12 @@
           "male": 3,
           "female": 1,
           "total": 4
+        },
+        {
+          "name": "乌鲁木齐局",
+          "male": 0,
+          "female": 0,
+          "total": 1
         },
         {
           "name": "南宁局",
@@ -1937,12 +2005,6 @@
           "total": 2
         },
         {
-          "name": "乌鲁木齐局",
-          "male": 0,
-          "female": 0,
-          "total": 1
-        },
-        {
           "name": "西安局",
           "male": 1,
           "female": 0,
@@ -1954,15 +2016,16 @@
       "name": "城市轨道交通运营管理",
       "male": 21,
       "female": 22,
-      "total": 43,
-      "male_pct": "48.8%",
-      "female_pct": "51.2%",
-      "bureau_count": 6,
+      "total": 44,
+      "male_pct": "47.7%",
+      "female_pct": "50.0%",
+      "bureau_count": 7,
       "bureaus": [
         "广州局",
         "南昌局",
         "上海局",
         "乌鲁木齐局",
+        "南宁局",
         "济南局",
         "北京局"
       ],
@@ -1992,6 +2055,12 @@
           "total": 1
         },
         {
+          "name": "南宁局",
+          "male": 1,
+          "female": 0,
+          "total": 1
+        },
+        {
           "name": "济南局",
           "male": 1,
           "female": 0,
@@ -2015,8 +2084,8 @@
       "bureau_count": 6,
       "bureaus": [
         "广州局",
-        "上海局",
         "南昌局",
+        "上海局",
         "昆明局",
         "武汉局",
         "济南局"
@@ -2029,16 +2098,16 @@
           "total": 24
         },
         {
-          "name": "上海局",
-          "male": 5,
-          "female": 1,
-          "total": 6
-        },
-        {
           "name": "南昌局",
           "male": 2,
           "female": 3,
           "total": 5
+        },
+        {
+          "name": "上海局",
+          "male": 5,
+          "female": 1,
+          "total": 6
         },
         {
           "name": "昆明局",
@@ -2064,16 +2133,17 @@
       "name": "城市轨道车辆应用技术",
       "male": 34,
       "female": 3,
-      "total": 37,
-      "male_pct": "91.9%",
-      "female_pct": "8.1%",
-      "bureau_count": 6,
+      "total": 43,
+      "male_pct": "79.1%",
+      "female_pct": "7.0%",
+      "bureau_count": 7,
       "bureaus": [
         "广州局",
-        "上海局",
         "南昌局",
+        "上海局",
         "乌鲁木齐局",
         "南宁局",
+        "成都局",
         "西安局"
       ],
       "bureau_details": [
@@ -2084,16 +2154,16 @@
           "total": 16
         },
         {
-          "name": "上海局",
-          "male": 9,
-          "female": 0,
-          "total": 9
-        },
-        {
           "name": "南昌局",
           "male": 7,
           "female": 0,
           "total": 7
+        },
+        {
+          "name": "上海局",
+          "male": 9,
+          "female": 0,
+          "total": 9
         },
         {
           "name": "乌鲁木齐局",
@@ -2106,6 +2176,12 @@
           "male": 1,
           "female": 0,
           "total": 1
+        },
+        {
+          "name": "成都局",
+          "male": 3,
+          "female": 0,
+          "total": 3
         },
         {
           "name": "西安局",
@@ -2127,8 +2203,8 @@
         "广州局",
         "南昌局",
         "昆明局",
-        "南宁局",
-        "武汉局"
+        "武汉局",
+        "南宁局"
       ],
       "bureau_details": [
         {
@@ -2150,16 +2226,16 @@
           "total": 5
         },
         {
-          "name": "南宁局",
-          "male": 2,
-          "female": 0,
-          "total": 2
-        },
-        {
           "name": "武汉局",
           "male": 1,
           "female": 0,
           "total": 1
+        },
+        {
+          "name": "南宁局",
+          "male": 2,
+          "female": 0,
+          "total": 2
         }
       ]
     },
@@ -2254,21 +2330,21 @@
       "female_pct": "30.0%",
       "bureau_count": 2,
       "bureaus": [
-        "南昌局",
-        "广州局"
+        "广州局",
+        "南昌局"
       ],
       "bureau_details": [
-        {
-          "name": "南昌局",
-          "male": 12,
-          "female": 6,
-          "total": 18
-        },
         {
           "name": "广州局",
           "male": 2,
           "female": 0,
           "total": 2
+        },
+        {
+          "name": "南昌局",
+          "male": 12,
+          "female": 6,
+          "total": 18
         }
       ]
     },
@@ -2276,15 +2352,15 @@
       "name": "城市轨道交通通信信号技术",
       "male": 14,
       "female": 5,
-      "total": 19,
-      "male_pct": "73.7%",
-      "female_pct": "26.3%",
+      "total": 21,
+      "male_pct": "66.7%",
+      "female_pct": "23.8%",
       "bureau_count": 4,
       "bureaus": [
         "广州局",
+        "南昌局",
         "上海局",
-        "乌鲁木齐局",
-        "南昌局"
+        "乌鲁木齐局"
       ],
       "bureau_details": [
         {
@@ -2292,6 +2368,12 @@
           "male": 14,
           "female": 2,
           "total": 16
+        },
+        {
+          "name": "南昌局",
+          "male": 0,
+          "female": 1,
+          "total": 1
         },
         {
           "name": "上海局",
@@ -2304,12 +2386,6 @@
           "male": 0,
           "female": 0,
           "total": 2
-        },
-        {
-          "name": "南昌局",
-          "male": 0,
-          "female": 1,
-          "total": 1
         }
       ]
     },
@@ -2323,9 +2399,9 @@
       "bureau_count": 6,
       "bureaus": [
         "广州局",
+        "南昌局",
         "上海局",
         "昆明局",
-        "南昌局",
         "北京局",
         "西安局"
       ],
@@ -2335,6 +2411,12 @@
           "male": 8,
           "female": 1,
           "total": 9
+        },
+        {
+          "name": "南昌局",
+          "male": 1,
+          "female": 0,
+          "total": 1
         },
         {
           "name": "上海局",
@@ -2347,12 +2429,6 @@
           "male": 1,
           "female": 1,
           "total": 2
-        },
-        {
-          "name": "南昌局",
-          "male": 1,
-          "female": 0,
-          "total": 1
         },
         {
           "name": "北京局",
@@ -2490,7 +2566,7 @@
       "female": 0,
       "total": 9,
       "male_pct": "100.0%",
-      "female_pct": "0.0%",
+      "female_pct": "-",
       "bureau_count": 3,
       "bureaus": [
         "广州局",
@@ -2522,9 +2598,9 @@
       "name": "智能控制技术",
       "male": 5,
       "female": 1,
-      "total": 6,
-      "male_pct": "83.3%",
-      "female_pct": "16.7%",
+      "total": 7,
+      "male_pct": "71.4%",
+      "female_pct": "14.3%",
       "bureau_count": 6,
       "bureaus": [
         "南昌局",
@@ -2580,10 +2656,11 @@
       "total": 5,
       "male_pct": "80.0%",
       "female_pct": "20.0%",
-      "bureau_count": 2,
+      "bureau_count": 3,
       "bureaus": [
         "兰州局",
-        "青藏集团"
+        "青藏集团",
+        "成都局"
       ],
       "bureau_details": [
         {
@@ -2596,6 +2673,12 @@
           "name": "青藏集团",
           "male": 1,
           "female": 0,
+          "total": 1
+        },
+        {
+          "name": "成都局",
+          "male": 0,
+          "female": 1,
           "total": 1
         }
       ]
