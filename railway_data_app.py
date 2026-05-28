@@ -316,7 +316,7 @@ body {{
 </head>
 <body>
 <div class="header">
-    <h1>🚂 2025级 铁路局招录数据</h1>
+    <h1>🚂 2025年 铁路局招录数据</h1>
     <div class="sub">湖南铁道职业技术学院（东校区）</div>
 </div>
 <div class="notice">📢 温馨提示：所有招录数据均来自中国铁路人才招聘网的官方公示</div>
