@@ -671,7 +671,7 @@ function loadWrongBook() {
     return;
   }
   el.innerHTML = '<div style="text-align:center;padding:20px;color:#999">加载中...</div>';
-  fetch('../api/wrong/list', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ids})})
+  fetch('/exam/api/wrong/list', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ids})})
     .then(r=>r.json()).then(res=>{
       if(res.code!==0||!res.data.items.length){el.innerHTML='<div class="wrong-empty"><p>暂无错题</p></div>';return}
       let html = '<div style="margin:16px 0;text-align:right"><button class="btn btn-sm btn-outline" onclick="clearWrongBook()">清空错题本</button></div>';
@@ -718,7 +718,7 @@ function loadExam() {
   const el = document.getElementById('examContent');
   document.querySelector('#pageExam .header .title').textContent = '广铁限时模拟题';
   el.innerHTML = '<div style="text-align:center;padding:60px 0;color:#999">生成试卷中...</div>';
-  fetch('../api/exam/generate_gt').then(r=>r.json()).then(res=>{
+  fetch('/exam/api/exam/generate_gt').then(r=>r.json()).then(res=>{
     if(res.code!==0){el.innerHTML='<div style="text-align:center;padding:60px 0;color:#f44336">生成失败</div>';return}
     examData = res.data;
     examAnswers = {};
@@ -829,7 +829,7 @@ function submitExam() {
     });
   }
   const timeUsed = examData.duration * 60 - examTimeLeft;
-  fetch('../api/exam/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers,time_used:timeUsed})})
+  fetch('/exam/api/exam/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers,time_used:timeUsed})})
     .then(r=>r.json()).then(res=>{
       if(res.code!==0) return;
       showExamResult(res.data);
@@ -949,7 +949,7 @@ var trainPage = 1;
 function loadTypes() {
   const el = document.getElementById('trainContent');
   el.innerHTML = '<div style="text-align:center;padding:20px 0;color:#999">加载中...</div>';
-  fetch('../api/train/types').then(r=>r.json()).then(res=>{
+  fetch('/exam/api/train/types').then(r=>r.json()).then(res=>{
     if(res.code!==0||!res.data.length){el.innerHTML='<div style="padding:20px;text-align:center;color:#999">暂无题目</div>';return}
     let html = '<div style="padding:12px 0;font-size:14px;color:#666;text-align:center">选择题型开始练习</div><div class="type-grid">';
     res.data.forEach(t=>{
@@ -978,7 +978,7 @@ function loadTrainQuestion() {
   }
   const el = document.getElementById('trainContent');
   el.innerHTML = '<div style="text-align:center;padding:40px 0;color:#999">加载中...</div>';
-  fetch('../api/train/questions?type='+encodeURIComponent(trainType)+'&page='+trainPage+'&page_size=1')
+  fetch('/exam/api/train/questions?type='+encodeURIComponent(trainType)+'&page='+trainPage+'&page_size=1')
     .then(r=>r.json()).then(res=>{
       if(res.code!==0||!res.data.items.length){
         el.innerHTML = '<div style="padding:40px;text-align:center"><p style="color:#888;margin-bottom:20px">没有更多题目了</p><button class="btn btn-outline btn-sm" onclick="loadTypes()">返回题型列表</button></div>';
@@ -1098,7 +1098,7 @@ function submitTrain() {
   if(btn) btn.disabled = true;
   const selected = Array.isArray(window.trainSelected)?window.trainSelected.join(','):window.trainSelected;
   if(!selected) { if(btn) btn.disabled = false; return; }
-  fetch('../api/train/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question_id:currentTrainQ.id,selected})})
+  fetch('/exam/api/train/submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question_id:currentTrainQ.id,selected})})
     .then(r=>r.json()).then(res=>{
       if(res.code!==0) return;
       showTrainResult(res.data);
