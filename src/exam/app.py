@@ -654,13 +654,21 @@ function showWrongBook() { showPage('pageWrong'); loadWrongBook(); }
 function getWrongIds() {
   try { return JSON.parse(localStorage.getItem('wrong_ids') || '[]'); } catch(e) { return []; }
 }
+let _wrongBatchTimer = null;
+function _flushWrongBatch() {
+  _wrongBatchTimer = null;
+  localStorage.setItem('wrong_ids', JSON.stringify(getWrongIds()));
+}
 function addWrongId(id) {
   let ids = getWrongIds();
-  if (!ids.includes(id)) { ids.push(id); localStorage.setItem('wrong_ids', JSON.stringify(ids)); }
+  if (!ids.includes(id)) { ids.push(id); }
+  if(_wrongBatchTimer) clearTimeout(_wrongBatchTimer);
+  _wrongBatchTimer = setTimeout(_flushWrongBatch, 300);
 }
 function removeWrongId(id) {
   let ids = getWrongIds().filter(i => i !== id);
   localStorage.setItem('wrong_ids', JSON.stringify(ids));
+  if(_wrongBatchTimer) clearTimeout(_wrongBatchTimer);
 }
 
 function loadWrongBook() {
@@ -683,10 +691,10 @@ function loadWrongBook() {
         html += '</div>';
         html += '<div style="font-size:14px;line-height:1.8;white-space:pre-wrap;margin-bottom:10px">'+htmlEscape(q.question)+'</div>';
       if(q.image && q.type==='图形推理'){
-        html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
+        html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
       }
       if(q.image && q.type!=='图形推理'){
-        html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
+        html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
       }
         if(q.options){
           html += '<div style="font-size:13px;color:#666;margin-bottom:6px">选项：</div>';
@@ -739,10 +747,10 @@ function renderExam() {
     html += '</div>';
     html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     if(q.image && q.type==='图形推理'){
-      html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
+      html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
     if(q.image && q.type!=='图形推理'){
-      html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
+      html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
     if(q.question_type==='填空'){
       html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value}">';
@@ -750,7 +758,7 @@ function renderExam() {
       if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
       html += '<div class="options" id="exam_opts_'+i+'">';
       Object.entries(q.options||{}).forEach(([k,v])=>{
-        html += '<div class="option" onclick="examSelectOpt('+i+','+q.id+',\''+k+'\','+(q.question_type==='多选'?'true':'false')+')">';
+        html += '<div class="option" onclick="examSelectOpt(this,'+q.id+',\''+k+'\','+(q.question_type==='多选'?'true':'false')+')" data-idx="'+i+'">';
         html += '<span class="letter">'+k+'</span>';
         html += '<span>'+htmlEscape(v)+'</span></div>';
       });
@@ -764,36 +772,22 @@ function renderExam() {
   el.innerHTML = html;
 }
 
-// 选答案
-window.examSelectOpt = function(i, qid, opt, isMulti) {
-  const items = document.getElementById('examContent');
-  if(!items) return;
-  const cards = items.querySelectorAll('.q-card');
-  if(!cards[i]) return;
-  const opts = cards[i].querySelector('.options');
-  if(!opts) return;
-  
-  currentExamQuestion = i;
+// 选答案 - 用DOM参数传递避免重复查询
+window.examSelectOpt = function(el, qid, opt, isMulti) {
+  currentExamQuestion = el.dataset.idx;
+  const cards = document.getElementById('examContent');
   
   if(isMulti){
-    const el = Array.from(opts.children).find(o=>{
-      const letter = o.querySelector('.letter');
-      return letter && letter.textContent.trim()===opt;
-    });
-    if(el) el.classList.toggle('selected');
+    el.classList.toggle('selected');
     const selected = [];
-    opts.querySelectorAll('.option.selected').forEach(o=>{
+    el.parentElement.querySelectorAll('.option.selected').forEach(o=>{
       const letter = o.querySelector('.letter');
       if(letter) selected.push(letter.textContent.trim());
     });
     examAnswers[qid] = {id:qid, selected: selected.join(',')};
   } else {
-    opts.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
-    const el = Array.from(opts.children).find(o=>{
-      const letter = o.querySelector('.letter');
-      return letter && letter.textContent.trim()===opt;
-    });
-    if(el) el.classList.add('selected');
+    el.parentElement.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
     examAnswers[qid] = {id:qid, selected: opt};
   }
 }
@@ -891,13 +885,13 @@ function renderExamItems(details, filter){
     const correctAns = typeof d.answer==='object' ? (d.answer||[]).join(',') : (d.answer||'');
     const analysisText = d.analysis || '暂无解析';
     
-    html += '<div class="result-item '+(isCorrect?'correct-bg':'wrong-bg')+'">';
+    html += '<div class="result-item '+(isCorrect?'correct-bg':'wrong-bg')+'" data-correct="'+isCorrect+'">';
     html += '<div style="font-size:14px;font-weight:600;color:#333;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #eee">第 '+(i+1)+' 题 <span style="float:right;font-size:13px">'+(isCorrect?'✅ 正确 (+'+d.score+'分)':'❌ 错误')+'</span></div>';
     html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
     if(q.image && q.type==='图形推理'){
-      html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
+      html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     } else if(q.image){
-      html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
+      html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
     html += '<div style="margin-top:8px;padding:8px 10px;background:#f8f9fa;border-radius:6px;font-size:14px">';
     html += '<div><span style="font-weight:600">你的答案：</span><span style="color:'+(isCorrect?'#27ae60':'#e74c3c')+';font-weight:600">'+htmlEscape(userAns)+'</span></div>';
@@ -937,10 +931,10 @@ function switchExamFilter(mode){
     btnWrong.style.fontWeight = mode==='wrong' ? '600' : 'normal';
   }
   
-  const section = document.getElementById('reviewSection');
-  if(section){
-    section.innerHTML = renderExamItems(data.details, mode);
-  }
+  // 显示/隐藏对应题目，无需重新渲染
+  document.querySelectorAll('#reviewSection .result-item').forEach(el=>{
+    el.style.display = (mode==='all' || el.dataset.correct==='false') ? '' : 'none';
+  });
 }
 // ========== 分层训练 ==========
 var trainType = '';
@@ -1019,16 +1013,16 @@ function renderTrainQuestion(q, hasMore, total, fromCache) {
   html += '</div>';
   html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
   if(q.image && q.type==='图形推理'){
-  html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
+  html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
     if(q.image && q.type!=='图形推理'){
-  html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图"></div>';
+  html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
   if(q.options){
     if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
     html += '<div class="options" id="trainOpts">';
     Object.entries(q.options).forEach(([k,v])=>{
-      html += '<div class="option" onclick="trainSelectOpt(\''+k+'\','+(q.question_type==='多选'?'true':'false')+')">';
+      html += '<div class="option" onclick="trainSelectOpt(this,\''+k+'\','+(q.question_type==='多选'?'true':'false')+')">';
       html += '<span class="letter">'+k+'</span>';
       html += '<span>'+htmlEscape(v)+'</span></div>';
     });
@@ -1070,24 +1064,16 @@ function renderTrainQuestion(q, hasMore, total, fromCache) {
   }
 }
 
-function trainSelectOpt(opt, isMulti) {
+function trainSelectOpt(el, opt, isMulti) {
   if(isMulti){
-    const opts = document.getElementById('trainOpts');
-    if(!opts) return;
-    opts.querySelectorAll('.option').forEach(o=>{
-      o.querySelector('.letter').textContent===opt?o.classList.toggle('selected'):null;
-    });
+    el.classList.toggle('selected');
     window.trainSelected = [];
-    opts.querySelectorAll('.option.selected').forEach(o=>{
+    el.parentElement.querySelectorAll('.option.selected').forEach(o=>{
       window.trainSelected.push(o.querySelector('.letter').textContent);
     });
   } else {
-    document.querySelectorAll('#trainOpts .option').forEach(o=>o.classList.remove('selected'));
-    const opts = document.getElementById('trainOpts');
-    if(!opts) return;
-    opts.querySelectorAll('.option').forEach(o=>{
-      if(o.querySelector('.letter').textContent===opt) o.classList.add('selected');
-    });
+    el.parentElement.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected');
     window.trainSelected = opt;
   }
 }
