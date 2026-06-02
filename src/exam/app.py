@@ -469,11 +469,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .page.active{display:block}
 /* Main Content Area */
 .content{padding:16px;max-width:800px;margin:0 auto}
-/* Type Selector */
-.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 24px}
-.type-btn{background:#fff;border:2px solid #e8e8e8;border-radius:12px;padding:20px 16px;text-align:center;cursor:pointer;transition:all 0.3s;font-size:15px;font-weight:500}
-.type-btn:hover{border-color:#1a73e8;color:#1a73e8}
-.type-btn:active{transform:scale(0.97)}
+/* Type Selector - 新版分层训练选题卡片 */
+.train-header{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;padding:28px 24px;color:#fff;margin-bottom:20px;text-align:center}
+.train-header .big{font-size:26px;font-weight:700;margin-bottom:6px}
+.train-header .small{font-size:14px;opacity:0.85}
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 24px}
+.type-btn{background:#fff;border-radius:16px;padding:20px 16px;text-align:center;cursor:pointer;transition:all 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.06);position:relative;overflow:hidden}
+.type-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,0.1)}
+.type-btn:active{transform:scale(0.96)}
+.type-btn .t-icon{font-size:36px;display:block;margin-bottom:8px}
+.type-btn .t-name{font-size:16px;font-weight:600;color:#333;margin-bottom:4px}
+.type-btn .t-count{font-size:12px;color:#999}
+.type-btn .t-bar{position:absolute;bottom:0;left:0;right:0;height:4px;border-radius:0 0 16px 16px}
+/* 各题型配色 */
+.type-btn[data-type="图形推理"] .t-bar{background:linear-gradient(90deg,#667eea,#764ba2)}
+.type-btn[data-type="数字推理"] .t-bar{background:linear-gradient(90deg,#4facfe,#00f2fe)}
+.type-btn[data-type="言语理解"] .t-bar{background:linear-gradient(90deg,#43e97b,#38f9d7)}
+.type-btn[data-type="高中数学"] .t-bar{background:linear-gradient(90deg,#fa709a,#fee140)}
+.type-btn[data-type="高中物理"] .t-bar{background:linear-gradient(90deg,#f093fb,#f5576c)}
+.type-btn[data-type="铁道信号"] .t-bar{background:linear-gradient(90deg,#4facfe,#00f2fe)}
+/* 题目导航 */
+.train-progress{background:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.06);display:flex;align-items:center;gap:14px}
+.train-progress .p-bar{flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden}
+.train-progress .p-bar .p-fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);border-radius:3px;transition:width 0.4s ease}
+.train-progress .p-text{font-size:13px;color:#888;white-space:nowrap}
+.train-progress .p-type{font-size:12px;padding:3px 10px;border-radius:8px;background:#f0e8ff;color:#667eea;font-weight:500;white-space:nowrap}
 /* Question Card */
 .q-card{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08);padding:20px;margin-bottom:16px}
 .q-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:6px}
@@ -942,12 +962,19 @@ var trainPage = 1;
 
 function loadTypes() {
   const el = document.getElementById('trainContent');
-  el.innerHTML = '<div style="text-align:center;padding:20px 0;color:#999">加载中...</div>';
+  el.innerHTML = '<div style="text-align:center;padding:40px 0;color:#999">加载中...</div>';
   fetch('/exam/api/train/types').then(r=>r.json()).then(res=>{
     if(res.code!==0||!res.data.length){el.innerHTML='<div style="padding:20px;text-align:center;color:#999">暂无题目</div>';return}
-    let html = '<div style="padding:12px 0;font-size:14px;color:#666;text-align:center">选择题型开始练习</div><div class="type-grid">';
+    // 题型图标映射
+    const icons = {'图形推理':'🧩','数字推理':'🔢','言语理解':'💬','高中数学':'📐','高中物理':'⚡','铁道信号':'🚊'};
+    let html = '<div class="train-header"><div class="big">📚 分层训练</div><div class="small">选择练习题型，逐项突破</div></div>';
+    html += '<div class="type-grid">';
     res.data.forEach(t=>{
-      html += '<div class="type-btn" onclick="startTrainType(\''+t+'\')">'+t+'</div>';
+      html += '<div class="type-btn" data-type="'+t+'" onclick="startTrainType(\''+t+'\')">';
+      html += '<span class="t-icon">'+(icons[t]||'📖')+'</span>';
+      html += '<span class="t-name">'+t+'</span>';
+      html += '<span class="t-count">点击开始练习 →</span>';
+      html += '<div class="t-bar"></div></div>';
     });
     html += '</div>';
     el.innerHTML = html;
@@ -993,16 +1020,17 @@ var trainTotal = 0;    // 当前题型总题数
 function renderTrainQuestion(q, hasMore, total, fromCache) {
   currentTrainQ = q;
   const el = document.getElementById('trainContent');
-  // 顶部导航：返回 + 进度
-  let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0">';
-  html += '<button class="btn btn-outline btn-sm" onclick="loadTypes()">&larr; 返回题型</button>';
-  html += '<span style="font-size:13px;color:#888">'+trainType+' · 第 '+trainPage+' 题</span>';
-  html += '</div>';
-  // 上一题 / 下一题 导航栏
+  const pct = total > 0 ? Math.min(Math.round(trainPage/total*100), 100) : 0;
+  // 进度条 + 导航
+  let html = '<div class="train-progress">';
+  html += '<div class="p-type">'+trainType+'</div>';
+  html += '<div class="p-bar"><div class="p-fill" style="width:'+pct+'%"></div></div>';
+  html += '<span class="p-text">'+trainPage+'/'+total+'</span></div>';
+  // 导航按钮行
   html += '<div style="display:flex;gap:8px;margin-bottom:10px">';
-  if(trainPage > 1) html += '<button class="btn btn-outline btn-sm" onclick="prevTrain()" style="flex:1">&larr; 上一题</button>';
+  if(trainPage > 1) html += '<button class="btn btn-sm" onclick="prevTrain()" style="flex:1;background:#f0f0f0;color:#555;border:1px solid #ddd;border-radius:10px">&larr; 上一题</button>';
   else html += '<div style="flex:1"></div>';
-  if(hasMore) html += '<button class="btn btn-outline btn-sm" onclick="nextTrain()" style="flex:1">下一题 &rarr;</button>';
+  if(hasMore) html += '<button class="btn btn-sm" onclick="nextTrain()" style="flex:1;background:#667eea;color:#fff;border:none;border-radius:10px">下一题 &rarr;</button>';
   else html += '<div style="flex:1"></div>';
   html += '</div>';
   // 题目卡片
@@ -1013,10 +1041,10 @@ function renderTrainQuestion(q, hasMore, total, fromCache) {
   html += '</div>';
   html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
   if(q.image && q.type==='图形推理'){
-  html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
+  html += '<div class="q-img-full"><img src="../static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
     if(q.image && q.type!=='图形推理'){
-  html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
+  html += '<div class="q-img-wrap"><img src="../static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
   if(q.options){
     if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
@@ -1030,7 +1058,7 @@ function renderTrainQuestion(q, hasMore, total, fromCache) {
   }
   html += '<div id="trainResult" style="margin-top:12px"></div>';
   html += '<div style="display:flex;gap:10px;margin-top:14px">';
-  html += '<button class="btn btn-primary btn-sm" style="flex:1" id="trainSubmitBtn" onclick="submitTrain()">提交答案</button>';
+  html += '<button class="btn btn-primary" style="flex:1;padding:12px 0" id="trainSubmitBtn" onclick="submitTrain()">提交答案</button>';
   html += '</div></div>';
   el.innerHTML = html;
   window.trainSelected = q.question_type==='多选'?[]:'';
