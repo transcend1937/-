@@ -554,7 +554,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .exam-footer{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
 .exam-footer .btn{flex:1;min-width:120px}
 /* Exam layout */
-.exam-wrap{display:flex;gap:16px;max-width:900px;margin:0 auto;position:relative}
+.exam-wrap{max-width:720px;margin:0 auto;position:relative}
 .exam-main{flex:1;min-width:0}
 /* === 成绩页 === */
 .result-card{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-radius:20px;padding:36px 28px;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,0.06);margin-bottom:20px;border:1px solid rgba(255,255,255,0.8);animation:resultIn .6s ease}
@@ -611,10 +611,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .score-ring{width:110px;height:110px}
 .btn{padding:12px 20px;font-size:14px}
 }
-/* Exam dot nav */
-.q-dot-nav{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;padding:12px;background:rgba(255,255,255,0.9);border-radius:14px;border:1px solid rgba(255,255,255,0.8)}
-.q-dot{width:32px;height:32px;border-radius:50%;border:2px solid #e0e4ea;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;color:#888;background:#fff}
-.q-dot:hover{border-color:#1a73e8;color:#1a73e8;transform:scale(1.1)}
+/* Exam question nav - horizontal scrollable strip */
+.q-nav-strip{display:flex;gap:4px;padding:8px 4px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:thin;scrollbar-color:#c0c4cc transparent;min-height:36px;align-items:center}
+.q-nav-strip::-webkit-scrollbar{height:3px}
+.q-nav-strip::-webkit-scrollbar-thumb{background:#c0c4cc;border-radius:2px}
+.q-nav-item{width:26px;min-width:26px;height:26px;border-radius:50%;border:1.5px solid #e0e4ea;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;color:#999;background:#fff}
+.q-nav-item:hover{border-color:#1a73e8;color:#1a73e8;transform:scale(1.12)}
+.q-nav-item.answered{background:#34a853;border-color:#34a853;color:#fff}
+.q-nav-item.active{background:#1a73e8;border-color:#1a73e8;color:#fff;transform:scale(1.15);box-shadow:0 2px 8px rgba(26,115,232,0.3)}
+.nav-label{font-size:12px;color:#666;margin-bottom:4px}
 .q-dot.active{border-color:#1a73e8;background:#1a73e8;color:#fff}
 .q-dot.answered{border-color:#4caf50;background:#e8f5e9;color:#4caf50}
 .q-dot.wrong-dot{border-color:#f44336;background:#ffebee;color:#f44336}
@@ -663,7 +668,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
       <div class="exam-main" id="examContent">
         <div style="text-align:center;padding:60px 0;color:#999">加载中...</div>
       </div>
-      <div id="examDotNav" class="q-dot-nav" style="display:none;position:sticky;top:70px;align-self:flex-start;width:200px;flex-shrink:0;max-height:calc(100vh - 90px);overflow-y:auto"></div>
+      
 
     </div>
   </div>
@@ -807,9 +812,8 @@ function loadExam() {
 
 function renderExam() {
   const el = document.getElementById('examContent');
-  const dotNav = document.getElementById('examDotNav');
   let html = '<div style="font-size:13px;color:#ff6b35;padding:8px 0;text-align:center">注意：考试限时45分钟，请合理安排时间</div>';
-  let dots = '';
+  let navHtml = '<div class="q-nav-strip" id="qNavStrip">';
   examData.items.forEach((q,i)=>{
     html += '<div class="q-card" id="eq_'+i+'">';
     html += '<div class="q-header">';
@@ -824,7 +828,7 @@ function renderExam() {
       html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
     if(q.question_type==='填空'){
-      html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value};updateDots()">';
+      html += '<input class="fill-input" id="exam_inp_'+i+'" placeholder="请输入答案" onchange="examAnswers['+q.id+']={id:'+q.id+',selected:this.value};updateNavStrip()">';
     } else {
       if(q.question_type==='多选') html += '<div class="multi-hint">📌 多选（可点击多个选项）</div>';
       html += '<div class="options" id="exam_opts_'+i+'">';
@@ -836,28 +840,34 @@ function renderExam() {
       html += '</div>';
     }
     html += '</div>';
-    dots += '<div class="q-dot" id="edot_'+i+'" onclick="document.getElementById(\'eq_'+i+'\').scrollIntoView({behavior:\'smooth\',block:\'center\'})">'+(i+1)+'</div>';
+    navHtml += '<span class="q-nav-item" id="qn_'+i+'" onclick="document.getElementById(\'eq_'+i+'\').scrollIntoView({behavior:\'smooth\',block:\'center\'});hilitNav('+i+')">'+(i+1)+'</span>';
   });
+  navHtml += '</div>';
+  html += '<div style="margin:12px 0 8px"><div class="nav-label">📋 题目导航</div>'+navHtml+'</div>';
   html += '<div class="exam-footer">';
   html += '<button class="btn btn-primary btn-block" onclick="submitExam()" id="examSubmitBtn">提交试卷</button>';
   html += '</div>';
   el.innerHTML = html;
-  dotNav.innerHTML = dots;
-  dotNav.style.display = 'block';
 }
 
-function updateDots(){
+function updateNavStrip(){
   if(!examData||!examData.items) return;
   examData.items.forEach((q,i)=>{
-    const dot = document.getElementById('edot_'+i);
-    if(!dot) return;
+    const nav = document.getElementById('qn_'+i);
+    if(!nav) return;
     const ans = examAnswers[q.id];
     if(ans && ans.selected && ans.selected.toString().trim()){
-      dot.className = 'q-dot answered';
+      nav.className = 'q-nav-item answered';
     } else {
-      dot.className = 'q-dot';
+      nav.className = 'q-nav-item';
     }
   });
+}
+
+function hilitNav(i){
+  document.querySelectorAll('.q-nav-item.active').forEach(el=>el.classList.remove('active'));
+  const el = document.getElementById('qn_'+i);
+  if(el) el.classList.add('active');
 }
 
 // 选答案 - 用DOM参数传递避免重复查询
@@ -877,7 +887,7 @@ window.examSelectOpt = function(el, qid, opt, isMulti) {
     el.classList.add('selected');
     examAnswers[qid] = {id:qid, selected: opt};
   }
-  updateDots();
+  updateNavStrip();
 }
 
 function startExamTimer() {
