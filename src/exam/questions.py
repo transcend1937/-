@@ -1374,7 +1374,7 @@ QUESTIONS = [
     "answer": "广州",
     "analysis": "广东省省会是广州市",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 92,
@@ -1384,7 +1384,7 @@ QUESTIONS = [
     "answer": "湘",
     "analysis": "湖南简称湘，因湘江贯穿全境而得名",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 93,
@@ -1394,7 +1394,7 @@ QUESTIONS = [
     "answer": "李白",
     "analysis": "《静夜思》是唐代诗人李白的名作",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 94,
@@ -1404,7 +1404,7 @@ QUESTIONS = [
     "answer": "苏轼",
     "analysis": "该名句出自北宋苏轼的《水调歌头·明月几时有》",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 95,
@@ -2149,7 +2149,7 @@ QUESTIONS = [
     "answer": "石家庄",
     "analysis": "河北省省会是石家庄。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 147,
@@ -2159,7 +2159,7 @@ QUESTIONS = [
     "answer": "沈阳",
     "analysis": "辽宁省省会是沈阳。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 148,
@@ -2169,7 +2169,7 @@ QUESTIONS = [
     "answer": "长春",
     "analysis": "吉林省省会是长春。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 149,
@@ -2179,7 +2179,7 @@ QUESTIONS = [
     "answer": "哈尔滨",
     "analysis": "黑龙江省省会是哈尔滨。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 150,
@@ -2189,7 +2189,7 @@ QUESTIONS = [
     "answer": "南京",
     "analysis": "江苏省省会是南京。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 151,
@@ -2199,7 +2199,7 @@ QUESTIONS = [
     "answer": "合肥",
     "analysis": "安徽省省会是合肥。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 152,
@@ -2209,7 +2209,7 @@ QUESTIONS = [
     "answer": "南昌",
     "analysis": "江西省省会是南昌。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 153,
@@ -2219,7 +2219,7 @@ QUESTIONS = [
     "answer": "郑州",
     "analysis": "河南省省会是郑州。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 154,
@@ -2229,7 +2229,7 @@ QUESTIONS = [
     "answer": "海口",
     "analysis": "海南省省会是海口。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 155,
@@ -2239,7 +2239,7 @@ QUESTIONS = [
     "answer": "兰州",
     "analysis": "甘肃省省会是兰州。",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 156,
@@ -2590,7 +2590,7 @@ QUESTIONS = [
     "answer": "98J",
     "analysis": "重力势能公式Ep=mgh=5×9.8×2=98J",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 177,
@@ -2600,7 +2600,7 @@ QUESTIONS = [
     "answer": "58.8J",
     "analysis": "重力势能变化ΔEp=mgh=2×9.8×3=58.8J",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 178,
@@ -2610,7 +2610,7 @@ QUESTIONS = [
     "answer": "500J",
     "analysis": "根据热力学第一定律ΔU=W+Q=300+200=500J",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 179,
@@ -2620,7 +2620,7 @@ QUESTIONS = [
     "answer": "放出60J",
     "analysis": "ΔU=-100J，W=-40J，由ΔU=W+Q得Q=-60J，负号表示放热",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 180,
@@ -2630,7 +2630,7 @@ QUESTIONS = [
     "answer": "0.5J",
     "analysis": "弹性势能公式Ep=½kx²=0.5×100×0.1²=0.5J",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 181,
@@ -2640,7 +2640,7 @@ QUESTIONS = [
     "answer": "490J",
     "analysis": "Ep=mgh=10×9.8×5=490J",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 182,
@@ -2650,7 +2650,7 @@ QUESTIONS = [
     "answer": "增加200J",
     "analysis": "ΔU=W+Q=50+150=200J，内能增加",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 183,
@@ -2660,7 +2660,7 @@ QUESTIONS = [
     "answer": "4J",
     "analysis": "Ep=½kx²=0.5×200×0.2²=4J",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 184,
@@ -2670,7 +2670,7 @@ QUESTIONS = [
     "answer": "19.6J",
     "analysis": "ΔEp=mgh=0.5×9.8×4=19.6J",
     "score": 2.5,
-    "options": null
+    "options": None
   },
   {
     "id": 185,
@@ -2680,6 +2680,6 @@ QUESTIONS = [
     "answer": "吸热100J",
     "analysis": "W=-80J，ΔU=20J，由ΔU=W+Q得Q=100J，正值表示吸热",
     "score": 2.5,
-    "options": null
+    "options": None
   }
 ]
