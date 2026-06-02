@@ -1136,10 +1136,10 @@ function renderTrainQuestion(q, hasMore, total, fromCache) {
   html += '</div>';
   html += '<div class="q-text">'+htmlEscape(q.question)+'</div>';
   if(q.image && q.type==='图形推理'){
-  html += '<div class="q-img-full"><img src="../static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
+  html += '<div class="q-img-full"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
     if(q.image && q.type!=='图形推理'){
-  html += '<div class="q-img-wrap"><img src="../static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
+  html += '<div class="q-img-wrap"><img src="./static/'+q.image[0]+'" alt="题图" loading="lazy"></div>';
     }
   if(q.options){
     if(q.question_type==='多选') html += '<div class="multi-hint">多选（可点击多个选项）</div>';
