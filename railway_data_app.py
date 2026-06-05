@@ -3,6 +3,7 @@ import os
 import json
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.gzip import GZipMiddleware
 
 WORKSPACE = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,6 +13,7 @@ with open(DATA_PATH, "r", encoding="utf-8") as f:
     RAILWAY_DATA = json.load(f)
 
 app = FastAPI()
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 def _gender_bar(male, female, total):
     """生成男女比例色条"""

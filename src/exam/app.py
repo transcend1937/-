@@ -9,6 +9,7 @@ from typing import Any
 from fastapi import FastAPI, Query, HTTPException, Body
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel
 from starlette.responses import Response
 
@@ -48,6 +49,7 @@ class CacheStaticFiles(StaticFiles):
         return response
 
 app = FastAPI(title="广铁机考模拟题库")
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request

@@ -29,6 +29,10 @@ from railway_data_app import app as railway_app
 # ========== 主应用 ==========
 app = FastAPI(title="铁路校招服务平台")
 
+# gzip 压缩 - 减少传输体积 70%
+from fastapi.middleware.gzip import GZipMiddleware
+app.add_middleware(GZipMiddleware, minimum_size=500)
+
 # 首页
 HOME_HTML = """<!DOCTYPE html>
 <html lang="zh-CN">
