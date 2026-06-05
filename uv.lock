@@ -276,7 +276,7 @@ wheels = [
 
 [[package]]
 name = "coze-coding-dev-sdk"
-version = "0.5.15"
+version = "0.5.16"
 source = { registry = "https://mirrors.aliyun.com/pypi/simple/" }
 dependencies = [
     { name = "alembic" },
@@ -303,18 +303,22 @@ dependencies = [
     { name = "supabase" },
     { name = "unidecode" },
 ]
-sdist = { url = "https://mirrors.aliyun.com/pypi/packages/c9/9e/88e1edc5e37f9dce8b0505e80a6d89280815d024b47bc4ae92dec5ac4def/coze_coding_dev_sdk-0.5.15.tar.gz", hash = "sha256:31d5be3f3db92d1fe88b0efebe3bde1b72fe17f1f827465e13ce3c40c2d72dae" }
+sdist = { url = "https://mirrors.aliyun.com/pypi/packages/fc/e9/35c71d8718bb589e41b54525ffe5d957ee4360035bbf433466f55817165a/coze_coding_dev_sdk-0.5.16.tar.gz", hash = "sha256:7e845df670d559363540a236d9aa0b33f86d59f8a5b8b809ec14db75882b518d" }
 wheels = [
-    { url = "https://mirrors.aliyun.com/pypi/packages/9a/5b/e271f3389c7002c08c2653b6b74ae36dc5b743d24b4838054e64c9f4de0e/coze_coding_dev_sdk-0.5.15-py3-none-any.whl", hash = "sha256:9760e295483be2de9c028ae22e94adc1249decdd53ebf3343fdfe5442b2e1011" },
+    { url = "https://mirrors.aliyun.com/pypi/packages/29/6a/2fa7a397b165a39ea27c670134572a53beaf657030f9fda544a5b839b738/coze_coding_dev_sdk-0.5.16-py3-none-any.whl", hash = "sha256:5bd5f4f45187916fdcbe99d610f6a2950ba0fe9445bd18296abfa583f8ab697c" },
 ]
 
 [[package]]
 name = "coze-coding-utils"
-version = "0.2.7"
+version = "0.2.8"
 source = { registry = "https://mirrors.aliyun.com/pypi/simple/" }
-sdist = { url = "https://mirrors.aliyun.com/pypi/packages/00/49/0a6fed9c78c470f6d6adeb18baad50204a45e01a08930151cd120c2fb2df/coze_coding_utils-0.2.7.tar.gz", hash = "sha256:e9ffeab41e467ceac38c72174a0f7a621d074aea3aa08e065d168dc7d9fc1639" }
+dependencies = [
+    { name = "psycopg2-binary" },
+    { name = "sqlalchemy" },
+]
+sdist = { url = "https://mirrors.aliyun.com/pypi/packages/5f/18/241ed27c827d0edc18765ad0e62d2922e2787c63dec3dbc0a37c0dd747ea/coze_coding_utils-0.2.8.tar.gz", hash = "sha256:3aadf17975be046c5bde18732cb6a0cb956ff6124746af3fefe214787fb2618b" }
 wheels = [
-    { url = "https://mirrors.aliyun.com/pypi/packages/1c/a0/235a4454f19cd4e23ce7da5ec8e33b549fb2ba9b3d53dfda2b4458e513cf/coze_coding_utils-0.2.7-py3-none-any.whl", hash = "sha256:34f403c9e6bdbe347fafed8708dda3eeb85d4f3193e8216599466628d32c0652" },
+    { url = "https://mirrors.aliyun.com/pypi/packages/44/d3/3dd67badde9219c0ccccbab5625ab24b3a76e3f1ca9bc9c0caf5d447af27/coze_coding_utils-0.2.8-py3-none-any.whl", hash = "sha256:6e49bf2bdc2f2b85c1a37c7eaa4f1d80b843638ba691da15a7e3e982225e6f09" },
 ]
 
 [[package]]
@@ -2728,8 +2732,8 @@ requires-dist = [
     { name = "alembic", specifier = ">=1.16,<2" },
     { name = "boto3", specifier = ">=1.40,<2" },
     { name = "chardet", specifier = ">=5.2,<6" },
-    { name = "coze-coding-dev-sdk", specifier = ">0.5.0,<1" },
-    { name = "coze-coding-utils", specifier = ">=0.2.7,<1" },
+    { name = "coze-coding-dev-sdk", specifier = ">=0.5.15" },
+    { name = "coze-coding-utils", specifier = ">=0.2.7" },
     { name = "coze-workload-identity", specifier = ">=0.1.4,<1" },
     { name = "cozeloop", specifier = ">=0.1.25,<1" },
     { name = "dbus-python", specifier = "==1.3.2" },
