@@ -359,6 +359,7 @@ function filterData() {{
     }});
 }}
 </script>
+<script>fetch('/api/track',{{method:'POST',headers:{{'Content-Type':'application/json'}},body:JSON.stringify({{p:window.location.pathname,r:document.referrer||'',t:document.title}})}});</script>
 </body>
 </html>"""
 

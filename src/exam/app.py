@@ -1263,6 +1263,7 @@ function htmlEscape(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 </script>
+<script>fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p:window.location.pathname+window.location.search,r:document.referrer||'',t:document.title})});</script>
 </body>
 </html>
 """

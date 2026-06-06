@@ -2,8 +2,9 @@
 import os
 import sys
 import json
-from fastapi import FastAPI, Response
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request, Response
+from fastapi.responses import HTMLResponse, JSONResponse
+from src.utils.analytics import record_from_request, get_stats
 
 WORKSPACE = os.path.dirname(os.path.abspath(__file__))
 
@@ -86,14 +87,49 @@ body{
         <p>18家铁路局2025届招录数据，按路局或专业分类查询</p>
         <span class="tag data">📋 数据查询</span>
     </a>
+    <a class="card" href="/analytics" style="background:rgba(251,191,36,0.04);border-color:rgba(251,191,36,0.12)">
+        <div class="icon">📈</div>
+        <h2>访客统计看板</h2>
+        <p>查看网站访问量、页面排行、实时动态</p>
+        <span class="tag" style="background:rgba(251,191,36,0.15);color:#fbbf24">📊 数据统计</span>
+    </a>
     <div class="footer">所有数据均来自中国铁路人才招聘网官方公示</div>
 </div>
+<script>
+fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p:window.location.pathname,r:document.referrer||'',t:document.title})});
+</script>
 </body>
 </html>"""
 
 @app.get("/", response_class=HTMLResponse)
 async def home():
     return HOME_HTML
+
+# ========== 访客统计 ==========
+@app.post("/api/track")
+async def track(request: Request):
+    body = await request.json()
+    record_from_request(
+        page=body.get("p", "/"),
+        request_headers=dict(request.headers),
+        title=body.get("t", ""),
+    )
+    return {"ok": True}
+
+
+@app.get("/api/analytics")
+async def analytics(days: int = 7):
+    """获取统计数据的 JSON 接口"""
+    return get_stats(days=days)
+
+
+# 统计看板页面
+ANALYTICS_HTML = open(os.path.join(WORKSPACE, "src", "utils", "analytics_dashboard.html"), encoding="utf-8").read() if os.path.exists(os.path.join(WORKSPACE, "src", "utils", "analytics_dashboard.html")) else "<h1>看板文件缺失</h1>"
+
+@app.get("/analytics", response_class=HTMLResponse)
+async def analytics_page():
+    return ANALYTICS_HTML
+
 
 # 挂载子应用
 app.mount("/exam", exam_app)
