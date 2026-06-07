@@ -254,9 +254,9 @@ function createWheel(hasDefect, hasGear, hasPass) {
   hub.position.y = 0;
   group.add(hub);
 
-  // 整个组绕X轴旋转-90°，让车轮面朝Z方向 (平行于轨道)
-  // 原来的Y轴（轮轴）变成Z轴
-  group.rotation.x = -Math.PI / 2;
+  // 整个组绕Z轴旋转90°，让车轮面朝Z方向 (平行于轨道)
+  // 原来的Y轴（轮轴）变成X轴，车轮面朝YZ平面（含Z方向=平行轨道）
+  group.rotation.z = Math.PI / 2;
 
   // 缺陷标记
   if (hasDefect) {
@@ -286,7 +286,7 @@ function createWheelset(zPos, index) {
   group.name = 'wheelset';
 
   // 两个车轮与轨道平行摆放，中间车轴相连
-  // 车轮面朝Z方向（平行于轨道延伸方向）
+  // 车轮面朝Z方向（平行于轨道延伸方向） → 绕Z轴旋转90°实现
   // 车轴沿X方向连接左右车轮
 
   // 左侧车轮 (位于 -AXLE_LEN/2)
