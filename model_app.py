@@ -1,5 +1,5 @@
 """
-万象归踪 — 轮对缺陷智能检测 · 双碳减排演示
+万像归踪 — 轮对缺陷智能检测 · 双碳减排演示
 检测传感器动态扫描，缺陷红光闪烁，碳减排数据看板
 """
 from fastapi import FastAPI, Response
@@ -13,26 +13,48 @@ HTML = r'''<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>万象归踪 · 节能减碳</title>
+<title>万像归踪-节能减碳 - 轮对缺陷智能检测</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0f0f1a;overflow:hidden;height:100vh;font-family:'PingFang SC','Microsoft YaHei',sans-serif}
 #canvas-container{width:100%;height:100vh}
 #title-bar{
   position:fixed;top:0;left:0;right:0;z-index:10;
-  background:linear-gradient(135deg,rgba(15,23,42,0.92),rgba(30,41,59,0.85));
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(56,189,248,0.2);
-  padding:10px 24px;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(135deg,rgba(15,23,42,0.95),rgba(30,41,59,0.9));
+  backdrop-filter:blur(16px);
+  border-bottom:2px solid rgba(56,189,248,0.3);
+  padding:16px 28px;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 4px 30px rgba(0,0,0,0.3);
 }
 #title-bar .logo{
-  font-size:20px;font-weight:700;
-  background:linear-gradient(90deg,#38bdf8,#818cf8);
+  font-size:28px;font-weight:900;
+  background:linear-gradient(135deg,#38bdf8,#a78bfa,#f472b6);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  letter-spacing:2px;
+  letter-spacing:3px;text-shadow:0 0 40px rgba(56,189,248,0.3);
+}
+#title-bar .logo-icon{
+  display:inline-block;font-size:30px;margin-right:10px;
+  -webkit-text-fill-color:initial;
+  filter:drop-shadow(0 0 8px rgba(56,189,248,0.5));
+}
+#title-bar .right{
+  display:flex;align-items:center;gap:18px;
 }
 #title-bar .sub{
-  font-size:12px;color:#94a3b8;letter-spacing:4px;
+  font-size:13px;color:#94a3b8;letter-spacing:4px;
+  border-left:1px solid rgba(56,189,248,0.2);padding-left:16px;
+}
+#title-bar .eco-badge{
+  background:linear-gradient(135deg,rgba(34,197,94,0.2),rgba(16,185,129,0.15));
+  border:1px solid rgba(34,197,94,0.4);
+  border-radius:20px;padding:4px 14px;
+  font-size:12px;font-weight:600;color:#4ade80;
+  letter-spacing:1px;
+  animation:pulseGlow 2s ease-in-out infinite;
+}
+@keyframes pulseGlow{
+  0%,100%{box-shadow:0 0 5px rgba(34,197,94,0.2)}
+  50%{box-shadow:0 0 20px rgba(34,197,94,0.4)}
 }
 #status-panel{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:10;
@@ -70,11 +92,14 @@ window.addEventListener('error',function(e){if(e.target&&e.target.tagName==='SCR
 </script>
 </head>
 <body>
-<div id="loading"><div class="spinner"></div><span>万象归踪 · 场景加载中...</span></div>
+<div id="loading"><div class="spinner"></div><span>万像归踪 · 场景加载中...</span></div>
 <div id="load-error"><p>⚠️ 3D场景加载失败</p><p style="font-size:12px;color:#94a3b8">可能是网络问题，请检查能否访问外网</p><button class="retry-btn" onclick="location.reload()">重新加载</button></div>
 <div id="title-bar">
-  <div class="logo">⚡ 万象归踪</div>
-  <div class="sub">轮对踏面缺陷智能检测 · 碳减排运维</div>
+  <div class="logo"><span class="logo-icon">⚡</span>万像归踪<span style="color:#94a3b8;font-size:24px;font-weight:300;margin:0 6px;-webkit-text-fill-color:initial">-</span>节能减碳</div>
+  <div class="right">
+    <div class="eco-badge">🌱 双碳减排</div>
+    <div class="sub">轮对踏面缺陷智能检测系统</div>
+  </div>
 </div>
 <div id="canvas-container"></div>
 <div id="status-panel">
