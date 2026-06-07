@@ -120,7 +120,7 @@ const hubMat = new THREE.MeshStandardMaterial({color:0x6a7a8a,metalness:0.6,roug
 
 const AXLE_LEN = 1.44;
 
-function makeWheel(){
+function makeWheel(hasDefect){
   const g = new THREE.Group();
   // 车轮主体 - LatheGeometry绕Y轴
   const wheel = new THREE.Mesh(new THREE.LatheGeometry(profile, 36), wheelMat);
@@ -134,6 +134,26 @@ function makeWheel(){
   g.add(hub);
   // 整体绕Z转90°，车轮轴从Y变成X，轮面朝Z（平行轨道）
   g.rotation.z = Math.PI/2;
+
+  // 缺陷标记
+  if(hasDefect){
+    const defMat = new THREE.MeshStandardMaterial({
+      color:0xf87171,emissive:0xf87171,emissiveIntensity:0.5
+    });
+    const def = new THREE.Mesh(new THREE.SphereGeometry(0.04,8,8), defMat);
+    def.position.set(R-0.01, 0, 0.08);
+    def.name='defect';
+    g.add(def);
+    // 光晕环
+    const glowRing = new THREE.Mesh(
+      new THREE.RingGeometry(0.06,0.1,16),
+      new THREE.MeshBasicMaterial({color:0xf87171,transparent:true,opacity:0.3})
+    );
+    glowRing.position.set(R-0.01, 0, 0.085);
+    glowRing.rotation.x = -Math.PI/2;
+    glowRing.name='glow';
+    g.add(glowRing);
+  }
   return g;
 }
 
@@ -143,8 +163,9 @@ for(let i=0; i<6; i++){
   const z = (i-2.5)*2.2;
 
   // 左右车轮
+  const isDefect = (i===1); // 第2组有缺陷
   for(let side of[-1,1]){
-    const w = makeWheel();
+    const w = makeWheel(isDefect);
     w.position.x = side*AXLE_LEN/2;
     grp.add(w);
   }
@@ -208,10 +229,52 @@ for(let z=-4; z<=4; z+=2){
   scene.add(s);
 }
 
+// 轨边检测传感器
+const sensorFrame = new THREE.MeshStandardMaterial({color:0x5a6a7a,metalness:0.7,roughness:0.3});
+const sensorBlue = new THREE.MeshStandardMaterial({color:0x60a5fa,emissive:0x60a5fa,emissiveIntensity:0.1});
+// 左侧传感器（位于第2组轮对附近）
+for(let side of[-1,1]){
+  const post = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.5, 0.06), sensorFrame);
+  post.position.set(side*1.1, 0.25, -1.8);
+  scene.add(post);
+  const sensor = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.08, 0.08), sensorBlue);
+  sensor.position.set(side*1.16, 0.45, -1.8);
+  sensor.name='sensor';
+  scene.add(sensor);
+  const dot = new THREE.Mesh(
+    new THREE.SphereGeometry(0.02, 6, 6),
+    new THREE.MeshBasicMaterial({color:0xef4444})
+  );
+  dot.position.set(side*1.22, 0.45, -1.8);
+  dot.name='sensorDot';
+  scene.add(dot);
+}
+
 document.getElementById('loading').classList.add('hidden');
 
 function animate(){
   requestAnimationFrame(animate);
+
+  // 缺陷红光闪烁 + 传感器闪烁
+  const t = Date.now();
+  scene.children.forEach(obj=>{
+    if(obj.type==='Group'){
+      obj.children.forEach(ch=>{
+        if(ch.name==='defect') ch.material.emissiveIntensity = 0.2+Math.sin(t*0.006)*0.2;
+        if(ch.name==='glow'){
+          ch.material.opacity = 0.2+Math.sin(t*0.008)*0.15;
+          ch.scale.setScalar(1+Math.sin(t*0.005)*0.15);
+        }
+      });
+    }
+    if(obj.name==='sensor'){
+      obj.material.emissiveIntensity = 0.08+Math.sin(t*0.004)*0.06;
+    }
+    if(obj.name==='sensorDot'){
+      obj.material.opacity = 0.3+Math.sin(t*0.005)*0.3;
+    }
+  });
+
   controls.update();
   renderer.render(scene, camera);
 }
