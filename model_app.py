@@ -19,6 +19,17 @@ HTML = """<!DOCTYPE html>
 body{overflow:hidden;background:#0a0e1a;font-family:'PingFang SC','Microsoft YaHei',sans-serif;color:#fff}
 #canvas-container{width:100vw;height:100vh;display:block}
 
+/* Loading/Error overlay */
+#loading-overlay{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#0a0e1a;font-family:'PingFang SC','Microsoft YaHei',sans-serif;transition:opacity 0.8s}
+#loading-overlay.hidden{opacity:0;pointer-events:none}
+#loading-overlay .spinner{width:40px;height:40px;border:3px solid rgba(52,211,153,0.15);border-top-color:#34d399;
+  border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading-overlay .msg{margin-top:16px;color:rgba(255,255,255,0.5);font-size:13px;letter-spacing:2px}
+#loading-overlay .error{display:none;margin-top:20px;padding:16px 24px;border-radius:10px;
+  background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.2);color:#ff6b6b;font-size:13px;max-width:400px;text-align:center}
+
 /* Top title */
 #title{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:100;text-align:center;pointer-events:none}
 #title h1{font-size:24px;font-weight:700;background:linear-gradient(135deg,#34d399,#06b6d4,#60a5fa);-webkit-background-clip:text;
@@ -78,6 +89,11 @@ body{overflow:hidden;background:#0a0e1a;font-family:'PingFang SC','Microsoft YaH
 <body>
 <div id="title"><h1>🚂 万象归踪 · 智能轮对检测</h1><p>3D SIMULATION · 双碳减排驱动铁路低碳运维</p></div>
 <div id="scan-status">⚡ 激光扫描检测中 ...</div>
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div class="msg">3D场景加载中...</div>
+  <div class="error" id="load-error"></div>
+</div>
 <div id="main-view"><div id="canvas-container"></div></div>
 <div id="side-panel">
   <div id="side-title">
@@ -136,6 +152,9 @@ const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0a0e1a);
 scene.fog = new THREE.Fog(0x0a0e1a, 40, 80);
+
+// Hide loading overlay
+document.getElementById('loading-overlay').classList.add('hidden');
 
 const camera = new THREE.PerspectiveCamera(30, container.clientWidth/container.clientHeight, 0.1, 100);
 camera.position.set(16, 10, 20);
@@ -1342,6 +1361,20 @@ renderer.domElement.addEventListener('click', () => {
     status.textContent = '⚡ 激光扫描检测中 ...';
     status.classList.add('active');
     setTimeout(() => status.classList.remove('active'), 1500);
+  }
+});
+
+// Catch module-level errors and show in overlay
+window.addEventListener('error', function(e){
+  const overlay = document.getElementById('loading-overlay');
+  if(overlay && !overlay.classList.contains('hidden')){
+    const errDiv = document.getElementById('load-error');
+    if(errDiv){
+      errDiv.style.display = 'block';
+      errDiv.textContent = '⚠️ 3D场景加载失败: ' + (e.message || '未知错误') + '\\n请检查网络或刷新重试';
+      overlay.querySelector('.spinner').style.display = 'none';
+      overlay.querySelector('.msg').textContent = '加载失败';
+    }
   }
 });
 </script>

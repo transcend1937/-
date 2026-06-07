@@ -28,7 +28,6 @@ exam_app = exam_mod.app
 from railway_data_app import app as railway_app
 from carbon_app import app as carbon_app
 from model_app import app as model_app
-from model_app import app as model_app
 
 # ========== 主应用 ==========
 app = FastAPI(title="铁路校招服务平台")
@@ -149,7 +148,6 @@ async def analytics_page():
 app.mount("/exam", exam_app)
 app.mount("/railway", railway_app)
 app.mount("/carbon", carbon_app)
-app.mount("/model", model_app)
 app.mount("/model", model_app)
 
 if __name__ == "__main__":
