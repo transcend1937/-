@@ -321,12 +321,9 @@ for(let i=0; i<NUM_WHEELSETS; i++){
 
   // 放大场景只有检测的轮对
   if(i===DEFECT_INDEX){
-    const zwL = createWheel(true);
-    zwL.position.set(-GAUGE/2, R+0.10, 0);
-    zoomScene.add(zwL);
-    const zwR = createWheel(true);
-    zwR.position.set(GAUGE/2, R+0.10, 0);
-    zoomScene.add(zwR);
+    const zw = createWheel(true);
+    zw.position.set(0, R+0.10, 0);
+    zoomScene.add(zw);
   }
 }
 
