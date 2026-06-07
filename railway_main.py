@@ -27,6 +27,8 @@ exam_app = exam_mod.app
 # railway_data_app - 根目录文件，直接导入
 from railway_data_app import app as railway_app
 from carbon_app import app as carbon_app
+from model_app import app as model_app
+from model_app import app as model_app
 
 # ========== 主应用 ==========
 app = FastAPI(title="铁路校招服务平台")
@@ -99,6 +101,12 @@ body{
         <p>查看网站访问量、页面排行、实时动态</p>
         <span class="tag" style="background:rgba(251,191,36,0.15);color:#fbbf24">📊 数据统计</span>
     </a>
+    <a href="/model" class="card" target="_blank">
+        <div class="icon" style="background:linear-gradient(135deg,#0d9488,#0891b2)">🎮</div>
+        <h3>🚂 万象归踪 · 3D模拟演示</h3>
+        <p>AI轮对检测+减碳过程3D交互模型</p>
+        <span class="tag" style="background:rgba(13,148,136,0.15);color:#14b8a6">🌱 双碳项目</span>
+    </a>
     <div class="footer">所有数据均来自中国铁路人才招聘网官方公示</div>
 </div>
 <script>
@@ -141,6 +149,8 @@ async def analytics_page():
 app.mount("/exam", exam_app)
 app.mount("/railway", railway_app)
 app.mount("/carbon", carbon_app)
+app.mount("/model", model_app)
+app.mount("/model", model_app)
 
 if __name__ == "__main__":
     import uvicorn
