@@ -446,20 +446,6 @@ scene.add(createInspectionUnit());
 function animate() {
   requestAnimationFrame(animate);
 
-  // 轮对旋转 - 所有轮子绕车轴（X轴）旋转
-  scene.children.forEach(obj => {
-    if (obj.type === 'Group' && obj.name === 'wheelset') {
-      // 旋转整个轮对组里的车轮（绕X轴 = 车轴方向）
-      obj.children.forEach(child => {
-        // 车轮组有 rotation.x = -PI/2，所以子对象的rotation.z会绕车轴转
-        if (child.type === 'Group') {
-          child.rotation.z += 0.02; // 绕车轴旋转
-        }
-        // 车轴本身不旋转（它是静止的柱子）
-      });
-    }
-  });
-
   // 传感器闪烁
   const blink = 0.08 + Math.sin(Date.now() * 0.004) * 0.06;
   scene.children.forEach(obj => {
