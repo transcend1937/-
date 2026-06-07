@@ -75,6 +75,32 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
 #loading.hidden{opacity:0;pointer-events:none}
 .spinner{width:32px;height:32px;border:3px solid rgba(56,189,248,0.15);border-top-color:#38bdf8;border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* 手机端适配 */
+@media(max-width:768px){
+  #viewports{flex-direction:column}
+  #zoom-view{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;height:35%;min-width:unset;border-top:1px solid rgba(56,189,248,0.15);z-index:5}
+  #main-view{flex:none;height:65%}
+  #main-view,#zoom-view{width:100%}
+  #carbon-dashboard{bottom:36%;left:12px;right:12px;max-width:unset;padding:12px 16px}
+  #carbon-dashboard .grid{grid-template-columns:1fr 1fr 1fr 1fr}
+  .carbon-item .val{font-size:16px}
+  .carbon-item .val.highlight{font-size:20px}
+  #detail-overlay{bottom:8px;left:8px;right:8px;padding:8px 12px}
+  #detail-overlay .row{font-size:11px}
+  #title-bar .logo{font-size:18px}
+  #title-bar{padding:0 12px}
+}
+@media(max-width:480px){
+  #zoom-view{height:30%;z-index:5}
+  #main-view{height:70%}
+  #carbon-dashboard{bottom:31%}
+  #title-bar .logo{font-size:15px}
+  #title-bar .eco{font-size:10px;padding:2px 8px}
+  .carbon-item .val{font-size:13px}
+  .carbon-item .val.highlight{font-size:16px}
+  #detail-overlay .row{font-size:10px}
+}
 </style>
 </head>
 <body>
