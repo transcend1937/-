@@ -196,171 +196,120 @@ zl2.position.set(-2, 1, -1);
 zoomScene.add(zl2);
 
 // ===== 材质 =====
-const wheelMat = new THREE.MeshStandardMaterial({color:0x8a9aaa,metalness:0.7,roughness:0.35});
-const rimMat = new THREE.MeshStandardMaterial({color:0x7a8a9a,metalness:0.8,roughness:0.3});
-const hubMat = new THREE.MeshStandardMaterial({color:0x9aaaba,metalness:0.6,roughness:0.4});
-const axleMat = new THREE.MeshStandardMaterial({color:0x6a7a8a,metalness:0.75,roughness:0.3});
-const brakeMat = new THREE.MeshStandardMaterial({color:0x4a5a6a,metalness:0.5,roughness:0.6});
-const defectMat = new THREE.MeshStandardMaterial({color:0xff2222,emissive:0xff0000,emissiveIntensity:0.4});
-const railMat = new THREE.MeshStandardMaterial({color:0x5a6a7a,metalness:0.6,roughness:0.5});
-const tieMat = new THREE.MeshStandardMaterial({color:0x3a2a1a,roughness:0.9});
-const groundMat = new THREE.MeshStandardMaterial({color:0x2a2a3a,roughness:0.95});
+const wheelMat = new THREE.MeshStandardMaterial({color:0x7a8a9a,metalness:0.65,roughness:0.3});
+const axleMat = new THREE.MeshStandardMaterial({color:0x5a6a7a,metalness:0.7,roughness:0.25});
+const brakeMat = new THREE.MeshStandardMaterial({color:0x3a4a5a,metalness:0.8,roughness:0.2});
+const defectMat = new THREE.MeshStandardMaterial({color:0xef4444,emissive:0xef4444,emissiveIntensity:0.3});
+const railMat = new THREE.MeshStandardMaterial({color:0x6a7a8a,metalness:0.6,roughness:0.4});
+const tieMat = new THREE.MeshStandardMaterial({color:0x4a3a2a,roughness:0.9});
+const groundMat = new THREE.MeshStandardMaterial({color:0x2a2a3a,roughness:0.95,metalness:0});
 
 // ===== 地面 =====
 const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 20), groundMat);
 ground.rotation.x = -Math.PI/2;
-ground.position.set(0, -0.01, 0);
+ground.position.y = -0.08;
 ground.receiveShadow = true;
 scene.add(ground);
 
-// ===== 轨道 =====
-for(let z=-7; z<=5; z+=0.3){
-  const tie = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.04, 0.12), tieMat);
+// ===== 轨道 (钢轨+轨枕) =====
+for(let z=-7.5; z<=5; z+=0.35){
+  const tie = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.05, 0.18), tieMat);
   tie.position.set(0, -0.02, z);
   scene.add(tie);
 }
 for(let side of[-1,1]){
-  const rail = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 14), railMat);
-  rail.position.set(side*GAUGE/2, 0.04, -5);
+  const rail = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.12, 16), railMat);
+  rail.position.set(side*GAUGE/2, 0.06, -4.5);
+  rail.castShadow = true;
   scene.add(rail);
 }
 
-// ===== 轮对创建 =====
-function createWheel(isDefect){
-  const g = new THREE.Group();
-
-  // 轮缘 (外侧粗环) - 使用TorusGeometry
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(R, 0.055, 12, 32), rimMat);
-  rim.rotation.z = Math.PI/2;
-  g.add(rim);
-
-  // 辐板 (薄连接盘，从内径到轮缘)
-  const webOuter = 0.90;  // outer radius of web 
-  const webInner = 0.18;  // inner radius (hub edge)
-  const webGeom = new THREE.CylinderGeometry(R*webInner, R*webOuter, 0.012, 24, 1, true);
-  // We need to fill the open cylinder with caps... simpler: use RingGeometry
-  const web = new THREE.Mesh(
-    new THREE.RingGeometry(R*webInner, R*webOuter, 24),
-    wheelMat
-  );
-  web.rotation.z = Math.PI/2;
-  web.position.x = 0.006;  // slight offset to center of rim
-  g.add(web);
-
-  // Second web for the back face
-  const web2 = new THREE.Mesh(
-    new THREE.RingGeometry(R*webInner, R*webOuter, 24),
-    wheelMat
-  );
-  web2.rotation.z = Math.PI/2;
-  web2.position.x = -0.006;
-  g.add(web2);
-
-  // Web edge cylinder (connecting front and back rings)
-  const webEdge = new THREE.Mesh(
-    new THREE.CylinderGeometry(R*webOuter, R*webOuter, 0.012, 24),
-    wheelMat
-  );
-  webEdge.rotation.z = Math.PI/2;
-  webEdge.position.x = 0;
-  g.add(webEdge);
-
-  // 辐板减重孔 (装饰性凹陷环纹)
-  for(let i=0; i<8; i++){
-    const angle = (i/8)*Math.PI*2;
-    const hole = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.03, 0.035, 0.014, 6),
-      new THREE.MeshStandardMaterial({color:0x2a3a4a,roughness:0.9})
-    );
-    hole.rotation.z = Math.PI/2;
-    const hr = R * 0.55;
-    hole.position.set(0, Math.cos(angle)*hr, Math.sin(angle)*hr);
-    g.add(hole);
+// ===== 轮对 (LatheGeometry真实轮型) =====
+function createWheel(isDefect=false){
+  const group = new THREE.Group();
+  // 车轮轮廓 (LatheGeometry)
+  const pts = [];
+  const profile = [
+    {x:R+0.04, y:R*0.12},      // 轮缘外侧
+    {x:R+0.02, y:R*0.16},      // 轮缘顶部
+    {x:R-0.01, y:R*0.10},      // 轮缘喉部
+    {x:R-0.03, y:R*0.04},      // 踏面起始
+    {x:R-0.06, y:R*0.02},      // 踏面1:20锥度
+    {x:R-0.10, y:R*0.005},     // 踏面内侧
+    {x:R-0.14, y:-0.002},      // 内侧R角
+    {x:R-0.18, y:-0.005},      // 辐板外缘
+    {x:R*0.35, y:-0.008},      // 辐板中部
+    {x:R*0.20, y:-0.005},      // 辐板内缘
+    {x:R*0.15, y:0.002},       // 轮毂外缘
+    {x:R*0.08, y:0.008},       // 轮毂内侧
+    {x:R*0.04, y:0.015},       // 轮毂中心凸起
+    {x:0.02, y:0.015},         // 轴孔边缘
+  ];
+  for(let p of profile) pts.push(new THREE.Vector2(p.x, p.y));
+  for(let i=profile.length-2; i>=0; i--){
+    const p = profile[i];
+    pts.push(new THREE.Vector2(p.x, -p.y));
   }
+  const wheel = new THREE.Mesh(new THREE.LatheGeometry(pts, 48), wheelMat);
+  wheel.rotation.z = Math.PI/2;
+  wheel.castShadow = true;
+  group.add(wheel);
 
-  // 轮毂 (中心凸台)
-  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.08, 0.05, 20), hubMat);
-  hub.rotation.z = Math.PI/2;
-  hub.position.x = 0;
-  g.add(hub);
-
-  // 轴孔 (中心小洞)
-  const hole = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.025, 0.025, 0.055, 8),
-    new THREE.MeshStandardMaterial({color:0x1a1a2a,roughness:1})
-  );
-  hole.rotation.z = Math.PI/2;
-  g.add(hole);
-
-  // 缺陷标记 (仅在指定轮对)
+  // 缺陷标记 (仅需一处)
   if(isDefect){
-    const glowRing = new THREE.Mesh(
-      new THREE.RingGeometry(R*0.75, R*0.85, 24),
-      new THREE.MeshBasicMaterial({color:0xff0000,transparent:true,opacity:0.3,side:THREE.DoubleSide})
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(R*0.02, 0.008, 8, 24),
+      new THREE.MeshBasicMaterial({color:0xff0000,transparent:true,opacity:0.5})
     );
-    glowRing.rotation.z = Math.PI/2;
-    glowRing.position.x = 0;
-    glowRing.name='glow';
-    g.add(glowRing);
-
-    const glowRing2 = new THREE.Mesh(
-      new THREE.RingGeometry(R*0.75, R*0.85, 24),
-      new THREE.MeshBasicMaterial({color:0xff0000,transparent:true,opacity:0.3,side:THREE.DoubleSide})
-    );
-    glowRing2.rotation.z = Math.PI/2;
-    glowRing2.position.x = -0.012;
-    glowRing2.name='glowBack';
-    g.add(glowRing2);
-
+    ring.name='glow';
+    ring.rotation.y = Math.PI/2;
+    ring.position.set(0, -R*0.05, R*0.05);
+    group.add(ring);
     // 缺陷标记点
-    for(let j=0; j<5; j++){
-      const a = j*1.26 + 0.3;
+    for(let i=0;i<8;i++){
       const dot = new THREE.Mesh(
-        new THREE.SphereGeometry(0.025, 6, 6),
-        new THREE.MeshBasicMaterial({color:0xff0000})
+        new THREE.SphereGeometry(0.008, 4, 4),
+        defectMat
       );
-      dot.position.set(0, Math.cos(a)*R*0.72, Math.sin(a)*R*0.72);
       dot.name='defect';
-      g.add(dot);
+      const a=i/8*Math.PI*2;
+      dot.position.set(0, R*0.7+Math.sin(a)*0.03, Math.cos(a)*0.03);
+      group.add(dot);
     }
   }
-
-  // 制动盘 (车轮内侧)
-  for(let side of[-1,1]){
-    const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.015, 16), brakeMat);
-    disc.rotation.z = Math.PI/2;
-    disc.position.x = side*0.032;
-    g.add(disc);
-  }
-
-  return g;
+  return group;
 }
 
 function createWheelset(zPos, isDefect=false){
   const g = new THREE.Group();
+  // 左右车轮
   const lw = createWheel(isDefect);
-  lw.position.x = -WHEEL_INN;
+  lw.position.x = -GAUGE/2;
   g.add(lw);
   const rw = createWheel(isDefect);
-  rw.position.x = WHEEL_INN;
+  rw.position.x = GAUGE/2;
   g.add(rw);
-
   // 车轴
-  const axle = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, GAUGE+0.2, 12), axleMat);
+  const axle = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, GAUGE+0.1, 12), axleMat);
   axle.rotation.z = Math.PI/2;
-  axle.name='axle';
+  axle.name = 'axle';
   g.add(axle);
-
   // 轴端凸台
   for(let side of[-1,1]){
-    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.058, 0.064, 0.035, 12), axleMat);
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.07, 0.04, 12), axleMat);
     cap.rotation.z = Math.PI/2;
-    cap.position.x = side*(GAUGE/2+0.08);
+    cap.position.x = side*(GAUGE/2+0.06);
     g.add(cap);
   }
-
+  // 制动盘
+  for(let side of[-1,1]){
+    const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.015, 16), brakeMat);
+    disc.rotation.z = Math.PI/2;
+    disc.position.x = side*(GAUGE/2-0.12);
+    g.add(disc);
+  }
   g.position.z = zPos;
-  g.position.y = R + 0.08;
+  g.position.y = R + 0.10;
   return g;
 }
 
@@ -372,7 +321,6 @@ for(let i=0; i<NUM_WHEELSETS; i++){
 
   // 放大场景只有检测的轮对
   if(i===DEFECT_INDEX){
-    // Clone the wheelset for zoom scene
     const zoomWS = createWheelset(0, true);
     zoomScene.add(zoomWS);
   }
