@@ -219,66 +219,38 @@ function createTrack(){
 }
 scene.add(createTrack());
 
-// ===== 轮对 (组合几何体) =====
+// ===== 轮对 =====
 function createWheel(isDefect=false){
   const group = new THREE.Group();
-  const rimR = R;           // 踏面半径
-  const rimW = 0.07;        // 轮缘宽度
-  
-  // 1. 轮缘 (粗环 - 外侧凸起)
-  const rim = new THREE.Mesh(
-    new THREE.TorusGeometry(rimR, rimW, 16, 32),
-    wheelMat
-  );
-  rim.rotation.z = Math.PI/2;
-  group.add(rim);
-  
-  // 2. 辐板 (薄圆盘连接轮缘和轮毂)
-  const web = new THREE.Mesh(
-    new THREE.CylinderGeometry(R*0.32, R*0.40, 0.015, 32),
-    new THREE.MeshStandardMaterial({color:0x6a7a8a, metalness:0.55, roughness:0.4})
-  );
-  web.rotation.z = Math.PI/2;
-  web.position.x = 0;
-  group.add(web);
-  
-  // 3. 轮毂 (中心凸台)
-  const hub = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.08, 0.10, 0.04, 16),
-    new THREE.MeshStandardMaterial({color:0x7a8a9a, metalness:0.65, roughness:0.3})
-  );
-  hub.rotation.z = Math.PI/2;
-  group.add(hub);
-  
-  // 4. 轴孔 (深色中心孔)
-  const hole = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.025, 0.025, 0.05, 12),
-    new THREE.MeshStandardMaterial({color:0x1a1a2a, metalness:0.9, roughness:0.1})
-  );
-  hole.rotation.z = Math.PI/2;
-  group.add(hole);
-  
-  // 5. 辐板减重孔 (6个扇形孔)
-  const holeMat = new THREE.MeshStandardMaterial({color:0x1a1a2a, metalness:0.5, roughness:0.8});
-  for(let i=0;i<6;i++){
-    const a = i/6*Math.PI*2;
-    const hr = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.04, 0.05, 0.02, 8),
-      holeMat
-    );
-    hr.rotation.z = Math.PI/2;
-    hr.position.set(0, Math.sin(a)*R*0.25, Math.cos(a)*R*0.25);
-    group.add(hr);
+  // 车轮轮廓 (LatheGeometry)
+  const pts = [];
+  const step = 0.01;
+  // 从轮缘外侧到轮毂中心
+  const profile = [
+    {x:R+0.04, y:R*0.12},      // 轮缘外侧
+    {x:R+0.02, y:R*0.16},      // 轮缘顶部
+    {x:R-0.01, y:R*0.10},      // 轮缘喉部
+    {x:R-0.03, y:R*0.04},      // 踏面起始
+    {x:R-0.06, y:R*0.02},      // 踏面1:20锥度
+    {x:R-0.10, y:R*0.005},     // 踏面内侧
+    {x:R-0.14, y:-0.002},      // 内侧R角
+    {x:R-0.18, y:-0.005},      // 辐板外缘
+    {x:R*0.35, y:-0.008},      // 辐板中部
+    {x:R*0.20, y:-0.005},      // 辐板内缘
+    {x:R*0.15, y:0.002},       // 轮毂外缘
+    {x:R*0.08, y:0.008},       // 轮毂内侧
+    {x:R*0.04, y:0.015},       // 轮毂中心凸起
+    {x:0.02, y:0.015},         // 轴孔边缘
+  ];
+  for(let p of profile) pts.push(new THREE.Vector2(p.x, p.y));
+  for(let i=profile.length-2; i>=0; i--){
+    const p = profile[i];
+    pts.push(new THREE.Vector2(p.x, -p.y));
   }
-  
-  // 6. 制动盘 (轮内侧)
-  const brake = new THREE.Mesh(
-    new THREE.CylinderGeometry(R*0.32, R*0.34, 0.012, 24),
-    new THREE.MeshStandardMaterial({color:0x3a4a5a, metalness:0.8, roughness:0.2})
-  );
-  brake.rotation.z = Math.PI/2;
-  brake.position.x = 0.04;
-  group.add(brake);
+  const wheel = new THREE.Mesh(new THREE.LatheGeometry(pts, 48), wheelMat);
+  wheel.rotation.z = Math.PI/2;
+  wheel.castShadow = true;
+  group.add(wheel);
 
   // 缺陷标记 (仅需一处)
   if(isDefect){
