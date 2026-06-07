@@ -1,6 +1,6 @@
 """
 万象归踪 — 3D交互模型展示网站
-基于Three.js构建的轮对检测+碳减排过程3D模拟
+参照参考图：轮对平行排列在地面轨槽中，直线纵深排列
 """
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
@@ -9,77 +9,54 @@ from fastapi.middleware.gzip import GZipMiddleware
 app = FastAPI()
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-HTML = """<!DOCTYPE html>
+HTML = r"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>万象归踪 · 3D模拟演示</title>
+<title>万象归踪 · 轮对排列展示</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;overflow:hidden;background:#0a0e1a;color:#fff}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;overflow:hidden;background:#1a1a2e;color:#fff}
 #canvas-container{width:100vw;height:100vh;display:block}
 
-/* HUD overlay */
+/* HUD */
 #hud{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:10}
-#title-bar{position:absolute;top:24px;left:50%;transform:translateX(-50%);text-align:center;
-  background:rgba(10,14,26,0.75);backdrop-filter:blur(16px);padding:14px 36px;
-  border-radius:16px;border:1px solid rgba(255,255,255,0.08);pointer-events:auto}
-#title-bar h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,#5eead4,#2dd4bf,#06b6d4);
+#title-bar{position:absolute;top:20px;left:50%;transform:translateX(-50%);text-align:center;
+  background:rgba(26,26,46,0.85);backdrop-filter:blur(16px);padding:12px 30px;
+  border-radius:14px;border:1px solid rgba(255,255,255,0.08);pointer-events:auto}
+#title-bar h1{font-size:20px;font-weight:700;background:linear-gradient(135deg,#60a5fa,#818cf8);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-#title-bar .sub{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px}
-#title-bar .sub span{background:rgba(45,212,191,0.15);color:#5eead4;padding:2px 10px;border-radius:6px}
+#title-bar .sub{font-size:12px;color:rgba(255,255,255,0.45);margin-top:3px}
 
-/* Data dashboard */
-#dashboard{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
-  display:flex;gap:16px;pointer-events:auto;flex-wrap:wrap;justify-content:center}
-.d-card{background:rgba(10,14,26,0.8);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.06);
-  border-radius:14px;padding:14px 22px;min-width:130px;text-align:center;
-  transition:all 0.3s ease}
-.d-card:hover{transform:translateY(-4px);border-color:rgba(45,212,191,0.3)}
-.d-card .num{font-size:28px;font-weight:700;line-height:1.2}
-.d-card .label{font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px}
-.c-green .num{color:#5eead4}
-.c-blue .num{color:#38bdf8}
-.c-purple .num{color:#a78bfa}
-.c-amber .num{color:#fbbf24}
-
-/* Control hint */
-#hint{position:absolute;bottom:100px;left:50%;transform:translateX(-50%);
-  font-size:12px;color:rgba(255,255,255,0.25);text-align:center;pointer-events:none;
-  background:rgba(0,0,0,0.4);padding:8px 20px;border-radius:20px;backdrop-filter:blur(4px)}
-
-/* Status badge */
-#status-badge{position:absolute;top:24px;right:24px;pointer-events:auto}
-#status-badge .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;animation:pulse 1.5s infinite}
-#status-badge .dot.green{background:#5eead4;box-shadow:0 0 12px rgba(94,234,212,0.5)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-#status-badge span{font-size:12px;color:rgba(255,255,255,0.5)}
-
-/* Phase indicator */
-#phase{position:absolute;top:90px;left:50%;transform:translateX(-50%);pointer-events:none;
-  font-size:14px;color:rgba(255,255,255,0.6);background:rgba(10,14,26,0.6);backdrop-filter:blur(8px);
-  padding:8px 24px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);opacity:0;transition:opacity 0.5s}
-#phase.show{opacity:1}
+#hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  font-size:12px;color:rgba(255,255,255,0.25);text-align:center;
+  background:rgba(0,0,0,0.4);padding:6px 18px;border-radius:20px}
 
 /* Legend */
-#legend{position:absolute;bottom:110px;right:24px;pointer-events:none;
-  background:rgba(10,14,26,0.7);backdrop-filter:blur(8px);padding:12px 16px;border-radius:10px;
-  border:1px solid rgba(255,255,255,0.06);font-size:12px;line-height:1.8}
-#legend .row{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.5)}
-#legend .color-box{width:14px;height:14px;border-radius:4px}
+#legend{position:absolute;bottom:80px;right:20px;pointer-events:none;
+  background:rgba(26,26,46,0.8);backdrop-filter:blur(8px);padding:10px 14px;border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);font-size:11px;line-height:1.8}
+#legend .row{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.5)}
+#legend .color-box{width:12px;height:12px;border-radius:3px}
+
+/* Data footer */
+#data-bar{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);
+  display:flex;gap:12px;pointer-events:auto}
+.data-item{background:rgba(26,26,46,0.8);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px 16px;text-align:center}
+.data-item .num{font-size:20px;font-weight:700;color:#60a5fa}
+.data-item .label{font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px}
 
 @media(max-width:768px){
-  #title-bar{top:12px;padding:10px 18px;width:90%}
-  #title-bar h1{font-size:17px}
-  #dashboard{bottom:16px;gap:8px}
-  .d-card{padding:10px 14px;min-width:90px}
-  .d-card .num{font-size:20px}
+  #title-bar{top:10px;padding:8px 16px;width:92%}
+  #title-bar h1{font-size:16px}
+  #data-bar{bottom:50px;gap:6px;flex-wrap:wrap;justify-content:center}
+  .data-item{padding:6px 10px}
+  .data-item .num{font-size:16px}
   #legend{display:none}
-  #hint{bottom:80px;font-size:10px;padding:6px 14px}
-  #phase{top:78px;font-size:12px;padding:6px 16px}
 }
 </style>
 </head>
@@ -89,40 +66,36 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;overflow:hidden;back
 
 <div id="hud">
   <div id="title-bar">
-    <h1>🚂 万象归踪 · 3D模拟</h1>
-    <div class="sub"><span>🌱 智能检测驱动低碳运维</span> &nbsp; 轨边双向阵列成像系统</div>
+    <h1>🚂 万象归踪 · 轮对排列</h1>
+    <div class="sub">参照检修车间轮对存放布局 · 轨槽平行排列</div>
   </div>
-
-  <div id="status-badge"><span class="dot green"></span><span>系统运行中</span></div>
-
-  <div id="phase">🔍 开始检测...</div>
-
-  <div id="dashboard">
-    <div class="d-card c-green"><div class="num" id="d-co2">0</div><div class="label">碳减排 (kgCO₂/次)</div></div>
-    <div class="d-card c-blue"><div class="num" id="d-eff">0</div><div class="label">检测效率提升</div></div>
-    <div class="d-card c-purple"><div class="num" id="d-def">0</div><div class="label">缺陷识别率</div></div>
-    <div class="d-card c-amber"><div class="num" id="d-scan">0</div><div class="label">累计扫描 (次)</div></div>
-  </div>
-
-  <div id="hint">🖱 拖拽旋转 · 滚轮缩放</div>
 
   <div id="legend">
-    <div class="row"><span class="color-box" style="background:#5eead4"></span> 检测激光束</div>
-    <div class="row"><span class="color-box" style="background:#f87171"></span> 识别缺陷区域</div>
-    <div class="row"><span class="color-box" style="background:#38bdf8"></span> 轨边阵列相机</div>
+    <div class="row"><span class="color-box" style="background:#60a5fa"></span> 标准轮对</div>
+    <div class="row"><span class="color-box" style="background:#f87171"></span> 缺陷标记轮对</div>
+    <div class="row"><span class="color-box" style="background:#34d399"></span> 检测完成</div>
   </div>
+
+  <div id="data-bar">
+    <div class="data-item"><div class="num" id="d-total">5</div><div class="label">轮对总数</div></div>
+    <div class="data-item"><div class="num" id="d-defect">1</div><div class="label">缺陷轮对</div></div>
+    <div class="data-item"><div class="num" id="d-pass">4</div><div class="label">检测通过</div></div>
+  </div>
+
+  <div id="hint">🖱 拖拽旋转 · 滚轮缩放 · 点击暂停自动旋转</div>
 </div>
 
 <script>
 // ===== Three.js 场景 =====
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0a0e1a);
-scene.fog = new THREE.Fog(0x0a0e1a, 30, 60);
+scene.background = new THREE.Color(0x1a1a2e);
+scene.fog = new THREE.Fog(0x1a1a2e, 18, 40);
 
-const camera = new THREE.PerspectiveCamera(40, window.innerWidth/window.innerHeight, 0.1, 100);
-camera.position.set(14, 8, 16);
-camera.lookAt(0, 0, 0);
+// 侧视角：像参考图一样正面看到轮对侧面
+const camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1, 100);
+camera.position.set(0, 4.5, 12);
+camera.lookAt(0, 0.3, 0);
 
 const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -130,366 +103,428 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
+renderer.toneMappingExposure = 1.0;
 container.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.autoRotate = true;
-controls.autoRotateSpeed = 0.8;
-controls.target.set(0, 0.5, 0);
-controls.maxPolarAngle = Math.PI / 2.2;
-controls.minDistance = 6;
-controls.maxDistance = 30;
+controls.autoRotateSpeed = 0.5;
+controls.target.set(0, 0.3, 0);
+controls.maxPolarAngle = Math.PI / 2.5;
+controls.minDistance = 4;
+controls.maxDistance = 25;
 
 // ===== 灯光 =====
-const ambientLight = new THREE.AmbientLight(0x222244, 0.4);
+const ambientLight = new THREE.AmbientLight(0x222244, 0.5);
 scene.add(ambientLight);
 
-const hemiLight = new THREE.HemisphereLight(0x5eead4, 0x0a0e1a, 0.6);
+const hemiLight = new THREE.HemisphereLight(0x60a5fa, 0x1a1a2e, 0.5);
 scene.add(hemiLight);
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-dirLight.position.set(8, 15, 5);
+const dirLight = new THREE.DirectionalLight(0xffeedd, 1.0);
+dirLight.position.set(6, 12, 4);
 dirLight.castShadow = true;
 dirLight.shadow.mapSize.width = 2048;
 dirLight.shadow.mapSize.height = 2048;
 scene.add(dirLight);
 
-const fillLight = new THREE.DirectionalLight(0x5eead4, 0.3);
-fillLight.position.set(-5, 3, -8);
+const fillLight = new THREE.DirectionalLight(0x60a5fa, 0.3);
+fillLight.position.set(-4, 2, -6);
 scene.add(fillLight);
 
+// 顶光 - 模拟车间灯光
+const topLight = new THREE.DirectionalLight(0xffffff, 0.4);
+topLight.position.set(0, 10, 0);
+scene.add(topLight);
+
 // ===== 地面 =====
-const groundGeo = new THREE.PlaneGeometry(30, 20);
+const groundGeo = new THREE.PlaneGeometry(30, 30);
 const groundMat = new THREE.MeshStandardMaterial({
-  color: 0x141829,
+  color: 0x2a2a3e,
   roughness: 0.9,
-  metalness: 0.1,
+  metalness: 0.05,
 });
 const ground = new THREE.Mesh(groundGeo, groundMat);
 ground.rotation.x = -Math.PI / 2;
-ground.position.y = -0.15;
+ground.position.y = -0.1;
 ground.receiveShadow = true;
 scene.add(ground);
 
-// Grid
-const gridHelper = new THREE.GridHelper(30, 30, 0x1a2a4a, 0x1a2a4a);
-gridHelper.position.y = -0.1;
+// 轨槽 (地面凹槽)
+const grooveMat = new THREE.MeshStandardMaterial({
+  color: 0x1a1a2e,
+  roughness: 1.0,
+});
+for (let z = -6; z <= 6; z += 0.08) {
+  const groove = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.01, 0.04), grooveMat);
+  groove.position.set(0, -0.09, z);
+  scene.add(groove);
+}
+
+// 网格参考线
+const gridHelper = new THREE.GridHelper(20, 20, 0x3a3a5e, 0x2a2a4e);
+gridHelper.position.y = -0.08;
 scene.add(gridHelper);
 
-// ===== 轨道 =====
-function createRail(zOffset) {
+// ===== 轨道 (钢轨) =====
+function createTrack() {
   const group = new THREE.Group();
   const railMat = new THREE.MeshStandardMaterial({
-    color: 0x4a5568, metalness: 0.8, roughness: 0.3
+    color: 0x5a6a7a, metalness: 0.8, roughness: 0.3
   });
-  const railGeo = new THREE.BoxGeometry(0.08, 0.12, 12);
-  const rail1 = new THREE.Mesh(railGeo, railMat);
-  rail1.position.set(-0.72, 0.06, 0);
-  rail1.castShadow = true;
-  group.add(rail1);
-  const rail2 = new THREE.Mesh(railGeo, railMat);
-  rail2.position.set(0.72, 0.06, 0);
-  rail2.castShadow = true;
-  group.add(rail2);
-
-  // Sleepers
+  // 两条钢轨
+  for (let side of [-1, 1]) {
+    // 轨头
+    const headGeo = new THREE.BoxGeometry(0.06, 0.04, 14);
+    const head = new THREE.Mesh(headGeo, railMat);
+    head.position.set(side * 0.72, 0.08, 0);
+    head.castShadow = true;
+    group.add(head);
+    // 轨腰
+    const webGeo = new THREE.BoxGeometry(0.04, 0.08, 14);
+    const web = new THREE.Mesh(webGeo, railMat);
+    web.position.set(side * 0.72, 0.02, 0);
+    group.add(web);
+    // 轨底
+    const baseGeo = new THREE.BoxGeometry(0.1, 0.02, 14);
+    const base = new THREE.Mesh(baseGeo, railMat);
+    base.position.set(side * 0.72, -0.04, 0);
+    group.add(base);
+  }
+  // 轨枕
   const sleeperMat = new THREE.MeshStandardMaterial({
-    color: 0x5a4a3a, roughness: 0.9
+    color: 0x6a5a4a, roughness: 0.9
   });
-  for (let i = -5.5; i <= 5.5; i += 0.8) {
-    const s = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.06, 0.14), sleeperMat);
-    s.position.set(0, 0, i);
+  for (let z = -6.5; z <= 6.5; z += 0.7) {
+    const s = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.06, 0.12), sleeperMat);
+    s.position.set(0, -0.07, z);
     s.castShadow = true;
     group.add(s);
   }
-  group.position.z = zOffset;
   return group;
 }
+scene.add(createTrack());
 
-scene.add(createRail(0));
+// ===== 车轮组 =====
+const WHEEL_RADIUS = 0.48;
+const WHEEL_THICK = 0.12;
+const AXLE_LEN = 1.44;
+const AXLE_RADIUS = 0.08;
 
-// ===== 火车轮对 =====
-function createWheel(x, z, hasDefect) {
+// 所有轮对组
+const wheelsets = [];
+
+function createWheelset(zPos, index) {
   const group = new THREE.Group();
 
-  // 车轮
+  // 轮对材质
   const wheelMat = new THREE.MeshStandardMaterial({
-    color: 0x8a9ba8, metalness: 0.6, roughness: 0.4
+    color: 0x7a8b9a,
+    metalness: 0.7,
+    roughness: 0.3,
   });
-  const wheelGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.12, 32);
-  const wheel = new THREE.Mesh(wheelGeo, wheelMat);
-  wheel.rotation.x = Math.PI / 2;
-  wheel.castShadow = true;
-  group.add(wheel);
-
-  // 轮缘
   const rimMat = new THREE.MeshStandardMaterial({
-    color: 0x6a7b88, metalness: 0.7, roughness: 0.3
+    color: 0x5a6a7a,
+    metalness: 0.8,
+    roughness: 0.25,
   });
-  const rimGeo = new THREE.TorusGeometry(0.53, 0.04, 16, 32);
-  const rim = new THREE.Mesh(rimGeo, rimMat);
-  rim.rotation.x = Math.PI / 2;
-  rim.position.z = 0.07;
-  group.add(rim);
-  const rim2 = rim.clone();
-  rim2.position.z = -0.07;
-  group.add(rim2);
+  const axleMat = new THREE.MeshStandardMaterial({
+    color: 0x3a4a5a,
+    metalness: 0.85,
+    roughness: 0.2,
+  });
+  const hubMat = new THREE.MeshStandardMaterial({
+    color: 0x6a7a8a,
+    metalness: 0.6,
+    roughness: 0.35,
+  });
+
+  // 左侧车轮
+  const wheelL = new THREE.Mesh(new THREE.CylinderGeometry(WHEEL_RADIUS, WHEEL_RADIUS, WHEEL_THICK, 32), wheelMat);
+  wheelL.rotation.x = Math.PI / 2;
+  wheelL.position.x = -AXLE_LEN/2;
+  wheelL.castShadow = true;
+  group.add(wheelL);
+
+  // 左轮轮缘
+  const rimL = new THREE.Mesh(new THREE.TorusGeometry(WHEEL_RADIUS + 0.03, 0.035, 12, 32), rimMat);
+  rimL.rotation.x = Math.PI / 2;
+  rimL.position.set(-AXLE_LEN/2, 0, WHEEL_THICK/2 + 0.01);
+  group.add(rimL);
+  const rimL2 = rimL.clone();
+  rimL2.position.z = -(WHEEL_THICK/2 + 0.01);
+  group.add(rimL2);
+
+  // 右侧车轮
+  const wheelR = new THREE.Mesh(new THREE.CylinderGeometry(WHEEL_RADIUS, WHEEL_RADIUS, WHEEL_THICK, 32), wheelMat);
+  wheelR.rotation.x = Math.PI / 2;
+  wheelR.position.x = AXLE_LEN/2;
+  wheelR.castShadow = true;
+  group.add(wheelR);
+
+  // 右轮轮缘
+  const rimR = new THREE.Mesh(new THREE.TorusGeometry(WHEEL_RADIUS + 0.03, 0.035, 12, 32), rimMat);
+  rimR.rotation.x = Math.PI / 2;
+  rimR.position.set(AXLE_LEN/2, 0, WHEEL_THICK/2 + 0.01);
+  group.add(rimR);
+  const rimR2 = rimR.clone();
+  rimR2.position.z = -(WHEEL_THICK/2 + 0.01);
+  group.add(rimR2);
 
   // 轮轴
-  const axleMat = new THREE.MeshStandardMaterial({
-    color: 0x3a4a58, metalness: 0.8, roughness: 0.2
-  });
-  const axle = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.44, 12), axleMat);
+  const axle = new THREE.Mesh(new THREE.CylinderGeometry(AXLE_RADIUS, AXLE_RADIUS, AXLE_LEN, 12), axleMat);
   axle.rotation.x = Math.PI / 2;
   group.add(axle);
 
-  // 辐条
-  for (let i = 0; i < 6; i++) {
-    const angle = (i / 6) * Math.PI * 2;
-    const spoke = new THREE.Mesh(
-      new THREE.BoxGeometry(0.03, 0.03, 0.38),
-      new THREE.MeshStandardMaterial({color: 0x7a8b98, metalness: 0.5, roughness: 0.5})
+  // 轴端 (两侧凸台)
+  for (let side of [-1, 1]) {
+    const hub = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.12, 0.14, 0.05, 12),
+      hubMat
     );
-    spoke.position.set(Math.cos(angle)*0.25, Math.sin(angle)*0.25, 0);
-    spoke.rotation.z = angle;
-    group.add(spoke);
+    hub.rotation.x = Math.PI / 2;
+    hub.position.x = side * (AXLE_LEN/2 + 0.025);
+    group.add(hub);
   }
 
-  // 踏面缺陷标记
-  if (hasDefect) {
-    const defectMat = new THREE.MeshStandardMaterial({
+  // 辐板 (薄圆盘连接轮缘和轮毂)
+  const webMat = new THREE.MeshStandardMaterial({
+    color: 0x6a7a88,
+    metalness: 0.5,
+    roughness: 0.5,
+  });
+  for (let side of [-1, 1]) {
+    // 辐板是连接车轮背面到车轴的薄盘
+    const web = new THREE.Mesh(
+      new THREE.RingGeometry(0.12, WHEEL_RADIUS - 0.04, 24),
+      webMat
+    );
+    web.rotation.y = Math.PI / 2;
+    web.rotation.x = Math.PI / 2;
+    web.position.set(side * AXLE_LEN/2, 0, 0);
+    group.add(web);
+  }
+
+  // 减速齿轮 (中间某组轮对带齿轮)
+  if (index === 4) {
+    const gearMat = new THREE.MeshStandardMaterial({
+      color: 0x4a5a6a, metalness: 0.85, roughness: 0.2
+    });
+    const gear = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.18, 0.18, 0.08, 16),
+      gearMat
+    );
+    gear.rotation.x = Math.PI / 2;
+    gear.position.set(0, 0, 0.05);
+    group.add(gear);
+    // 齿轮齿
+    for (let i = 0; i < 12; i++) {
+      const angle = (i / 12) * Math.PI * 2;
+      const tooth = new THREE.Mesh(
+        new THREE.BoxGeometry(0.04, 0.03, 0.06),
+        gearMat
+      );
+      tooth.position.set(Math.cos(angle) * 0.2, Math.sin(angle) * 0.2, 0.05);
+      tooth.rotation.z = angle;
+      group.add(tooth);
+    }
+  }
+
+  // 缺陷标记 (第2组轮对)
+  if (index === 2) {
+    const defMat = new THREE.MeshStandardMaterial({
       color: 0xf87171, emissive: 0xf87171, emissiveIntensity: 0.3
     });
-    const defect = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), defectMat);
-    defect.position.set(0, 0.45, 0);
-    defect.name = 'defect';
-    group.add(defect);
+    // 左轮踏面缺陷
+    const def1 = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), defMat);
+    def1.position.set(-AXLE_LEN/2, WHEEL_RADIUS - 0.02, WHEEL_THICK/2 + 0.02);
+    def1.name = 'defect';
+    group.add(def1);
+    // 缺陷标记光圈
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0xf87171, transparent: true, opacity: 0.3, side: THREE.DoubleSide
+    });
+    const ring = new THREE.Mesh(new THREE.RingGeometry(0.06, 0.08, 16), ringMat);
+    ring.position.copy(def1.position);
+    ring.position.y += 0.01;
+    ring.rotation.x = -Math.PI / 2;
+    ring.name = 'defectRing';
+    group.add(ring);
   }
 
-  group.position.set(x, 0.25, z);
+  // 检测完成标记 (第5组轮对)
+  if (index === 5) {
+    const checkMat = new THREE.MeshBasicMaterial({
+      color: 0x34d399, transparent: true, opacity: 0.2
+    });
+    const ring = new THREE.Mesh(new THREE.RingGeometry(WHEEL_RADIUS - 0.02, WHEEL_RADIUS, 32), checkMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.set(0, 0, 0);
+    ring.name = 'checkRing';
+    group.add(ring);
+  }
+
+  group.position.set(0, WHEEL_RADIUS, zPos);
+  group.name = 'wheelset';
   return group;
 }
 
-// 轮对1 (带缺陷) - 在检测区
-const wheelGroup1 = createWheel(0.2, 1.5, true);
-scene.add(wheelGroup1);
-
-// 轮对2 (无缺陷) - 在等待区
-const wheelGroup2 = createWheel(-0.2, -2.2, false);
-scene.add(wheelGroup2);
-
-// 轮对3 (带缺陷) - 等待区
-const wheelGroup3 = createWheel(0.2, -3.8, true);
-scene.add(wheelGroup3);
-
-// ===== 轨边阵列相机 =====
-function createCameraArray(x, zOffset) {
-  const group = new THREE.Group();
-  const poleMat = new THREE.MeshStandardMaterial({color: 0x6a7b88, metalness: 0.7, roughness: 0.3});
-  const camMat = new THREE.MeshStandardMaterial({color: 0x38bdf8, emissive: 0x38bdf8, emissiveIntensity: 0.15});
-
-  for (let i = -2; i <= 2; i += 0.6) {
-    // 支柱
-    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.5, 6), poleMat);
-    pole.position.set(0, 0.25, i);
-    group.add(pole);
-
-    // 相机头
-    const cam = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.1), camMat);
-    cam.position.set(0.02, 0.55, i);
-    cam.name = 'camera';
-    group.add(cam);
-
-    // 镜头光晕 (小发光球)
-    const lensGlow = new THREE.Mesh(
-      new THREE.SphereGeometry(0.025, 6, 6),
-      new THREE.MeshBasicMaterial({color: 0x7dd3fc})
-    );
-    lensGlow.position.set(0.07, 0.55, i);
-    lensGlow.name = 'lens';
-    group.add(lensGlow);
-  }
-
-  group.position.set(x, 0, zOffset);
-  return group;
+// 排列5组轮对 - 沿Z轴直线排列，与参考图一致
+const SPACING = 2.0;
+for (let i = 0; i < 6; i++) {
+  const z = (i - 2.5) * SPACING;
+  const ws = createWheelset(z, i + 1);
+  scene.add(ws);
+  wheelsets.push(ws);
 }
 
-// 左侧阵列
-const leftArray = createCameraArray(-1.2, 0.8);
-scene.add(leftArray);
+// ===== 车间背景设施 =====
 
-// 右侧阵列
-const rightArray = createCameraArray(1.2, 0.8);
-scene.add(rightArray);
-
-// ===== 检测激光束 =====
-function createLaserBeam() {
-  const group = new THREE.Group();
-
-  // 主光束
-  const beamMat = new THREE.MeshBasicMaterial({
-    color: 0x5eead4, transparent: true, opacity: 0.6
-  });
-  const beam = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.015, 2.4), beamMat);
-  beam.name = 'mainBeam';
-  group.add(beam);
-
-  // 发光粒子效果
-  const particles = new THREE.BufferGeometry();
-  const positions = new Float32Array(30 * 3);
-  for (let i = 0; i < 30; i++) {
-    positions[i*3] = (Math.random() - 0.5) * 0.1;
-    positions[i*3+1] = (Math.random() - 0.5) * 0.1;
-    positions[i*3+2] = (Math.random() - 0.5) * 2.4;
-  }
-  particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particleMat = new THREE.PointsMaterial({
-    color: 0x5eead4, size: 0.015, transparent: true, opacity: 0.5
-  });
-  const particleSystem = new THREE.Points(particles, particleMat);
-  particleSystem.name = 'particles';
-  group.add(particleSystem);
-
-  // 端点光晕
-  const glowMat = new THREE.MeshBasicMaterial({
-    color: 0x5eead4, transparent: true, opacity: 0.3
-  });
-  const glow = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), glowMat);
-  glow.position.set(0, 0, 1.2);
-  glow.name = 'endGlow';
-  group.add(glow);
-
-  group.position.set(0, 0.12, 0.5);
-  return group;
-}
-
-const laserBeam = createLaserBeam();
-scene.add(laserBeam);
-
-// ===== 扫描线 (横移扫描) =====
-const scanLineMat = new THREE.MeshBasicMaterial({
-  color: 0x5eead4, transparent: true, opacity: 0.2
+// 两侧货架/支柱
+const pillarMat = new THREE.MeshStandardMaterial({
+  color: 0x3a4a5a, metalness: 0.6, roughness: 0.5
 });
-const scanLine = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.01, 1.0), scanLineMat);
-scanLine.position.set(0, 0.3, 0);
-scene.add(scanLine);
+for (let side of [-1, 1]) {
+  for (let z = -5; z <= 5; z += 2.5) {
+    const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.8, 0.1), pillarMat);
+    pillar.position.set(side * 2.0, 0.4, z);
+    pillar.castShadow = true;
+    scene.add(pillar);
+  }
+}
 
-// ===== 环境光晕粒子 =====
+// 横梁 (连接两侧支柱)
+const beamMat = new THREE.MeshStandardMaterial({
+  color: 0x4a5a6a, metalness: 0.5, roughness: 0.6
+});
+for (let z = -5; z <= 5; z += 2.5) {
+  const beam = new THREE.Mesh(new THREE.BoxGeometry(4.0, 0.06, 0.08), beamMat);
+  beam.position.set(0, 0.85, z);
+  scene.add(beam);
+}
+
+// 顶棚灯光
+const lightMat = new THREE.MeshBasicMaterial({
+  color: 0xffffee, transparent: true, opacity: 0.08
+});
+for (let z = -4; z <= 4; z += 2) {
+  const lightStrip = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.02, 0.15), lightMat);
+  lightStrip.position.set(0, 0.9, z);
+  scene.add(lightStrip);
+}
+
+// ===== 轨边检测设备 (只在第一组轮对附近) =====
+function createInspectionUnit() {
+  const group = new THREE.Group();
+  const frameMat = new THREE.MeshStandardMaterial({
+    color: 0x5a6a7a, metalness: 0.7, roughness: 0.3
+  });
+  const sensorMat = new THREE.MeshStandardMaterial({
+    color: 0x60a5fa, emissive: 0x60a5fa, emissiveIntensity: 0.1
+  });
+
+  // 检测立柱 (轨边)
+  for (let side of [-1, 1]) {
+    const post = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.6, 0.06), frameMat);
+    post.position.set(side * 1.1, 0.3, 0);
+    group.add(post);
+
+    // 传感器头
+    const sensor = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.08, 0.08), sensorMat);
+    sensor.position.set(side * 1.16, 0.52, 0);
+    sensor.name = 'sensor';
+    group.add(sensor);
+
+    // 传感器红光
+    const glow = new THREE.Mesh(
+      new THREE.SphereGeometry(0.02, 6, 6),
+      new THREE.MeshBasicMaterial({color: 0xef4444})
+    );
+    glow.position.set(side * 1.22, 0.52, 0);
+    glow.name = 'sensorGlow';
+    group.add(glow);
+  }
+
+  // 横跨轨道的检测梁
+  const crossBeam = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.04, 2.4), frameMat);
+  crossBeam.position.set(0, 0.62, 0);
+  group.add(crossBeam);
+
+  group.position.set(0, WHEEL_RADIUS, -SPACING * 1.5);
+  return group;
+}
+scene.add(createInspectionUnit());
+
+// ===== 背景粒子 =====
 const starGeo = new THREE.BufferGeometry();
-const starCount = 400;
+const starCount = 200;
 const starPos = new Float32Array(starCount * 3);
 for (let i = 0; i < starCount*3; i++) {
-  starPos[i] = (Math.random() - 0.5) * 60;
+  starPos[i] = (Math.random() - 0.5) * 50;
 }
 starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
 const starMat = new THREE.PointsMaterial({
-  color: 0x5eead4, size: 0.04, transparent: true, opacity: 0.15
+  color: 0x60a5fa, size: 0.03, transparent: true, opacity: 0.1
 });
 const stars = new THREE.Points(starGeo, starMat);
-stars.position.y = 2;
+stars.position.y = 3;
 scene.add(stars);
 
-// ===== 动画状态 =====
-let scanPos = -1.0;
-let scanDir = 1;
-let scanCount = 0;
-let co2Saved = 0;
-let phaseText = '';
-let defectHighlight = false;
+// ===== 动画 =====
+let scanPhase = 0;
+const dTotal = document.getElementById('d-total');
+const dDefect = document.getElementById('d-defect');
+const dPass = document.getElementById('d-pass');
 
-const dCo2 = document.getElementById('d-co2');
-const dEff = document.getElementById('d-eff');
-const dDef = document.getElementById('d-def');
-const dScan = document.getElementById('d-scan');
-const phaseEl = document.getElementById('phase');
-
-// ===== 动画循环 =====
 function animate() {
   requestAnimationFrame(animate);
 
-  // 扫描动画
-  scanPos += scanDir * 0.012;
-  if (scanPos > 1.0) {
-    scanPos = -1.0;
-    scanCount++;
-    co2Saved += 0.25;
-    dScan.textContent = scanCount;
+  const delta = 0.016; // ~60fps
+  scanPhase += delta;
 
-    // 缺陷闪烁提示
-    if (scanCount % 3 === 0) {
-      defectHighlight = true;
-      phaseEl.textContent = '⚠️ 检测到轮对踏面缺陷！碳排预警！';
-      phaseEl.className = 'show';
-      setTimeout(() => {
-        defectHighlight = false;
-        phaseEl.textContent = `🔍 第 ${scanCount} 次轨边扫描完成`;
-      }, 2000);
-    } else {
-      phaseEl.textContent = `🔍 第 ${scanCount} 次轨边扫描完成 | 轮对状态正常`;
-      phaseEl.className = 'show';
-    }
-  }
-
-  // 激光束动画
-  laserBeam.children.forEach(child => {
-    if (child.name === 'mainBeam') {
-      child.scale.z = 0.8 + Math.sin(Date.now() * 0.005) * 0.2;
-    }
-    if (child.name === 'endGlow') {
-      child.scale.setScalar(1 + Math.sin(Date.now() * 0.01) * 0.3);
-      child.material.opacity = 0.2 + Math.sin(Date.now() * 0.008) * 0.15;
-    }
-    if (child.name === 'particles') {
-      child.rotation.z += 0.02;
-    }
-  });
-
-  // 扫描线横移
-  scanLine.position.x = scanPos * 0.5;
-  laserBeam.position.z = 0.5 + scanPos * 0.8;
-
-  // 缺陷高亮闪烁
-  const defects = [];
-  wheelGroup1.children.forEach(c => { if (c.name === 'defect') defects.push(c); });
-  wheelGroup3.children.forEach(c => { if (c.name === 'defect') defects.push(c); });
-  defects.forEach(d => {
-    if (defectHighlight) {
-      d.material.emissiveIntensity = 1.0;
-      d.scale.setScalar(1 + Math.sin(Date.now() * 0.02) * 0.3);
-    } else {
-      d.material.emissiveIntensity = 0.2;
-      d.scale.setScalar(1);
-    }
-  });
-
-  // 轮对缓慢旋转
-  wheelGroup1.children.forEach(c => {
-    if (c.type === 'Mesh' && !c.name) { c.rotation.y += 0.01; }
-  });
-  wheelGroup2.children.forEach(c => {
-    if (c.type === 'Mesh' && !c.name) { c.rotation.y += 0.01; }
-  });
-
-  // 相机阵列闪烁
-  const camBlink = 0.15 + Math.sin(Date.now() * 0.003) * 0.08;
-  scene.children.forEach(c => {
-    if (c.type === 'Group') {
-      c.children.forEach(ch => {
-        if (ch.name === 'camera' || ch.name === 'lens') {
-          ch.material && (ch.material.emissiveIntensity = camBlink);
+  // 轮对旋转 - 所有轮子缓慢旋转
+  scene.children.forEach(obj => {
+    if (obj.type === 'Group' && obj.name === 'wheelset') {
+      // 只旋转轮子和轴（不是整个组里的标记物）
+      obj.children.forEach(child => {
+        // 轮子是CylinderGeometry Mesh，标记物有name属性
+        if (child.type === 'Mesh' && !child.name && child.geometry) {
+          child.rotation.y += 0.015;
+        }
+        // 轮缘(TorusGeometry)也要转
+        if (child.type === 'Mesh' && child.geometry && child.geometry.type === 'TorusGeometry') {
+          child.rotation.y += 0.015;
         }
       });
     }
   });
 
-  // 更新HUD数据
-  const effVal = Math.min(5 + (co2Saved / 0.25) * 0.15, 15);
-  dEff.textContent = effVal.toFixed(1) + 'x';
-  dCo2.textContent = co2Saved.toFixed(1);
-  dDef.textContent = Math.min(90 + (co2Saved / 0.25) * 0.3, 97.5).toFixed(1) + '%';
+  // 传感器闪烁
+  const blink = 0.08 + Math.sin(Date.now() * 0.004) * 0.06;
+  scene.children.forEach(obj => {
+    if (obj.type === 'Group') {
+      obj.children.forEach(ch => {
+        if (ch.name === 'sensor') {
+          ch.material.emissiveIntensity = blink;
+        }
+        if (ch.name === 'sensorGlow') {
+          ch.material.opacity = 0.3 + Math.sin(Date.now() * 0.005) * 0.3;
+        }
+        if (ch.name === 'checkRing') {
+          ch.material.opacity = 0.15 + Math.sin(Date.now() * 0.003) * 0.1;
+        }
+        if (ch.name === 'defectRing') {
+          ch.material.opacity = 0.2 + Math.sin(Date.now() * 0.008) * 0.15;
+          ch.scale.setScalar(1 + Math.sin(Date.now() * 0.005) * 0.15);
+        }
+        if (ch.name === 'defect') {
+          ch.material.emissiveIntensity = 0.2 + Math.sin(Date.now() * 0.006) * 0.2;
+        }
+      });
+    }
+  });
 
   controls.update();
   renderer.render(scene, camera);
@@ -504,23 +539,15 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// 点击/触摸时停止自动旋转
+// 点击暂停自动旋转
 renderer.domElement.addEventListener('click', () => {
-  controls.autoRotate = false;
-  setTimeout(() => { controls.autoRotate = true; }, 8000);
+  controls.autoRotate = !controls.autoRotate;
 });
 renderer.domElement.addEventListener('touchstart', () => {
-  controls.autoRotate = false;
-  setTimeout(() => { controls.autoRotate = true; }, 8000);
+  controls.autoRotate = !controls.autoRotate;
 });
 
-// 初始化提示
-setTimeout(() => {
-  phaseEl.textContent = '🔍 轨边阵列相机启动，开始轮对踏面扫描...';
-  phaseEl.className = 'show';
-}, 500);
-
-console.log('🚂 万象归踪 3D模拟已启动');
+console.log('🚂 万象归踪 · 轮对排列展示已启动');
 </script>
 </body>
 </html>"""
@@ -531,4 +558,4 @@ async def index():
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "project": "万象归踪·3D模拟"}
+    return {"status": "ok", "project": "万象归踪·轮对排列"}
