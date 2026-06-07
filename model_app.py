@@ -327,43 +327,47 @@ for(let i=0; i<NUM_WHEELSETS; i++){
   }
 }
 
-// ===== 轨边检测传感器 =====
+// ===== 轨边检测传感器（每个轮对都摆放） =====
 const sensorMat = new THREE.MeshStandardMaterial({color:0x5a6a7a,metalness:0.7,roughness:0.3});
 const sensorHeadMat = new THREE.MeshStandardMaterial({color:0x60a5fa,emissive:0x3b82f6,emissiveIntensity:0.15});
-for(let side of[-1,1]){
-  const post = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.7, 0.05), sensorMat);
-  post.position.set(side*(GAUGE/2+0.4), 0.35, sensorZ);
-  post.castShadow = true;
-  scene.add(post);
-  const head = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.07, 0.07), sensorHeadMat);
-  head.position.set(side*(GAUGE/2+0.48), R+0.08, sensorZ);
-  head.name='sensor';
-  scene.add(head);
-  head.castShadow = true;
-  const dot = new THREE.Mesh(
-    new THREE.SphereGeometry(0.018, 6, 6),
-    new THREE.MeshBasicMaterial({color:0xef4444,transparent:true,opacity:0.4})
-  );
-  dot.position.set(side*(GAUGE/2+0.54), R+0.08, sensorZ);
-  dot.name='sensorDot';
-  scene.add(dot);
+const scanMat = new THREE.MeshBasicMaterial({color:0x38bdf8,transparent:true,opacity:0.5});
+for(let i=0; i<NUM_WHEELSETS; i++){
+  const zPos = i*SPACING - (NUM_WHEELSETS-1)*SPACING/2 - 3;
+  for(let side of[-1,1]){
+    const post = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.7, 0.05), sensorMat);
+    post.position.set(side*(GAUGE/2+0.4), 0.35, zPos);
+    post.castShadow = true;
+    scene.add(post);
+    const head = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.07, 0.07), sensorHeadMat);
+    head.position.set(side*(GAUGE/2+0.48), R+0.08, zPos);
+    head.name='sensor';
+    scene.add(head);
+    head.castShadow = true;
+    const dot = new THREE.Mesh(
+      new THREE.SphereGeometry(0.018, 6, 6),
+      new THREE.MeshBasicMaterial({color:0xef4444,transparent:true,opacity:0.4})
+    );
+    dot.position.set(side*(GAUGE/2+0.54), R+0.08, zPos);
+    dot.name='sensorDot';
+    scene.add(dot);
+  }
+  // 每个轮对位置加扫描线
+  const scanLine = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.003, 0.003), scanMat);
+  scanLine.position.set(0, 0.35, zPos);
+  scanLine.name='scanLine';
+  scene.add(scanLine);
+}
 
-  // 放大场景也加传感器
-  const zpost = post.clone();
-  zpost.position.x = side*(GAUGE/2+0.5);
+// 放大场景也加传感器（只加在缺陷轮对位置）
+for(let side of[-1,1]){
+  const zpost = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.7, 0.05), sensorMat);
+  zpost.position.set(side*(GAUGE/2+0.5), 0.35, 0);
   zoomScene.add(zpost);
-  const zhead = head.clone();
-  zhead.position.x = side*(GAUGE/2+0.58);
+  const zhead = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.07, 0.07), sensorHeadMat);
+  zhead.position.set(side*(GAUGE/2+0.58), R+0.08, 0);
   zhead.name='zsensor';
   zoomScene.add(zhead);
 }
-
-// ===== 激光扫描线 =====
-const scanMat = new THREE.MeshBasicMaterial({color:0x38bdf8,transparent:true,opacity:0.5});
-const scanLine = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.003, 0.003), scanMat);
-scanLine.position.set(0, 0.35, sensorZ);
-scanLine.name='scanLine';
-scene.add(scanLine);
 
 // ===== 车间背景 =====
 const pillarMat = new THREE.MeshStandardMaterial({color:0x3a4a5a,metalness:0.4,roughness:0.6});
@@ -411,9 +415,13 @@ function animate(){
     }
   });
 
-  // 扫描线
-  scanLine.position.x = Math.sin(t*0.0012) * 1.2;
-  scanLine.material.opacity = 0.3 + Math.sin(t*0.002)*0.3;
+  // 扫描线（所有轮对）
+  scene.children.forEach(obj=>{
+    if(obj.name==='scanLine'){
+      obj.position.x = Math.sin(t*0.0012 + obj.position.z*0.1) * 1.2;
+      obj.material.opacity = 0.3 + Math.sin(t*0.002 + obj.position.z*0.2)*0.3;
+    }
+  });
 
   // 更新碳减排数据动画
   const co2Base = 12.5;
