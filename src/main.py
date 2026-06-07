@@ -564,6 +564,27 @@ try:
 except Exception as e:
     logger.warning(f"⚠️ 铁路局招录查询挂载失败: {e}")
 
+# 挂载万象归踪 3D 模型展示
+try:
+    import sys
+    import os
+    _root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if _root_dir not in sys.path:
+        sys.path.insert(0, _root_dir)
+    from model_app import app as model_app
+    app.mount("/model", model_app)
+    logger.info("✅ 万象归踪3D模型已挂载到 /model")
+except Exception as e:
+    logger.warning(f"⚠️ 万象归踪3D模型挂载失败: {e}")
+
+# 挂载双碳减排展示网站
+try:
+    from carbon_app import app as carbon_app
+    app.mount("/carbon", carbon_app)
+    logger.info("✅ 双碳减排网站已挂载到 /carbon")
+except Exception as e:
+    logger.warning(f"⚠️ 双碳减排网站挂载失败: {e}")
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Start FastAPI server")
     parser.add_argument("-m", type=str, default="http", help="Run mode, support http,flow,node")
