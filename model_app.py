@@ -60,10 +60,18 @@ body{background:#0f0f1a;overflow:hidden;height:100vh;font-family:'PingFang SC','
 }
 #loading .spinner{width:32px;height:32px;border:3px solid rgba(56,189,248,0.1);border-top:3px solid #38bdf8;border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+.hidden{display:none!important}
+#load-error{position:fixed;inset:0;z-index:101;display:none;flex-direction:column;align-items:center;justify-content:center;background:#0f0f1a;color:#f87171;font-size:14px;gap:16px;padding:20px;text-align:center}
+#load-error .retry-btn{background:#38bdf8;color:#0f0f1a;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600}
+#load-error .retry-btn:hover{background:#7dd3fc}
 </style>
+<script>
+window.addEventListener('error',function(e){if(e.target&&e.target.tagName==='SCRIPT'){document.getElementById('loading').style.display='none';var err=document.getElementById('load-error');err.style.display='flex';}},true);
+</script>
 </head>
 <body>
 <div id="loading"><div class="spinner"></div><span>万象归踪 · 场景加载中...</span></div>
+<div id="load-error"><p>⚠️ 3D场景加载失败</p><p style="font-size:12px;color:#94a3b8">可能是网络问题，请检查能否访问外网</p><button class="retry-btn" onclick="location.reload()">重新加载</button></div>
 <div id="title-bar">
   <div class="logo">⚡ 万象归踪</div>
   <div class="sub">轮对踏面缺陷智能检测 · 碳减排运维</div>
