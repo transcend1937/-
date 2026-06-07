@@ -308,6 +308,7 @@ function createWheelset(zPos, isDefect=false){
     g.add(disc);
   }
   g.position.z = zPos;
+  g.position.y = R + 0.10;
   return g;
 }
 
@@ -325,13 +326,13 @@ const sensorHead = new THREE.MeshStandardMaterial({color:0x60a5fa,emissive:0x3b8
 // 两侧传感器 (对齐第2组轮对位置)
 const sensorZ = -3 + 1*SPACING;  // 第2组轮对的Z位置
 for(let side of[-1,1]){
-  const post = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.55, 0.05), sensorMat);
-  post.position.set(side*(GAUGE/2+0.35), 0.28, sensorZ);
+  const post = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.75, 0.05), sensorMat);
+  post.position.set(side*(GAUGE/2+0.35), 0.35, sensorZ);
   post.castShadow = true;
   scene.add(post);
   // 传感器头
   const head = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.08, 0.08), sensorHead);
-  head.position.set(side*(GAUGE/2+0.42), 0.48, sensorZ);
+  head.position.set(side*(GAUGE/2+0.42), R+0.10, sensorZ);
   head.name='sensor';
   scene.add(head);
   // 传感器指示灯
@@ -339,7 +340,7 @@ for(let side of[-1,1]){
     new THREE.SphereGeometry(0.015, 6, 6),
     new THREE.MeshBasicMaterial({color:0xef4444,transparent:true,opacity:0.4})
   );
-  dot.position.set(side*(GAUGE/2+0.48), 0.48, sensorZ);
+  dot.position.set(side*(GAUGE/2+0.48), R+0.10, sensorZ);
   dot.name='sensorDot';
   scene.add(dot);
 }
