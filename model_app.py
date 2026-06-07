@@ -125,6 +125,7 @@ const SPACING = 2.0;
 const NUM_WHEELSETS = 6;
 const WHEEL_INN = 0.65;  // wheel inner face from center (in local coords before rotation)
 const DEFECT_INDEX = 1;   // 第2组有缺陷
+const sensorZ = -3 + DEFECT_INDEX*SPACING;  // 缺陷轮对Z位置
 
 // ===== 主场景 =====
 const mainCanvas = document.getElementById('main-canvas');
@@ -364,7 +365,6 @@ function createWheelset(zPos, isDefect=false){
 }
 
 // ===== 放置轮对 =====
-const sensorZ = -3 + DEFECT_INDEX*SPACING;
 for(let i=0; i<NUM_WHEELSETS; i++){
   const z = i*SPACING - (NUM_WHEELSETS-1)*SPACING/2 - 3;
   const ws = createWheelset(z, i===DEFECT_INDEX);
