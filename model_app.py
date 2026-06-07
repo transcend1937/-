@@ -412,19 +412,6 @@ function createWheelset(xPos=0, color=0x666666){
   gearbox.position.set(0, -R*0.1, -GAUGE/4);
   group.add(gearbox);
   
-  // Primary suspension spring
-  const springMat = new THREE.MeshStandardMaterial({
-    color: 0x444444, metalness: 0.3, roughness: 0.5
-  });
-  for(let z of [-GAUGE/2, GAUGE/2]){
-    const spring = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.04, 0.05, 0.12, 8),
-      springMat
-    );
-    spring.position.set(0, R + 0.06, z);
-    group.add(spring);
-  }
-  
   group.position.x = xPos;
   group.position.y = 0.02; // Lift slightly above rail
   return group;
@@ -490,6 +477,21 @@ function createBogie(xPos=0, color=0x666666){
       );
       bearing.position.set(side * (GAUGE/2 - 0.1), R + 0.10, z);
       group.add(bearing);
+    }
+  }
+  
+  // Primary suspension springs (stationary - above axle bearings)
+  const springMat = new THREE.MeshStandardMaterial({
+    color: 0x444444, metalness: 0.3, roughness: 0.5
+  });
+  for(let z of [-WHEELBASE/2, WHEELBASE/2]){
+    for(let side of [-1, 1]){
+      const spring = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.04, 0.05, 0.14, 8),
+        springMat
+      );
+      spring.position.set(side * (GAUGE/2 - 0.1), R + 0.22, z);
+      group.add(spring);
     }
   }
   
