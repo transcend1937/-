@@ -117,8 +117,8 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
     <div id="carbon-dashboard">
       <div class="title">🌿 碳减排效益 · 单组轮对检测</div>
       <div class="grid">
-        <div class="carbon-item"><div class="val highlight" id="co2-save">12.5</div><div class="unit">kg CO₂</div><div class="lbl">每轮对检测减碳</div></div>
-        <div class="carbon-item"><div class="val" id="annual-save">5,400</div><div class="unit">吨/年</div><div class="lbl">全路网年减排</div></div>
+        <div class="carbon-item"><div class="val highlight" id="co2-save">4.0</div><div class="unit">kg CO₂</div><div class="lbl">每轮对检测减碳</div></div>
+        <div class="carbon-item"><div class="val" id="annual-save">1,708</div><div class="unit">吨/年</div><div class="lbl">全路网年减排</div></div>
         <div class="carbon-item"><div class="val" id="energy-save">92%</div><div class="unit">能耗降低</div><div class="lbl">对比人工检测</div></div>
         <div class="carbon-item"><div class="val" id="efficiency">3.2s</div><div class="unit">/组轮对</div><div class="lbl">AI检测耗时</div></div>
         <div class="carbon-item"><div class="val" id="power-save">4.8</div><div class="unit">kWh</div><div class="lbl">每轮对节省电能</div></div>
@@ -133,7 +133,7 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
       <div class="row"><span class="label">检测状态</span><span class="value ok" id="dt-status">✅ 检测中</span></div>
       <div class="row"><span class="label">踏面磨损</span><span class="value warn" id="dt-wear">0.12mm</span></div>
       <div class="row"><span class="label">轮缘厚度</span><span class="value ok" id="dt-flange">32.5mm</span></div>
-      <div class="row"><span class="label">碳减排量</span><span class="value ok" id="dt-carbon">12.5 kg CO₂</span></div>
+      <div class="row"><span class="label">碳减排量</span><span class="value ok" id="dt-carbon">4.0 kg CO₂</span></div>
       <div class="row"><span class="label">节省电能</span><span class="value ok" id="dt-power">4.8 kWh</span></div>
       <div class="row"><span class="label">检测时长</span><span class="value" id="dt-time">0.0s</span></div>
     </div>
@@ -453,7 +453,7 @@ function animate(){
   });
 
   // 更新碳减排数据动画
-  const co2Base = 12.5;
+  const co2Base = 4.0;
   const variation = Math.sin(t*0.0005)*0.3;
   document.getElementById('co2-save').textContent = (co2Base + variation).toFixed(1);
   document.getElementById('dt-carbon').textContent = (co2Base + variation).toFixed(1) + ' kg CO₂';
