@@ -78,27 +78,41 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
 
 /* 手机端适配 */
 @media(max-width:768px){
+  /* 碳减排看板 → 改成顶部紧凑条 */
+  #carbon-dashboard{
+    position:fixed;top:52px;left:0;right:0;z-index:20;
+    max-width:unset;padding:6px 8px;border-radius:0;
+    border-left:none;border-right:none;border-top:none;
+  }
+  #carbon-dashboard .title{display:none}
+  #carbon-dashboard .grid{grid-template-columns:repeat(6,1fr);gap:4px}
+  .carbon-item .unit{display:none}
+  .carbon-item .lbl{font-size:8px;margin-top:0;white-space:nowrap}
+  .carbon-item .val{font-size:14px}
+  .carbon-item .val.highlight{font-size:16px}
+  #carbon-dashboard .grid .carbon-item:nth-child(4) .lbl,
+  #carbon-dashboard .grid .carbon-item:nth-child(5) .lbl,
+  #carbon-dashboard .grid .carbon-item:nth-child(6) .lbl{display:none}
+
   #viewports{flex-direction:column}
   #zoom-view{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;height:35%;min-width:unset;border-top:1px solid rgba(56,189,248,0.15);z-index:5}
   #main-view{flex:none;height:65%}
   #main-view,#zoom-view{width:100%}
-  #carbon-dashboard{top:60px;left:12px;right:12px;max-width:unset;padding:12px 16px}
-  #carbon-dashboard .grid{grid-template-columns:1fr 1fr 1fr 1fr}
-  .carbon-item .val{font-size:18px}
-  .carbon-item .val.highlight{font-size:22px}
   #detail-overlay{bottom:8px;left:8px;right:8px;padding:8px 12px}
   #detail-overlay .row{font-size:11px}
-  #title-bar .logo{font-size:18px}
-  #title-bar{padding:0 12px}
+  #title-bar .logo{font-size:16px}
+  #title-bar{padding:0 10px;height:44px}
 }
 @media(max-width:480px){
-  #zoom-view{height:30%;z-index:5}
+  #carbon-dashboard .grid{grid-template-columns:repeat(6,1fr);gap:3px}
+  #carbon-dashboard{padding:4px 6px}
+  .carbon-item .val{font-size:12px}
+  .carbon-item .val.highlight{font-size:14px}
+  .carbon-item .lbl{font-size:7px}
+  #zoom-view{height:30%}
   #main-view{height:70%}
-  #carbon-dashboard{bottom:31%}
-  #title-bar .logo{font-size:15px}
-  #title-bar .eco{font-size:10px;padding:2px 8px}
-  .carbon-item .val{font-size:13px}
-  .carbon-item .val.highlight{font-size:16px}
+  #title-bar .logo{font-size:14px}
+  #title-bar .eco{font-size:9px;padding:2px 8px}
   #detail-overlay .row{font-size:10px}
 }
 </style>
