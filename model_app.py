@@ -43,7 +43,7 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
   padding:16px 22px;max-width:320px;
 }
 #carbon-dashboard .title{font-size:13px;font-weight:600;color:#4ade80;margin-bottom:10px;letter-spacing:2px;display:flex;align-items:center;gap:8px}
-#carbon-dashboard .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#carbon-dashboard .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .carbon-item{text-align:center}
 .carbon-item .val{font-size:20px;font-weight:800;color:#22c55e;line-height:1.2}
 .carbon-item .val.highlight{color:#fbbf24;font-size:26px}
@@ -121,6 +121,8 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
         <div class="carbon-item"><div class="val" id="annual-save">5,400</div><div class="unit">吨/年</div><div class="lbl">全路网年减排</div></div>
         <div class="carbon-item"><div class="val" id="energy-save">92%</div><div class="unit">能耗降低</div><div class="lbl">对比人工检测</div></div>
         <div class="carbon-item"><div class="val" id="efficiency">3.2s</div><div class="unit">/组轮对</div><div class="lbl">AI检测耗时</div></div>
+        <div class="carbon-item"><div class="val" id="power-save">4.8</div><div class="unit">kWh</div><div class="lbl">每轮对节省电能</div></div>
+        <div class="carbon-item"><div class="val" id="annual-power">2,160</div><div class="unit">MWh/年</div><div class="lbl">年节约用电量</div></div>
       </div>
     </div>
   </div>
@@ -132,6 +134,7 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
       <div class="row"><span class="label">踏面磨损</span><span class="value warn" id="dt-wear">0.12mm</span></div>
       <div class="row"><span class="label">轮缘厚度</span><span class="value ok" id="dt-flange">32.5mm</span></div>
       <div class="row"><span class="label">碳减排量</span><span class="value ok" id="dt-carbon">12.5 kg CO₂</span></div>
+      <div class="row"><span class="label">节省电能</span><span class="value ok" id="dt-power">4.8 kWh</span></div>
       <div class="row"><span class="label">检测时长</span><span class="value" id="dt-time">0.0s</span></div>
     </div>
   </div>
