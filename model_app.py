@@ -35,20 +35,20 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
 #zoom-view{width:36%;min-width:320px;position:relative;background:#080812}
 #main-canvas,#zoom-canvas{width:100%;height:100%;display:block}
 
-/* 碳减排数据看板 */
+/* 碳减排数据看板 - 左上角 */
 #carbon-dashboard{
-  position:fixed;bottom:24px;left:24px;z-index:15;
+  position:fixed;top:70px;left:24px;z-index:15;
   background:rgba(10,15,30,0.9);backdrop-filter:blur(12px);
   border:1px solid rgba(34,197,94,0.25);border-radius:14px;
-  padding:16px 22px;max-width:320px;
+  padding:20px 28px;max-width:420px;
 }
-#carbon-dashboard .title{font-size:13px;font-weight:600;color:#4ade80;margin-bottom:10px;letter-spacing:2px;display:flex;align-items:center;gap:8px}
-#carbon-dashboard .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+#carbon-dashboard .title{font-size:16px;font-weight:700;color:#4ade80;margin-bottom:12px;letter-spacing:2px;display:flex;align-items:center;gap:8px}
+#carbon-dashboard .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .carbon-item{text-align:center}
-.carbon-item .val{font-size:20px;font-weight:800;color:#22c55e;line-height:1.2}
-.carbon-item .val.highlight{color:#fbbf24;font-size:26px}
-.carbon-item .lbl{font-size:10px;color:#94a3b8;margin-top:2px}
-.carbon-item .unit{font-size:12px;color:#6b7280}
+.carbon-item .val{font-size:26px;font-weight:800;color:#22c55e;line-height:1.2}
+.carbon-item .val.highlight{color:#fbbf24;font-size:32px}
+.carbon-item .lbl{font-size:12px;color:#94a3b8;margin-top:3px}
+.carbon-item .unit{font-size:13px;color:#6b7280}
 
 /* 轮对检测详情浮窗 */
 #detail-overlay{
@@ -82,10 +82,10 @@ body{background:#0a0a14;overflow:hidden;height:100vh;font-family:'PingFang SC','
   #zoom-view{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;height:35%;min-width:unset;border-top:1px solid rgba(56,189,248,0.15);z-index:5}
   #main-view{flex:none;height:65%}
   #main-view,#zoom-view{width:100%}
-  #carbon-dashboard{bottom:36%;left:12px;right:12px;max-width:unset;padding:12px 16px}
+  #carbon-dashboard{top:60px;left:12px;right:12px;max-width:unset;padding:12px 16px}
   #carbon-dashboard .grid{grid-template-columns:1fr 1fr 1fr 1fr}
-  .carbon-item .val{font-size:16px}
-  .carbon-item .val.highlight{font-size:20px}
+  .carbon-item .val{font-size:18px}
+  .carbon-item .val.highlight{font-size:22px}
   #detail-overlay{bottom:8px;left:8px;right:8px;padding:8px 12px}
   #detail-overlay .row{font-size:11px}
   #title-bar .logo{font-size:18px}
