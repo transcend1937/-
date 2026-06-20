@@ -80,7 +80,7 @@ body{
     <a class="card" href="/exam/">
         <div class="icon">📝</div>
         <h2>广铁机考模拟题库</h2>
-        <p>铁路岗位招聘笔试练习，185道真题在线刷</p>
+        <p>铁路岗位招聘笔试练习，193道真题在线刷</p>
         <span class="tag exam">📖 题库练习</span>
     </a>
     <a class="card" href="/railway/">
@@ -152,5 +152,5 @@ app.mount("/model", model_app)
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", 8080))
     uvicorn.run(app, host="0.0.0.0", port=port)
