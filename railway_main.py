@@ -1,39 +1,30 @@
-"""Railway 独立入口 - 使用importlib直接加载模块文件"""
+"""铁路服务平台 - 题库 + 招录查询"""
 import os
 import sys
 import json
-from fastapi import FastAPI, Request, Response
+import importlib.util
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.middleware.gzip import GZipMiddleware
 from src.utils.analytics import record_from_request, get_stats
 
 WORKSPACE = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.join(WORKSPACE, "src")
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
 # ========== 加载子应用 ==========
-# exam app - 使用 importlib 从 src/exam/app.py 加载
-import importlib.util
+# 题库
+spec = importlib.util.spec_from_file_location("exam_app", os.path.join(WORKSPACE, "src", "exam", "app.py"))
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+exam_app = mod.app
 
-def load_module(name, filepath):
-    spec = importlib.util.spec_from_file_location(name, filepath)
-    mod = importlib.util.module_from_spec(spec)
-    src_dir = os.path.join(WORKSPACE, "src")
-    if src_dir not in sys.path:
-        sys.path.insert(0, src_dir)
-    spec.loader.exec_module(mod)
-    return mod
-
-exam_mod = load_module("exam_app", os.path.join(WORKSPACE, "src", "exam", "app.py"))
-exam_app = exam_mod.app
-
-# railway_data_app - 根目录文件，直接导入
+# 招录数据查询
 from railway_data_app import app as railway_app
-from carbon_app import app as carbon_app
-from model_app import app as model_app
 
 # ========== 主应用 ==========
-app = FastAPI(title="铁路校招服务平台")
-
-# gzip 压缩 - 减少传输体积 70%
-from fastapi.middleware.gzip import GZipMiddleware
+app = FastAPI(title="广铁机考题库")
 app.add_middleware(GZipMiddleware, minimum_size=500)
 
 # 首页
@@ -42,7 +33,7 @@ HOME_HTML = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>铁路校招服务平台</title>
+<title>广铁机考服务平台</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
@@ -74,7 +65,7 @@ body{
 <body>
 <div class="container">
     <div class="header">
-        <h1>🚂 铁路校招服务平台</h1>
+        <h1>🚂 广铁机考服务平台</h1>
         <p>题库练习 · 招录数据查询</p>
     </div>
     <a class="card" href="/exam/">
@@ -89,28 +80,8 @@ body{
         <p>18家铁路局2025届招录数据，按路局或专业分类查询</p>
         <span class="tag data">📋 数据查询</span>
     </a>
-    <a class="card" href="/carbon/" style="background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(6,182,212,0.08));border-color:rgba(16,185,129,0.15)">
-        <h2>🌱 轮对智能检测·降碳方案</h2>
-        <p>万象归踪 — AI赋能铁路轮对低碳运维</p>
-        <span class="tag exam" style="background:linear-gradient(135deg,#10b981,#06b6d4)">🏭 双碳·科创</span>
-    </a>
-    <a class="card" href="/analytics" style="background:rgba(251,191,36,0.04);border-color:rgba(251,191,36,0.12)">
-        <div class="icon">📈</div>
-        <h2>访客统计看板</h2>
-        <p>查看网站访问量、页面排行、实时动态</p>
-        <span class="tag" style="background:rgba(251,191,36,0.15);color:#fbbf24">📊 数据统计</span>
-    </a>
-    <a href="/model" class="card" target="_blank">
-        <div class="icon" style="background:linear-gradient(135deg,#0d9488,#0891b2)">🎮</div>
-        <h3>🚂 万象归踪 · 3D模拟演示</h3>
-        <p>AI轮对检测+减碳过程3D交互模型</p>
-        <span class="tag" style="background:rgba(13,148,136,0.15);color:#14b8a6">🌱 双碳项目</span>
-    </a>
     <div class="footer">所有数据均来自中国铁路人才招聘网官方公示</div>
 </div>
-<script>
-fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p:window.location.pathname,r:document.referrer||'',t:document.title})});
-</script>
 </body>
 </html>"""
 
@@ -118,7 +89,7 @@ fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},bo
 async def home():
     return HOME_HTML
 
-# ========== 访客统计 ==========
+# ========== 访客统计（轻量，保留）==========
 @app.post("/api/track")
 async def track(request: Request):
     body = await request.json()
@@ -129,26 +100,13 @@ async def track(request: Request):
     )
     return {"ok": True}
 
-
 @app.get("/api/analytics")
 async def analytics(days: int = 7):
-    """获取统计数据的 JSON 接口"""
     return get_stats(days=days)
 
-
-# 统计看板页面
-ANALYTICS_HTML = open(os.path.join(WORKSPACE, "src", "utils", "analytics_dashboard.html"), encoding="utf-8").read() if os.path.exists(os.path.join(WORKSPACE, "src", "utils", "analytics_dashboard.html")) else "<h1>看板文件缺失</h1>"
-
-@app.get("/analytics", response_class=HTMLResponse)
-async def analytics_page():
-    return ANALYTICS_HTML
-
-
-# 挂载子应用
+# ========== 挂载子应用 ==========
 app.mount("/exam", exam_app)
 app.mount("/railway", railway_app)
-app.mount("/carbon", carbon_app)
-app.mount("/model", model_app)
 
 if __name__ == "__main__":
     import uvicorn
